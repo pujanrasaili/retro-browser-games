@@ -55,3 +55,23 @@
   display: flex;
   justify-content: center;
 }
+
+.nav-btn.coming-soon {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.app-footer {
+  margin-top: 32px;
+  padding: 16px;
+  border-top: 1px solid var(--border);
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 0.4rem;
+  color: var(--text-muted);
+  letter-spacing: 3px;
+}

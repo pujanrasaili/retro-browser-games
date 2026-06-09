@@ -16,11 +16,22 @@ function App() {
           >
             🐍 SNAKE
           </button>
+          <button className="nav-btn coming-soon" disabled title="Coming soon!">
+            🧱 TETRIS
+          </button>
+          <button className="nav-btn coming-soon" disabled title="Coming soon!">
+            💣 MINES
+          </button>
         </nav>
       </header>
       <main className="app-main">
         {activeGame === 'snake' && <Snake />}
       </main>
+      <footer className="app-footer">
+        <span className="pixel-font footer-text">
+          MADE BY PUJANRASAILI · 2026
+        </span>
+      </footer>
     </div>
   );
 }
