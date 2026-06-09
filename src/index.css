@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #0a0a0f;
+  --bg-card: #12121a;
+  --green-bright: #39ff14;
+  --green-mid: #22c55e;
+  --green-dim: #16a34a;
+  --text-primary: #e2e8f0;
+  --text-muted: #64748b;
+  --border: #1e293b;
+  --snake-head: #39ff14;
+  --snake-body: #22c55e;
+  --food-color: #ff4757;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Orbitron', monospace;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pixel-font {
+  font-family: 'Press Start 2P', monospace;
+}
