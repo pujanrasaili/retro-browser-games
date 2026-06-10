@@ -14,20 +14,13 @@ function getSpeedLevel(speed) {
 
 export default function Snake() {
   const { snake, food, score, highScore, gameState, resetGame, setDirection, BOARD_SIZE, speed } = useSnakeGame();
-  const boardRef = useRef(null);
-
-  const isSnakeHead = (x, y) => snake[0].x === x && snake[0].y === y;
-  const isSnakeBody = (x, y) => snake.slice(1).some(s => s.x === x && s.y === y);
-  const isFood = (x, y) => food.x === x && food.y === y;
-  const getSnakeIndex = (x, y) => snake.findIndex(s => s.x === x && s.y === y);
-
+  const touchStart = useRef(null);
   const speedLevel = getSpeedLevel(speed);
 
-  // Swipe support
-  const touchStart = useRef(null);
   const handleTouchStart = (e) => {
     touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   };
+
   const handleTouchEnd = (e) => {
     if (!touchStart.current) return;
     const dx = e.changedTouches[0].clientX - touchStart.current.x;
@@ -40,10 +33,33 @@ export default function Snake() {
     touchStart.current = null;
   };
 
-  const handleDir = (dir) => {
-    setDirection(dir);
-    if (gameState === 'idle' || gameState === 'over') resetGame();
-  };
+  const cells = [];
+  for (let y = 0; y < BOARD_SIZE; y++) {
+    for (let x = 0; x < BOARD_SIZE; x++) {
+      const isHead = snake.length > 0 && snake[0].x === x && snake[0].y === y;
+      const bodyIndex = snake.slice(1).findIndex(s => s.x === x && s.y === y);
+      const isBody = bodyIndex !== -1;
+      const isFood = food.x === x && food.y === y;
+      const snakeIndex = isBody ? bodyIndex + 1 : 0;
+      const green = Math.round(255 * Math.max(0.35, 1 - snakeIndex * 0.04));
+
+      let className = 'cell';
+      if (isHead) className += ' snake-head';
+      else if (isBody) className += ' snake-body';
+      else if (isFood) className += ' food';
+
+      cells.push(
+        <div
+          key={`${x}-${y}`}
+          className={className}
+          style={isBody ? {
+            background: `rgb(0, ${green}, 0)`,
+            opacity: Math.max(0.45, 1 - snakeIndex * 0.025),
+          } : {}}
+        />
+      );
+    }
+  }
 
   return (
     <div className="snake-wrapper">
@@ -53,13 +69,11 @@ export default function Snake() {
           <span className="score-label pixel-font">SCORE</span>
           <span className="score-value pixel-font">{String(score).padStart(5, '0')}</span>
         </div>
-
         <div className="speed-indicator">
           {Array.from({ length: SPEED_LEVELS }, (_, i) => (
             <div key={i} className={`speed-dot ${i < speedLevel ? 'active' : ''}`} />
           ))}
         </div>
-
         <div className="score-item">
           <span className="score-label pixel-font">BEST</span>
           <span className="score-value hi pixel-font">{String(highScore).padStart(5, '0')}</span>
@@ -67,35 +81,11 @@ export default function Snake() {
       </div>
 
       {/* Game Board */}
-      <div
-        className="board-container"
-        ref={boardRef}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div className="board-container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div className="board" style={{ gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)` }}>
-          {Array.from({ length: BOARD_SIZE }, (_, y) =>
-            Array.from({ length: BOARD_SIZE }, (_, x) => {
-              const head = isSnakeHead(x, y);
-              const body = isSnakeBody(x, y);
-              const foodCell = isFood(x, y);
-              const idx = getSnakeIndex(x, y);
-              const green = Math.round(255 * Math.max(0.35, 1 - idx * 0.04));
-              return (
-                <div
-                  key={`${x}-${y}`}
-                  className={`cell${head ? ' snake-head' : ''}${body ? ' snake-body' : ''}${foodCell ? ' food' : ''}`}
-                  style={body ? {
-                    background: `rgb(0, ${green}, 0)`,
-                    opacity: Math.max(0.45, 1 - idx * 0.025),
-                  } : {}}
-                />
-              );
-            })
-          )}
+          {cells}
         </div>
 
-        {/* START overlay */}
         {gameState === 'idle' && (
           <div className="overlay">
             <div className="overlay-content">
@@ -103,15 +93,15 @@ export default function Snake() {
               <div className="overlay-divider" />
               <div className="how-to-play">
                 <div className="key-hint">
-                  <span className="key-box">↑↓←→</span>
+                  <span className="key-box pixel-font">↑↓←→</span>
                   <span className="key-desc">MOVE</span>
                 </div>
                 <div className="key-hint">
-                  <span className="key-box">WASD</span>
+                  <span className="key-box pixel-font">WASD</span>
                   <span className="key-desc">ALSO MOVE</span>
                 </div>
                 <div className="key-hint">
-                  <span className="key-box">SPC</span>
+                  <span className="key-box pixel-font">SPC</span>
                   <span className="key-desc">PAUSE</span>
                 </div>
               </div>
@@ -121,7 +111,6 @@ export default function Snake() {
           </div>
         )}
 
-        {/* GAME OVER overlay */}
         {gameState === 'over' && (
           <div className="overlay">
             <div className="overlay-content">
@@ -137,7 +126,6 @@ export default function Snake() {
           </div>
         )}
 
-        {/* PAUSED overlay */}
         {gameState === 'paused' && (
           <div className="overlay">
             <div className="overlay-content">
@@ -151,12 +139,12 @@ export default function Snake() {
       {/* Mobile D-pad */}
       <div className="mobile-controls">
         <div className="ctrl-row">
-          <button className="ctrl-btn" onClick={() => handleDir({ x: 0, y: -1 })}>▲</button>
+          <button className="ctrl-btn" onClick={() => setDirection({ x: 0, y: -1 })}>▲</button>
         </div>
         <div className="ctrl-row">
-          <button className="ctrl-btn" onClick={() => handleDir({ x: -1, y: 0 })}>◄</button>
-          <button className="ctrl-btn" onClick={() => handleDir({ x: 0, y: 1 })}>▼</button>
-          <button className="ctrl-btn" onClick={() => handleDir({ x: 1, y: 0 })}>►</button>
+          <button className="ctrl-btn" onClick={() => setDirection({ x: -1, y: 0 })}>◄</button>
+          <button className="ctrl-btn" onClick={() => setDirection({ x: 0, y: 1 })}>▼</button>
+          <button className="ctrl-btn" onClick={() => setDirection({ x: 1, y: 0 })}>►</button>
         </div>
       </div>
     </div>
