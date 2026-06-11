@@ -1,0 +1,268 @@
+.tetris-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Side panels */
+.tetris-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100px;
+  padding-top: 4px;
+}
+
+.panel-box {
+  background: #0a0a14;
+  border: 1px solid #1a2a1a;
+  border-radius: 8px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-label {
+  font-size: 0.38rem;
+  color: #2a4a2a;
+  letter-spacing: 3px;
+}
+
+.panel-value {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+}
+
+/* Mini piece preview */
+.mini-piece {
+  display: grid;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.mini-cell {
+  width: 14px;
+  height: 14px;
+  background: transparent;
+  border-radius: 2px;
+}
+
+/* Board */
+.tetris-board-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tetris-board {
+  display: grid;
+  background: #07070f;
+  border: 1px solid #1a2a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 0 40px rgba(57,255,20,0.03),
+    inset 0 0 60px rgba(0,0,0,0.6);
+  gap: 1px;
+  padding: 1px;
+  width: 220px;
+  height: 440px;
+}
+
+.tcell {
+  background: #0a0a14;
+  border-radius: 2px;
+  transition: background 0.05s;
+}
+
+.tcell.filled {
+  border-radius: 3px;
+}
+
+.tcell.ghost {
+  border-radius: 3px;
+  background: transparent;
+}
+
+/* Overlays */
+.t-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 12, 0.93);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+  z-index: 10;
+}
+
+.t-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.t-title {
+  font-size: 1rem;
+  color: #bf5fff;
+  text-shadow: 0 0 20px #bf5fff, 0 0 40px rgba(191,95,255,0.4);
+  letter-spacing: 5px;
+  animation: tGlitch 4s infinite;
+}
+
+.t-title.red {
+  color: #ff4757;
+  text-shadow: 0 0 20px #ff4757, 0 0 40px rgba(255,71,87,0.4);
+  animation: none;
+}
+
+@keyframes tGlitch {
+  0%, 88%, 100% { transform: translate(0); }
+  90% { transform: translate(-2px, 1px); }
+  92% { transform: translate(2px, -1px); }
+  94% { transform: translate(-1px, 2px); }
+}
+
+.t-divider {
+  width: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #2a1a4a, transparent);
+}
+
+.t-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.t-key-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.t-key {
+  background: #0d0d1a;
+  border: 1px solid #2a1a4a;
+  border-radius: 4px;
+  padding: 3px 7px;
+  font-size: 0.45rem;
+  color: #bf5fff;
+  min-width: 36px;
+  text-align: center;
+}
+
+.t-desc {
+  font-size: 0.6rem;
+  color: #2a3a4a;
+  font-family: 'Orbitron', monospace;
+}
+
+.t-desc-lg {
+  font-size: 0.65rem;
+  color: #3a4a5a;
+  font-family: 'Orbitron', monospace;
+}
+
+.t-stat {
+  font-size: 0.6rem;
+  color: #c0c0d0;
+  letter-spacing: 2px;
+}
+
+.t-best {
+  font-size: 0.6rem;
+  color: #ffd700;
+  text-shadow: 0 0 10px #ffd700;
+  animation: tBounce 0.5s ease infinite alternate;
+  letter-spacing: 2px;
+}
+
+@keyframes tBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+
+.t-btn {
+  background: transparent;
+  border: 1px solid #bf5fff;
+  color: #bf5fff;
+  padding: 12px 28px;
+  font-size: 0.58rem;
+  cursor: pointer;
+  border-radius: 6px;
+  letter-spacing: 4px;
+  transition: all 0.2s;
+  box-shadow: 0 0 12px rgba(191,95,255,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.t-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 30%; height: 200%;
+  background: rgba(191,95,255,0.1);
+  transform: skewX(-20deg);
+  transition: left 0.4s;
+}
+
+.t-btn:hover::before { left: 130%; }
+
+.t-btn:hover {
+  background: rgba(191,95,255,0.08);
+  box-shadow: 0 0 24px rgba(191,95,255,0.35);
+  transform: translateY(-1px);
+}
+
+/* Mobile controls */
+.t-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.t-ctrl-row {
+  display: flex;
+  gap: 4px;
+}
+
+.t-ctrl-btn {
+  width: 44px;
+  height: 44px;
+  background: #0d0d1a;
+  border: 1px solid #1a1a2a;
+  color: #bf5fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 0 #05050f;
+}
+
+.t-ctrl-btn:active {
+  background: #1a0a2a;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #05050f;
+  border-color: #bf5fff;
+}
+
+.t-ctrl-btn.drop {
+  color: #ff4757;
+  border-color: #2a1a1a;
+  width: 96px;
+}
