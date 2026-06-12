@@ -21,7 +21,7 @@
 | Game | Status | Description |
 |------|--------|-------------|
 | 🐍 **Snake** | ✅ Live | Classic snake — eat food, grow longer, don't crash! Speed increases as you score. |
-| 🧱 **Tetris** | 🔜 Soon | Stack falling blocks, clear lines, survive as long as possible. |
+| 🧱 **Tetris** | ✅ Live | Stack falling tetrominoes, clear lines, survive as long as possible. Speed increases every 10 lines. |
 | 💣 **Minesweeper** | 🔜 Soon | Uncover all safe tiles without triggering a mine. |
 | 🏓 **Pong** | 🔜 Soon | Two-paddle ball game — beat the AI or play with a friend. |
 
@@ -123,7 +123,8 @@ retro-browser-games/
 │   └── index.html              # HTML shell with Google Fonts
 ├── src/
 │   ├── games/
-│   │   └── Snake/
+│   │   ├── Snake/
+│   │   └── Tetris/
 │   │       ├── Snake.js        # Board renderer + overlays + controls
 │   │       ├── Snake.css       # All neon visuals & animations
 │   │       └── useSnakeGame.js # Pure game logic (hook)
