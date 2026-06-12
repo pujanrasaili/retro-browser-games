@@ -61,11 +61,13 @@ export default function useTetrisGame() {
 
   const boardRef = useRef(board);
   const currentRef = useRef(current);
+  const levelRef = useRef(level);
   boardRef.current = board;
   currentRef.current = current;
+  levelRef.current = level;
 
-  const spawnPiece = useCallback((nextPiece, boardState) => {
-    const piece = nextPiece || randomPiece();
+  const spawnPiece = useCallback((boardState) => {
+    const piece = randomPiece();
     if (!isValid(piece.shape, piece.x, piece.y, boardState)) {
       setGameState('over');
       return;
@@ -82,8 +84,7 @@ export default function useTetrisGame() {
     setLevel(1);
     setSpeed(INITIAL_SPEED);
     setGameState('playing');
-    const first = randomPiece();
-    setCurrent(first);
+    setCurrent(randomPiece());
     setNext(randomPiece());
   }, []);
 
@@ -103,13 +104,13 @@ export default function useTetrisGame() {
         return total;
       });
       setScore(prev => {
-        const ns = prev + SCORE_TABLE[linesCleared] * level;
+        const ns = prev + SCORE_TABLE[linesCleared] * levelRef.current;
         setHighScore(h => Math.max(h, ns));
         return ns;
       });
     }
-    spawnPiece(null, clearedBoard);
-  }, [spawnPiece, level]);
+    spawnPiece(clearedBoard);
+  }, [spawnPiece]);
 
   // Game loop
   useEffect(() => {
@@ -130,64 +131,74 @@ export default function useTetrisGame() {
   // Keyboard controls
   useEffect(() => {
     const handleKey = (e) => {
+      // Prevent page scroll on arrow keys and space
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
+        e.preventDefault();
+      }
+
       if (e.key === ' ' && gameState === 'idle') { resetGame(); return; }
-      if (e.key === 'Escape' || e.key === 'p') {
+      if (e.key === ' ' && gameState === 'over') { resetGame(); return; }
+      if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
         if (gameState === 'playing') setGameState('paused');
         else if (gameState === 'paused') setGameState('playing');
         return;
       }
       if (gameState !== 'playing') return;
+
       const piece = currentRef.current;
       const b = boardRef.current;
       if (!piece) return;
 
-      if (e.key === 'ArrowLeft' && isValid(piece.shape, piece.x - 1, piece.y, b)) {
-        setCurrent(p => ({ ...p, x: p.x - 1 }));
-      } else if (e.key === 'ArrowRight' && isValid(piece.shape, piece.x + 1, piece.y, b)) {
-        setCurrent(p => ({ ...p, x: p.x + 1 }));
+      if (e.key === 'ArrowLeft') {
+        if (isValid(piece.shape, piece.x - 1, piece.y, b))
+          setCurrent(p => ({ ...p, x: p.x - 1 }));
+      } else if (e.key === 'ArrowRight') {
+        if (isValid(piece.shape, piece.x + 1, piece.y, b))
+          setCurrent(p => ({ ...p, x: p.x + 1 }));
       } else if (e.key === 'ArrowDown') {
         if (isValid(piece.shape, piece.x, piece.y + 1, b)) {
           setCurrent(p => ({ ...p, y: p.y + 1 }));
           setScore(s => s + 1);
         }
-      } else if (e.key === 'ArrowUp' || e.key === 'x') {
+      } else if (e.key === 'ArrowUp' || e.key === 'x' || e.key === 'X') {
         const rotated = rotatePiece(piece.shape);
-        if (isValid(rotated, piece.x, piece.y, b)) {
+        if (isValid(rotated, piece.x, piece.y, b))
           setCurrent(p => ({ ...p, shape: rotated }));
-        } else if (isValid(rotated, piece.x - 1, piece.y, b)) {
+        else if (isValid(rotated, piece.x - 1, piece.y, b))
           setCurrent(p => ({ ...p, shape: rotated, x: p.x - 1 }));
-        } else if (isValid(rotated, piece.x + 1, piece.y, b)) {
+        else if (isValid(rotated, piece.x + 1, piece.y, b))
           setCurrent(p => ({ ...p, shape: rotated, x: p.x + 1 }));
-        }
-      } else if (e.key === 'ArrowDown' || e.key === ' ') {
+      } else if (e.key === ' ') {
         // Hard drop
         let dropY = piece.y;
         while (isValid(piece.shape, piece.x, dropY + 1, b)) dropY++;
+        setScore(s => s + (dropY - piece.y) * 2);
         setCurrent(p => ({ ...p, y: dropY }));
-        setTimeout(() => lockPiece(), 50);
+        setTimeout(() => lockPiece(), 30);
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [gameState, resetGame, lockPiece]);
 
-  const moveLeft  = () => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x-1})); };
-  const moveRight = () => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x+1})); };
-  const moveDown  = () => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x, p.y+1, b)) { setCurrent(prev => ({...prev, y: prev.y+1})); setScore(s => s+1); } };
-  const rotate    = () => {
+  const moveLeft  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x-1})); }, []);
+  const moveRight = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x+1})); }, []);
+  const moveDown  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x, p.y+1, b)) { setCurrent(prev => ({...prev, y: prev.y+1})); setScore(s => s+1); } }, []);
+  const rotate    = useCallback(() => {
     const p = currentRef.current; const b = boardRef.current; if (!p) return;
     const rotated = rotatePiece(p.shape);
     if (isValid(rotated, p.x, p.y, b)) setCurrent(prev => ({...prev, shape: rotated}));
     else if (isValid(rotated, p.x-1, p.y, b)) setCurrent(prev => ({...prev, shape: rotated, x: prev.x-1}));
     else if (isValid(rotated, p.x+1, p.y, b)) setCurrent(prev => ({...prev, shape: rotated, x: prev.x+1}));
-  };
-  const hardDrop  = () => {
+  }, []);
+  const hardDrop  = useCallback(() => {
     const p = currentRef.current; const b = boardRef.current; if (!p) return;
     let dropY = p.y;
     while (isValid(p.shape, p.x, dropY+1, b)) dropY++;
+    setScore(s => s + (dropY - p.y) * 2);
     setCurrent(prev => ({...prev, y: dropY}));
-    setTimeout(() => lockPiece(), 50);
-  };
+    setTimeout(() => lockPiece(), 30);
+  }, [lockPiece]);
 
   const ghost = current && gameState === 'playing' ? getGhost(current, board) : null;
 
