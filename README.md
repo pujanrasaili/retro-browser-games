@@ -189,3 +189,35 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 ⭐ Star this repo if you had fun playing!
 
 </div>
+
+---
+
+## 🧱 How to Play — Tetris
+
+```
+┌─────────────────────────────┐
+│                             │
+│   ←  →    Move Left/Right   │
+│   ↑        Rotate Piece     │
+│   ↓        Soft Drop        │
+│   SPACE    Hard Drop        │
+│   P        Pause / Resume   │
+│                             │
+│   Mobile: Buttons on screen │
+│                             │
+└─────────────────────────────┘
+```
+
+**Scoring:**
+| Lines Cleared | Points        |
+|---------------|---------------|
+| 1 line        | 100 × level   |
+| 2 lines       | 300 × level   |
+| 3 lines       | 500 × level   |
+| 4 lines (Tetris!) | 800 × level |
+
+**Tips:**
+- 👻 The **ghost piece** shows where your piece will land
+- ⚡ Speed increases every 10 lines
+- 🎯 Clear 4 lines at once (Tetris!) for maximum points
+- 📦 Watch the **NEXT** preview to plan ahead
