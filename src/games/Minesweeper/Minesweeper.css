@@ -251,3 +251,41 @@
   color: #2a3a2a;
   letter-spacing: 2px;
 }
+
+/* Responsive for medium/hard boards */
+@media (max-width: 600px) {
+  .mcell { width: 22px; height: 22px; font-size: 0.6rem; }
+  .mine-header { padding: 10px 14px; }
+  .seven-seg { font-size: 1.1rem; min-width: 56px; padding: 4px 8px; }
+  .face-btn { width: 40px; height: 40px; font-size: 1.1rem; }
+  .diff-btn { padding: 6px 10px; font-size: 0.42rem; }
+}
+
+/* Revealed cells with numbers — subtle inner glow */
+.mcell.revealed:not(:empty) {
+  text-shadow: 0 0 8px currentColor;
+}
+
+/* Flag animation */
+.mcell.flagged {
+  animation: flagPlace 0.2s ease-out;
+}
+
+@keyframes flagPlace {
+  0%   { transform: scale(0.5); }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Win cell reveal */
+.mine-board.won .mcell.hidden {
+  background: #0d1a0d;
+  border-color: #1a3a1a;
+  animation: winReveal 0.5s ease forwards;
+}
+
+@keyframes winReveal {
+  0%   { background: #0d1a0d; }
+  50%  { background: #1a3a1a; box-shadow: 0 0 8px rgba(57,255,20,0.3); }
+  100% { background: #0d1a0d; }
+}
