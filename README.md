@@ -22,7 +22,7 @@
 |------|--------|-------------|
 | 🐍 **Snake** | ✅ Live | Classic snake — eat food, grow longer, don't crash! Speed increases as you score. |
 | 🧱 **Tetris** | ✅ Live | Stack falling tetrominoes, clear lines, survive as long as possible. Speed increases every 10 lines. |
-| 💣 **Minesweeper** | 🔜 Soon | Uncover all safe tiles without triggering a mine. |
+| 💣 **Minesweeper** | ✅ Live | Uncover all safe tiles without triggering a mine. 3 difficulty levels: Easy, Medium, Hard. |
 | 🏓 **Pong** | 🔜 Soon | Two-paddle ball game — beat the AI or play with a friend. |
 
 ---
@@ -221,3 +221,28 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 - ⚡ Speed increases every 10 lines
 - 🎯 Clear 4 lines at once (Tetris!) for maximum points
 - 📦 Watch the **NEXT** preview to plan ahead
+
+---
+
+## 💣 How to Play — Minesweeper
+
+```
+┌─────────────────────────────┐
+│                             │
+│   LEFT CLICK   Reveal cell  │
+│   RIGHT CLICK  Place flag   │
+│   😊 Button    New game     │
+│                             │
+│   Difficulties:             │
+│   🟢 Easy   9×9,  10 mines  │
+│   🟡 Medium 16×16, 40 mines │
+│   🔴 Hard   16×30, 99 mines │
+│                             │
+└─────────────────────────────┘
+```
+
+**Tips:**
+- 🛡️ First click is always **safe** — no mine on first click
+- 🔢 Numbers show how many mines are in adjacent cells
+- 🚩 Flag suspected mines with right click
+- 💡 Empty cells auto-reveal connected safe areas
