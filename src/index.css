@@ -31,3 +31,28 @@ body {
 .pixel-font {
   font-family: 'Press Start 2P', monospace;
 }
+
+/* Mobile global improvements */
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+
+  .app { padding: 14px 10px; }
+
+  .app-title { font-size: 1rem !important; letter-spacing: 3px !important; }
+
+  .game-nav { flex-wrap: wrap; justify-content: center; gap: 6px !important; }
+
+  .nav-btn { padding: 8px 14px !important; font-size: 0.48rem !important; }
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* Better tap targets on mobile */
+button { -webkit-tap-highlight-color: transparent; }
+
+/* Prevent text selection on game elements */
+.board, .mine-board, .tetris-board {
+  -webkit-user-select: none;
+  user-select: none;
+}
