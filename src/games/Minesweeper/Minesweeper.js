@@ -5,21 +5,19 @@ import './Minesweeper.css';
 
 function SevenSeg({ value, digits = 3 }) {
   const display = String(Math.max(0, Math.min(999, value))).padStart(digits, '0');
-  return (
-    <div className="seven-seg pixel-font">
-      {display}
-    </div>
-  );
+  return <div className="seven-seg pixel-font">{display}</div>;
 }
 
 export default function Minesweeper() {
   const {
-    board, difficulty, gameState, minesLeft, time,
+    board, difficulty, gameState, minesLeft, time, bestTimes,
     rows, cols,
     resetGame, handleReveal, handleFlag,
   } = useMinesweeper();
 
   const faceMap = { idle: '🙂', playing: '🙂', won: '😎', lost: '😵' };
+  const bestTime = bestTimes[difficulty];
+  const isNewBest = gameState === 'won' && (!bestTime || time <= bestTime);
 
   return (
     <div className="mine-wrapper">
@@ -39,9 +37,14 @@ export default function Minesweeper() {
       {/* Header bar */}
       <div className="mine-header">
         <SevenSeg value={minesLeft} />
-        <button className="face-btn" onClick={() => resetGame(difficulty)}>
-          {faceMap[gameState]}
-        </button>
+        <div className="mine-header-center">
+          <button className="face-btn" onClick={() => resetGame(difficulty)}>
+            {faceMap[gameState]}
+          </button>
+          {bestTime !== undefined && (
+            <div className="best-time pixel-font">BEST: {bestTime}s</div>
+          )}
+        </div>
         <SevenSeg value={time} />
       </div>
 
@@ -52,69 +55,46 @@ export default function Minesweeper() {
           style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
           onContextMenu={e => e.preventDefault()}
         >
-          {board ? board.map((row, r) =>
-            row.map((cell, c) => {
-              let content = '';
-              let cellClass = 'mcell';
-
-              if (cell.revealed) {
-                cellClass += ' revealed';
-                if (cell.mine) {
-                  content = cell.exploded ? '💥' : '💣';
-                  if (cell.exploded) cellClass += ' exploded';
-                } else if (cell.adjacent > 0) {
-                  content = cell.adjacent;
-                }
-              } else if (cell.flagged) {
-                content = '🚩';
-                cellClass += ' flagged';
-              } else {
-                cellClass += ' hidden';
-              }
-
-              return (
-                <div
-                  key={`${r}-${c}`}
-                  className={cellClass}
-                  style={cell.revealed && !cell.mine && cell.adjacent > 0
-                    ? { color: NUM_COLORS[cell.adjacent] }
-                    : {}
-                  }
-                  onClick={() => handleReveal(r, c)}
-                  onContextMenu={(e) => handleFlag(e, r, c)}
-                >
-                  {content}
-                </div>
-              );
-            })
-          ) : (
-            // Empty board before first click
-            Array.from({ length: rows }, (_, r) =>
-              Array.from({ length: cols }, (_, c) => (
-                <div
-                  key={`${r}-${c}`}
-                  className="mcell hidden"
-                  onClick={() => handleReveal(r, c)}
-                  onContextMenu={(e) => handleFlag(e, r, c)}
-                />
-              ))
-            )
+          {(board
+            ? board.map((row, r) => row.map((cell, c) => {
+                let content = '';
+                let cellClass = 'mcell';
+                if (cell.revealed) {
+                  cellClass += ' revealed';
+                  if (cell.mine) { content = cell.exploded ? '💥' : '💣'; if (cell.exploded) cellClass += ' exploded'; }
+                  else if (cell.adjacent > 0) content = cell.adjacent;
+                } else if (cell.flagged) { content = '🚩'; cellClass += ' flagged'; }
+                else cellClass += ' hidden';
+                return (
+                  <div key={`${r}-${c}`} className={cellClass}
+                    style={cell.revealed && !cell.mine && cell.adjacent > 0 ? { color: NUM_COLORS[cell.adjacent] } : {}}
+                    onClick={() => handleReveal(r, c)}
+                    onContextMenu={(e) => handleFlag(e, r, c)}>
+                    {content}
+                  </div>
+                );
+              }))
+            : Array.from({ length: rows }, (_, r) =>
+                Array.from({ length: cols }, (_, c) => (
+                  <div key={`${r}-${c}`} className="mcell hidden"
+                    onClick={() => handleReveal(r, c)}
+                    onContextMenu={(e) => handleFlag(e, r, c)} />
+                )))
           )}
         </div>
 
-        {/* Win overlay */}
         {gameState === 'won' && (
           <div className="mine-overlay">
             <div className="mine-overlay-content">
               <div className="mine-overlay-icon">😎</div>
               <h2 className="pixel-font mine-overlay-title green">YOU WIN!</h2>
               <p className="mine-overlay-stat pixel-font">TIME: {time}s</p>
+              {isNewBest && <p className="mine-overlay-best pixel-font">🏆 NEW BEST!</p>}
               <button className="mine-btn pixel-font" onClick={() => resetGame(difficulty)}>▶ PLAY AGAIN</button>
             </div>
           </div>
         )}
 
-        {/* Lose overlay */}
         {gameState === 'lost' && (
           <div className="mine-overlay">
             <div className="mine-overlay-content">
@@ -127,7 +107,6 @@ export default function Minesweeper() {
         )}
       </div>
 
-      {/* Instructions */}
       <div className="mine-instructions">
         <span className="pixel-font mine-hint">LEFT CLICK: Reveal</span>
         <span className="pixel-font mine-hint">RIGHT CLICK: Flag 🚩</span>
