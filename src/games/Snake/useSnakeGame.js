@@ -25,7 +25,7 @@ export default function useSnakeGame() {
   const [direction, setDirectionState] = useState(INITIAL_DIRECTION);
   const [food, setFood] = useState({ x: 15, y: 10 });
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("snake_best") || "0", 10));
   const [gameState, setGameState] = useState('idle');
   const [speed, setSpeed] = useState(INITIAL_SPEED);
 
@@ -73,7 +73,7 @@ export default function useSnakeGame() {
         if (newHead.x === prevFood.x && newHead.y === prevFood.y) {
           setScore(s => {
             const ns = s + 10;
-            setHighScore(h => Math.max(h, ns));
+            setHighScore(h => { const newH = Math.max(h, ns); localStorage.setItem("snake_best", newH); return newH; });
             setSpeed(sp => Math.max(60, sp - 2));
             return ns;
           });
