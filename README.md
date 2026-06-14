@@ -29,10 +29,11 @@
 
 ## 🎯 Features
 
+- 🎮 **3 fully playable games** — Snake, Tetris, Minesweeper
 - ⚡ **No extra dependencies** — pure React + CSS, zero UI libraries
 - 🌈 **Neon retro aesthetic** — glowing greens, deep blacks, pixel fonts
 - 📱 **Mobile friendly** — on-screen D-pad + swipe gesture support
-- 🏆 **High score tracking** — best score persisted per session
+- 🏆 **Persistent high scores** — saved to localStorage, survives refresh
 - 🚀 **Increasing difficulty** — Snake speeds up as your score grows
 - ⏸️ **Pause / resume** — hit `Space` anytime
 
@@ -246,3 +247,12 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 - 🔢 Numbers show how many mines are in adjacent cells
 - 🚩 Flag suspected mines with right click
 - 💡 Empty cells auto-reveal connected safe areas
+
+---
+
+## 📊 Project Stats
+
+![Games](https://img.shields.io/badge/Games-3%20Live-39ff14?style=flat-square)
+![Commits](https://img.shields.io/badge/Commits-30%2B-bf5fff?style=flat-square)
+![Lines](https://img.shields.io/badge/Code-1500%2B%20lines-00f5ff?style=flat-square)
+![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
