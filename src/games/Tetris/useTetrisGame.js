@@ -53,7 +53,7 @@ export default function useTetrisGame() {
   const [current, setCurrent] = useState(null);
   const [next, setNext] = useState(null);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem('tetris_best') || '0', 10));
   const [lines, setLines] = useState(0);
   const [level, setLevel] = useState(1);
   const [gameState, setGameState] = useState('idle');
@@ -105,7 +105,7 @@ export default function useTetrisGame() {
       });
       setScore(prev => {
         const ns = prev + SCORE_TABLE[linesCleared] * levelRef.current;
-        setHighScore(h => Math.max(h, ns));
+        setHighScore(h => { const nh = Math.max(h, ns); localStorage.setItem('tetris_best', nh); return nh; });
         return ns;
       });
     }
