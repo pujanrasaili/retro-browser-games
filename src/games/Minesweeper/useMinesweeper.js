@@ -4,15 +4,19 @@ import { DIFFICULTIES, createBoard, floodReveal } from './mineUtils';
 export default function useMinesweeper() {
   const [difficulty, setDifficulty] = useState('easy');
   const [board, setBoard] = useState(null);
-  const [gameState, setGameState] = useState('idle'); // idle | playing | won | lost
+  const [gameState, setGameState] = useState('idle');
   const [minesLeft, setMinesLeft] = useState(DIFFICULTIES.easy.mines);
   const [time, setTime] = useState(0);
   const [firstClick, setFirstClick] = useState(true);
+  const [bestTimes, setBestTimes] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('mine_best') || '{}');
+    } catch { return {}; }
+  });
   const timerRef = useRef(null);
 
   const { rows, cols, mines } = DIFFICULTIES[difficulty];
 
-  // Timer
   useEffect(() => {
     if (gameState === 'playing') {
       timerRef.current = setInterval(() => setTime(t => Math.min(t + 1, 999)), 1000);
@@ -42,21 +46,15 @@ export default function useMinesweeper() {
 
   const handleReveal = useCallback((r, c) => {
     if (gameState === 'lost' || gameState === 'won') return;
-
     let currentBoard = board;
-
-    // First click — generate board
     if (firstClick || !currentBoard) {
       currentBoard = createBoard(rows, cols, mines, r, c);
       setFirstClick(false);
       setGameState('playing');
     }
-
     const cell = currentBoard[r][c];
     if (cell.revealed || cell.flagged) return;
-
     if (cell.mine) {
-      // Reveal all mines
       const newBoard = currentBoard.map(row =>
         row.map(cell => cell.mine ? { ...cell, revealed: true } : cell)
       );
@@ -65,14 +63,22 @@ export default function useMinesweeper() {
       setGameState('lost');
       return;
     }
-
     const newBoard = floodReveal(currentBoard, r, c, rows, cols);
     setBoard(newBoard);
-
     if (checkWin(newBoard)) {
       setGameState('won');
+      // Save best time
+      setBestTimes(prev => {
+        const current = prev[difficulty];
+        if (!current || time < current) {
+          const updated = { ...prev, [difficulty]: time };
+          localStorage.setItem('mine_best', JSON.stringify(updated));
+          return updated;
+        }
+        return prev;
+      });
     }
-  }, [board, gameState, firstClick, rows, cols, mines, checkWin]);
+  }, [board, gameState, firstClick, rows, cols, mines, checkWin, difficulty, time]);
 
   const handleFlag = useCallback((e, r, c) => {
     e.preventDefault();
@@ -80,7 +86,6 @@ export default function useMinesweeper() {
     if (!board) return;
     const cell = board[r][c];
     if (cell.revealed) return;
-
     const newBoard = board.map(row => row.map(c => ({ ...c })));
     newBoard[r][c].flagged = !newBoard[r][c].flagged;
     setBoard(newBoard);
@@ -88,7 +93,7 @@ export default function useMinesweeper() {
   }, [board, gameState]);
 
   return {
-    board, difficulty, gameState, minesLeft, time,
+    board, difficulty, gameState, minesLeft, time, bestTimes,
     rows, cols, mines,
     resetGame, handleReveal, handleFlag,
   };
