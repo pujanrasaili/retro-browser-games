@@ -372,3 +372,54 @@
   box-shadow: 0 1px 0 #050510, 0 0 14px rgba(57,255,20,0.2);
   border-color: var(--green-bright);
 }
+
+/* Options bar */
+.snake-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.option-group {
+  display: flex;
+  gap: 6px;
+}
+
+.option-btn {
+  background: #0a0a14;
+  border: 1px solid #1a2a1a;
+  color: #2a4a2a;
+  padding: 7px 12px;
+  font-size: 0.42rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--green-bright);
+  color: var(--green-bright);
+}
+
+.option-btn.active {
+  border-color: var(--green-bright);
+  color: var(--green-bright);
+  background: #0d1a0d;
+  box-shadow: 0 0 10px rgba(57,255,20,0.15);
+}
+
+.option-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.walls-btn.walls-on {
+  border-color: #ff4757;
+  color: #ff4757;
+  background: #1a0a0a;
+  box-shadow: 0 0 10px rgba(255,71,87,0.15);
+}
