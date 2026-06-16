@@ -55,6 +55,7 @@ export default function useTetrisGame() {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem('tetris_best') || '0', 10));
   const [lines, setLines] = useState(0);
+  const [bestLines, setBestLines] = useState(() => parseInt(localStorage.getItem('tetris_best_lines') || '0', 10));
   const [level, setLevel] = useState(1);
   const [gameState, setGameState] = useState('idle');
   const [speed, setSpeed] = useState(INITIAL_SPEED);
@@ -179,7 +180,7 @@ export default function useTetrisGame() {
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [gameState, resetGame, lockPiece]);
+  }, [gameState, resetGame, bestLines, lockPiece]);
 
   const moveLeft  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x-1})); }, []);
   const moveRight = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x+1})); }, []);
@@ -202,10 +203,11 @@ export default function useTetrisGame() {
 
   const ghost = current && gameState === 'playing' ? getGhost(current, board) : null;
 
+  // bestLines exposed
   return {
     board, current, next, ghost,
     score, highScore, lines, level,
-    gameState, resetGame,
+    gameState, resetGame, bestLines,
     moveLeft, moveRight, moveDown, rotate, hardDrop,
     BOARD_WIDTH, BOARD_HEIGHT,
   };
