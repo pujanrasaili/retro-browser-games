@@ -115,3 +115,16 @@ export function chordReveal(board, r, c, rows, cols) {
   }
   return { flagCount, neighbors };
 }
+
+export function useChord(board, gameState, rows, cols, handleReveal) {
+  const handleChord = (r, c) => {
+    if (!board || gameState !== 'playing') return;
+    const cell = board[r][c];
+    if (!cell.revealed || cell.adjacent === 0) return;
+    const { flagCount, neighbors } = chordReveal(board, r, c, rows, cols);
+    if (flagCount === cell.adjacent) {
+      neighbors.forEach(([nr, nc]) => handleReveal(nr, nc));
+    }
+  };
+  return handleChord;
+}
