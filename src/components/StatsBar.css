@@ -1,0 +1,38 @@
+.stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #0a0a14;
+  border: 1px solid #1a1a2a;
+  border-radius: 10px;
+  padding: 10px 20px;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 4px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-icon { font-size: 0.9rem; }
+
+.stat-label {
+  font-size: 0.35rem;
+  color: #2a3a2a;
+  letter-spacing: 2px;
+}
+
+.stat-value {
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 24px;
+  background: #1a1a2a;
+}
