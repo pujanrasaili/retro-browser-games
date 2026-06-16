@@ -98,3 +98,20 @@ export default function useMinesweeper() {
     resetGame, handleReveal, handleFlag,
   };
 }
+
+export function chordReveal(board, r, c, rows, cols) {
+  // Count adjacent flags
+  let flagCount = 0;
+  const neighbors = [];
+  for (let dr = -1; dr <= 1; dr++) {
+    for (let dc = -1; dc <= 1; dc++) {
+      if (dr === 0 && dc === 0) continue;
+      const nr = r + dr, nc = c + dc;
+      if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+        if (board[nr][nc].flagged) flagCount++;
+        else if (!board[nr][nc].revealed) neighbors.push([nr, nc]);
+      }
+    }
+  }
+  return { flagCount, neighbors };
+}
