@@ -3,6 +3,7 @@ import './App.css';
 import Snake from './games/Snake/Snake';
 import Tetris from './games/Tetris/Tetris';
 import Minesweeper from './games/Minesweeper/Minesweeper';
+import StatsBar from './components/StatsBar';
 
 function App() {
   const [activeGame, setActiveGame] = useState('snake');
@@ -16,6 +17,7 @@ function App() {
           <button className={`nav-btn ${activeGame === 'tetris' ? 'active' : ''}`} onClick={() => setActiveGame('tetris')}>🧱 TETRIS</button>
           <button className={`nav-btn ${activeGame === 'mines' ? 'active' : ''}`} onClick={() => setActiveGame('mines')}>💣 MINES</button>
         </nav>
+        <StatsBar />
       </header>
       <main className="app-main" key={activeGame}>
         {activeGame === 'snake' && <Snake />}
