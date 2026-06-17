@@ -1,5 +1,5 @@
 import React from 'react';
-import useMinesweeper from './useMinesweeper';
+import useMinesweeper, { useChord } from './useMinesweeper';
 import { NUM_COLORS, DIFFICULTIES } from './mineUtils';
 import './Minesweeper.css';
 
@@ -18,6 +18,7 @@ export default function Minesweeper() {
   const faceMap = { idle: '🙂', playing: '🙂', won: '😎', lost: '😵' };
   const bestTime = bestTimes[difficulty];
   const isNewBest = gameState === 'won' && (!bestTime || time <= bestTime);
+  const handleChord = useChord(board, gameState, rows, cols, handleReveal);
 
   return (
     <div className="mine-wrapper">
@@ -69,6 +70,7 @@ export default function Minesweeper() {
                   <div key={`${r}-${c}`} className={cellClass}
                     style={cell.revealed && !cell.mine && cell.adjacent > 0 ? { color: NUM_COLORS[cell.adjacent] } : {}}
                     onClick={() => handleReveal(r, c)}
+                    onDoubleClick={() => handleChord(r, c)}
                     onContextMenu={(e) => handleFlag(e, r, c)}>
                     {content}
                   </div>

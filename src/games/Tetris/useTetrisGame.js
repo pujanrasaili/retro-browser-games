@@ -102,6 +102,7 @@ export default function useTetrisGame() {
         const newLevel = Math.floor(total / 10) + 1;
         setLevel(newLevel);
         setSpeed(Math.max(100, INITIAL_SPEED - (newLevel - 1) * 70));
+        setBestLines(b => { const nb = Math.max(b, total); localStorage.setItem('tetris_best_lines', nb); return nb; });
         return total;
       });
       setScore(prev => {
@@ -180,7 +181,7 @@ export default function useTetrisGame() {
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [gameState, resetGame, bestLines, lockPiece]);
+  }, [gameState, resetGame, lockPiece]);
 
   const moveLeft  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x-1})); }, []);
   const moveRight = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x+1})); }, []);
