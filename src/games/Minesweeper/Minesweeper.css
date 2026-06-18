@@ -243,7 +243,9 @@
 /* Instructions */
 .mine-instructions {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 24px;
 }
 
 .mine-hint {

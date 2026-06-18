@@ -112,6 +112,7 @@ export default function Minesweeper() {
       <div className="mine-instructions">
         <span className="pixel-font mine-hint">LEFT CLICK: Reveal</span>
         <span className="pixel-font mine-hint">RIGHT CLICK: Flag 🚩</span>
+        <span className="pixel-font mine-hint">DOUBLE CLICK: Auto-clear ⚡</span>
       </div>
     </div>
   );
