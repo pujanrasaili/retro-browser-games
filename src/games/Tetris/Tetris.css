@@ -37,6 +37,12 @@
   letter-spacing: 2px;
 }
 
+.panel-sublabel {
+  font-size: 0.32rem;
+  color: #1a3a4a;
+  letter-spacing: 1px;
+}
+
 /* Mini piece preview */
 .mini-piece {
   display: grid;

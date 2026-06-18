@@ -18,7 +18,7 @@ function MiniPiece({ shape, color }) {
 export default function Tetris() {
   const {
     board, current, next, ghost,
-    score, highScore, lines, level,
+    score, highScore, lines, level, bestLines,
     gameState, resetGame,
     moveLeft, moveRight, moveDown, rotate, hardDrop,
     BOARD_WIDTH, BOARD_HEIGHT,
@@ -70,6 +70,7 @@ export default function Tetris() {
         <div className="panel-box">
           <div className="panel-label pixel-font">LINES</div>
           <div className="panel-value pixel-font" style={{ color: '#00f5ff' }}>{String(lines).padStart(4, '0')}</div>
+          <div className="panel-sublabel pixel-font">BEST {bestLines}</div>
         </div>
         <div className="panel-box">
           <div className="panel-label pixel-font">LEVEL</div>
