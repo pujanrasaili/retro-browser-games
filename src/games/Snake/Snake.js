@@ -126,6 +126,7 @@ export default function Snake() {
               <h2 className="pixel-font overlay-title red">GAME OVER</h2>
               <div className="overlay-divider" />
               <p className="overlay-score pixel-font">SCORE: {String(score).padStart(5, '0')}</p>
+              <p className="overlay-sub">{DIFFICULTIES[difficulty].label} · {walls ? '🧱 WALLS' : '🌀 WRAP'}</p>
               {score > 0 && score === highScore && <p className="overlay-best pixel-font">🏆 NEW RECORD!</p>}
               <div className="overlay-divider" />
               <button className="start-btn pixel-font" onClick={() => resetGame(difficulty, walls)}>↺ RETRY</button>
