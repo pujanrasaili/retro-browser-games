@@ -36,3 +36,24 @@
   height: 24px;
   background: #1a1a2a;
 }
+
+.stats-reset-btn {
+  background: transparent;
+  border: 1px solid #2a1a1a;
+  color: #4a2a2a;
+  font-size: 0.7rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-reset-btn:hover {
+  border-color: #ff4757;
+  color: #ff4757;
+  box-shadow: 0 0 8px rgba(255,71,87,0.2);
+}

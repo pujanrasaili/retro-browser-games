@@ -37,6 +37,15 @@ export default function StatsBar() {
 
   const { snakeBest, tetrisBest, mineBest } = stats;
 
+  const handleReset = () => {
+    if (!window.confirm('Reset all best scores for Snake, Tetris, and Minesweeper? This cannot be undone.')) return;
+    localStorage.removeItem('snake_best');
+    localStorage.removeItem('tetris_best');
+    localStorage.removeItem('tetris_best_lines');
+    localStorage.removeItem('mine_best');
+    setStats(readStats());
+  };
+
   return (
     <div className="stats-bar">
       <div className="stat-item">
@@ -56,6 +65,8 @@ export default function StatsBar() {
         <span className="stat-label pixel-font">BEST</span>
         <span className="stat-value pixel-font" style={{ color: '#ff8c00' }}>{mineBest}</span>
       </div>
+      <div className="stat-divider" />
+      <button className="stats-reset-btn pixel-font" onClick={handleReset} title="Reset all best scores">↺</button>
     </div>
   );
 }
