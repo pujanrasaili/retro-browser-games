@@ -232,6 +232,7 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 │                             │
 │   LEFT CLICK   Reveal cell  │
 │   RIGHT CLICK  Place flag   │
+│   DOUBLE CLICK Auto-clear   │
 │   😊 Button    New game     │
 │                             │
 │   Difficulties:             │
@@ -247,6 +248,15 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 - 🔢 Numbers show how many mines are in adjacent cells
 - 🚩 Flag suspected mines with right click
 - 💡 Empty cells auto-reveal connected safe areas
+- ⚡ Double-click a revealed number to instantly reveal all its neighbors, once you've flagged the correct number of mines around it
+
+---
+
+## 💾 Persistent Scores
+
+All best scores (Snake high score, Tetris high score + best lines, Minesweeper best time per difficulty) are saved to your browser's `localStorage` and survive page refreshes. They're visible at all times in the **stats bar** under the navigation menu.
+
+Want to start fresh? Click the **↺** button at the end of the stats bar to reset everything (with a confirmation prompt first).
 
 ---
 
