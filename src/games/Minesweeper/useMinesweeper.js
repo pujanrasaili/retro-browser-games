@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { DIFFICULTIES, createBoard, floodReveal } from './mineUtils';
+import { sounds } from '../../utils/sound';
 
 export default function useMinesweeper() {
   const [difficulty, setDifficulty] = useState('easy');
@@ -55,6 +56,7 @@ export default function useMinesweeper() {
     const cell = currentBoard[r][c];
     if (cell.revealed || cell.flagged) return;
     if (cell.mine) {
+      sounds.explode();
       const newBoard = currentBoard.map(row =>
         row.map(cell => cell.mine ? { ...cell, revealed: true } : cell)
       );
@@ -66,6 +68,7 @@ export default function useMinesweeper() {
     const newBoard = floodReveal(currentBoard, r, c, rows, cols);
     setBoard(newBoard);
     if (checkWin(newBoard)) {
+      sounds.win();
       setGameState('won');
       // Save best time
       setBestTimes(prev => {
@@ -77,6 +80,8 @@ export default function useMinesweeper() {
         }
         return prev;
       });
+    } else {
+      sounds.reveal();
     }
   }, [board, gameState, firstClick, rows, cols, mines, checkWin, difficulty, time]);
 
@@ -86,6 +91,7 @@ export default function useMinesweeper() {
     if (!board) return;
     const cell = board[r][c];
     if (cell.revealed) return;
+    sounds.flag();
     const newBoard = board.map(row => row.map(c => ({ ...c })));
     newBoard[r][c].flagged = !newBoard[r][c].flagged;
     setBoard(newBoard);
