@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { sounds } from '../../utils/sound';
 
 const BOARD_SIZE = 20;
 const INITIAL_SNAKE = [
@@ -74,6 +75,7 @@ export default function useSnakeGame() {
     // Wall mode — hit wall = game over
     if (useWalls) {
       if (nx < 0 || nx >= BOARD_SIZE || ny < 0 || ny >= BOARD_SIZE) {
+        sounds.gameOver();
         setGameState('over');
         return;
       }
@@ -85,6 +87,7 @@ export default function useSnakeGame() {
     const newHead = { x: nx, y: ny };
 
     if (current.some(s => s.x === newHead.x && s.y === newHead.y)) {
+      sounds.gameOver();
       setGameState('over');
       return;
     }
@@ -93,6 +96,7 @@ export default function useSnakeGame() {
       const newSnake = [newHead, ...prev];
       setFood(prevFood => {
         if (newHead.x === prevFood.x && newHead.y === prevFood.y) {
+          sounds.eat();
           setScore(s => {
             const ns = s + 10;
             setHighScore(h => { const newH = Math.max(h, ns); localStorage.setItem('snake_best', newH); return newH; });
