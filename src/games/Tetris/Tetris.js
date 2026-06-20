@@ -125,7 +125,8 @@ export default function Tetris() {
               <p className="pixel-font t-stat">SCORE: {String(score).padStart(6,'0')}</p>
               <p className="pixel-font t-stat">LINES: {lines}</p>
               <p className="pixel-font t-stat">LEVEL: {level}</p>
-              {score > 0 && score === highScore && <p className="pixel-font t-best">🏆 NEW RECORD!</p>}
+              {score > 0 && score === highScore && <p className="pixel-font t-best">🏆 NEW SCORE RECORD!</p>}
+              {lines > 0 && lines === bestLines && score !== highScore && <p className="pixel-font t-best">🔥 NEW LINES RECORD!</p>}
               <div className="t-divider" />
               <button className="t-btn pixel-font" onClick={resetGame}>↺ RETRY</button>
             </div>
