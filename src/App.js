@@ -4,14 +4,26 @@ import Snake from './games/Snake/Snake';
 import Tetris from './games/Tetris/Tetris';
 import Minesweeper from './games/Minesweeper/Minesweeper';
 import StatsBar from './components/StatsBar';
+import { isMuted, toggleMuted } from './utils/sound';
 
 function App() {
   const [activeGame, setActiveGame] = useState('snake');
+  const [muted, setMutedState] = useState(isMuted);
+
+  const handleMuteToggle = () => {
+    const newMuted = toggleMuted();
+    setMutedState(newMuted);
+  };
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="pixel-font app-title">🎮 RETRO GAMES</h1>
+        <div className="title-row">
+          <h1 className="pixel-font app-title">🎮 RETRO GAMES</h1>
+          <button className="mute-btn" onClick={handleMuteToggle} title={muted ? 'Unmute' : 'Mute'}>
+            {muted ? '🔇' : '🔊'}
+          </button>
+        </div>
         <nav className="game-nav">
           <button className={`nav-btn ${activeGame === 'snake' ? 'active' : ''}`} onClick={() => setActiveGame('snake')}>🐍 SNAKE</button>
           <button className={`nav-btn ${activeGame === 'tetris' ? 'active' : ''}`} onClick={() => setActiveGame('tetris')}>🧱 TETRIS</button>
