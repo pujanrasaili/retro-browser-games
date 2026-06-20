@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { randomPiece, rotatePiece } from './pieces';
+import { sounds } from '../../utils/sound';
 
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 20;
@@ -70,6 +71,7 @@ export default function useTetrisGame() {
   const spawnPiece = useCallback((boardState) => {
     const piece = randomPiece();
     if (!isValid(piece.shape, piece.x, piece.y, boardState)) {
+      sounds.gameOver();
       setGameState('over');
       return;
     }
@@ -97,6 +99,7 @@ export default function useTetrisGame() {
     const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
     setBoard(clearedBoard);
     if (linesCleared > 0) {
+      sounds.lineClear();
       setLines(prev => {
         const total = prev + linesCleared;
         const newLevel = Math.floor(total / 10) + 1;
@@ -110,6 +113,8 @@ export default function useTetrisGame() {
         setHighScore(h => { const nh = Math.max(h, ns); localStorage.setItem('tetris_best', nh); return nh; });
         return ns;
       });
+    } else {
+      sounds.drop();
     }
     spawnPiece(clearedBoard);
   }, [spawnPiece]);
@@ -164,16 +169,21 @@ export default function useTetrisGame() {
         }
       } else if (e.key === 'ArrowUp' || e.key === 'x' || e.key === 'X') {
         const rotated = rotatePiece(piece.shape);
-        if (isValid(rotated, piece.x, piece.y, b))
+        if (isValid(rotated, piece.x, piece.y, b)) {
+          sounds.rotate();
           setCurrent(p => ({ ...p, shape: rotated }));
-        else if (isValid(rotated, piece.x - 1, piece.y, b))
+        } else if (isValid(rotated, piece.x - 1, piece.y, b)) {
+          sounds.rotate();
           setCurrent(p => ({ ...p, shape: rotated, x: p.x - 1 }));
-        else if (isValid(rotated, piece.x + 1, piece.y, b))
+        } else if (isValid(rotated, piece.x + 1, piece.y, b)) {
+          sounds.rotate();
           setCurrent(p => ({ ...p, shape: rotated, x: p.x + 1 }));
+        }
       } else if (e.key === ' ') {
         // Hard drop
         let dropY = piece.y;
         while (isValid(piece.shape, piece.x, dropY + 1, b)) dropY++;
+        sounds.drop();
         setScore(s => s + (dropY - piece.y) * 2);
         setCurrent(p => ({ ...p, y: dropY }));
         setTimeout(() => lockPiece(), 30);
@@ -189,14 +199,15 @@ export default function useTetrisGame() {
   const rotate    = useCallback(() => {
     const p = currentRef.current; const b = boardRef.current; if (!p) return;
     const rotated = rotatePiece(p.shape);
-    if (isValid(rotated, p.x, p.y, b)) setCurrent(prev => ({...prev, shape: rotated}));
-    else if (isValid(rotated, p.x-1, p.y, b)) setCurrent(prev => ({...prev, shape: rotated, x: prev.x-1}));
-    else if (isValid(rotated, p.x+1, p.y, b)) setCurrent(prev => ({...prev, shape: rotated, x: prev.x+1}));
+    if (isValid(rotated, p.x, p.y, b)) { sounds.rotate(); setCurrent(prev => ({...prev, shape: rotated})); }
+    else if (isValid(rotated, p.x-1, p.y, b)) { sounds.rotate(); setCurrent(prev => ({...prev, shape: rotated, x: prev.x-1})); }
+    else if (isValid(rotated, p.x+1, p.y, b)) { sounds.rotate(); setCurrent(prev => ({...prev, shape: rotated, x: prev.x+1})); }
   }, []);
   const hardDrop  = useCallback(() => {
     const p = currentRef.current; const b = boardRef.current; if (!p) return;
     let dropY = p.y;
     while (isValid(p.shape, p.x, dropY+1, b)) dropY++;
+    sounds.drop();
     setScore(s => s + (dropY - p.y) * 2);
     setCurrent(prev => ({...prev, y: dropY}));
     setTimeout(() => lockPiece(), 30);
