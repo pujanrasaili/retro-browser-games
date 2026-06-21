@@ -193,9 +193,9 @@ export default function useTetrisGame() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [gameState, resetGame, lockPiece]);
 
-  const moveLeft  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x-1})); }, []);
-  const moveRight = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) setCurrent(prev => ({...prev, x: prev.x+1})); }, []);
-  const moveDown  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x, p.y+1, b)) { setCurrent(prev => ({...prev, y: prev.y+1})); setScore(s => s+1); } }, []);
+  const moveLeft  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) { sounds.move(); setCurrent(prev => ({...prev, x: prev.x-1})); } }, []);
+  const moveRight = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) { sounds.move(); setCurrent(prev => ({...prev, x: prev.x+1})); } }, []);
+  const moveDown  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x, p.y+1, b)) { sounds.move(); setCurrent(prev => ({...prev, y: prev.y+1})); setScore(s => s+1); } }, []);
   const rotate    = useCallback(() => {
     const p = currentRef.current; const b = boardRef.current; if (!p) return;
     const rotated = rotatePiece(p.shape);
