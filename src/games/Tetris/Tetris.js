@@ -80,7 +80,7 @@ export default function Tetris() {
 
       {/* Board */}
       <div className="tetris-board-container">
-        <div className="tetris-board" style={{ gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)` }}>
+        <div className={`tetris-board ${gameState === 'over' ? 'game-over' : ''}`} style={{ gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)` }}>
           {displayBoard.map((row, y) =>
             row.map((cell, x) => (
               <div

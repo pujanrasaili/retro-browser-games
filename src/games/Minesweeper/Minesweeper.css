@@ -102,6 +102,15 @@
 
 .mine-board.lost {
   box-shadow: 0 0 30px rgba(255,71,87,0.2), inset 0 0 40px rgba(255,71,87,0.05);
+  animation: boardShake 0.4s ease-out;
+}
+
+@keyframes boardShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px) rotate(-0.5deg); }
+  40% { transform: translateX(5px) rotate(0.5deg); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
 }
 
 /* Cells */
