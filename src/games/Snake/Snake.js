@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import useSnakeGame, { DIFFICULTIES } from './useSnakeGame';
+import { sounds } from '../../utils/sound';
 import './Snake.css';
 
 const INITIAL_SPEED = 130;
@@ -32,6 +33,7 @@ export default function Snake() {
     const dy = e.changedTouches[0].clientY - touchStart.current.y;
     if (Math.abs(dx) > Math.abs(dy)) setDirection(dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
     else setDirection(dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
+    sounds.move();
     touchStart.current = null;
   };
 
@@ -146,11 +148,11 @@ export default function Snake() {
 
       {/* Mobile D-pad */}
       <div className="mobile-controls">
-        <div className="ctrl-row"><button className="ctrl-btn" onClick={() => setDirection({ x: 0, y: -1 })}>▲</button></div>
+        <div className="ctrl-row"><button className="ctrl-btn" onClick={() => { setDirection({ x: 0, y: -1 }); sounds.move(); }}>▲</button></div>
         <div className="ctrl-row">
-          <button className="ctrl-btn" onClick={() => setDirection({ x: -1, y: 0 })}>◄</button>
-          <button className="ctrl-btn" onClick={() => setDirection({ x: 0, y: 1 })}>▼</button>
-          <button className="ctrl-btn" onClick={() => setDirection({ x: 1, y: 0 })}>►</button>
+          <button className="ctrl-btn" onClick={() => { setDirection({ x: -1, y: 0 }); sounds.move(); }}>◄</button>
+          <button className="ctrl-btn" onClick={() => { setDirection({ x: 0, y: 1 }); sounds.move(); }}>▼</button>
+          <button className="ctrl-btn" onClick={() => { setDirection({ x: 1, y: 0 }); sounds.move(); }}>►</button>
         </div>
       </div>
     </div>
