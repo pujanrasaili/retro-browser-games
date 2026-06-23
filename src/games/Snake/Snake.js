@@ -16,7 +16,7 @@ function getSpeedLevel(speed, diff) {
 
 export default function Snake() {
   const {
-    snake, food, score, highScore, gameState, speed,
+    snake, food, score, highScore, gameState, speed, eatBurst,
     difficulty, setDifficulty, walls, setWalls,
     resetGame, setDirection, BOARD_SIZE,
   } = useSnakeGame();
@@ -105,6 +105,21 @@ export default function Snake() {
         <div className="board" style={{ gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)` }}>
           {cells}
         </div>
+
+        {eatBurst && (
+          <div
+            key={eatBurst.id}
+            className="eat-burst"
+            style={{
+              left: `${((eatBurst.x + 0.5) / BOARD_SIZE) * 100}%`,
+              top: `${((eatBurst.y + 0.5) / BOARD_SIZE) * 100}%`,
+            }}
+          >
+            {Array.from({ length: 6 }, (_, i) => (
+              <span key={i} className="burst-particle" style={{ '--angle': `${i * 60}deg` }} />
+            ))}
+          </div>
+        )}
 
         {gameState === 'idle' && (
           <div className="overlay">

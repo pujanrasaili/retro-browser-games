@@ -78,6 +78,40 @@
   aspect-ratio: 1;
 }
 
+/* Eat burst particle effect */
+.eat-burst {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.burst-particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background: #ff4757;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ff4757;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
+  animation: burstFly 0.4s ease-out forwards;
+}
+
+@keyframes burstFly {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(18px);
+    opacity: 0;
+  }
+}
+
 .board {
   display: grid;
   width: 100%;
