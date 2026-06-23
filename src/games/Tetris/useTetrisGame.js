@@ -58,6 +58,7 @@ export default function useTetrisGame() {
   const [lines, setLines] = useState(0);
   const [bestLines, setBestLines] = useState(() => parseInt(localStorage.getItem('tetris_best_lines') || '0', 10));
   const [level, setLevel] = useState(1);
+  const [justLeveledUp, setJustLeveledUp] = useState(false);
   const [gameState, setGameState] = useState('idle');
   const [speed, setSpeed] = useState(INITIAL_SPEED);
 
@@ -103,7 +104,14 @@ export default function useTetrisGame() {
       setLines(prev => {
         const total = prev + linesCleared;
         const newLevel = Math.floor(total / 10) + 1;
-        setLevel(newLevel);
+        setLevel(currentLevel => {
+          if (newLevel > currentLevel) {
+            sounds.levelUp();
+            setJustLeveledUp(true);
+            setTimeout(() => setJustLeveledUp(false), 500);
+          }
+          return newLevel;
+        });
         setSpeed(Math.max(100, INITIAL_SPEED - (newLevel - 1) * 70));
         setBestLines(b => { const nb = Math.max(b, total); localStorage.setItem('tetris_best_lines', nb); return nb; });
         return total;
@@ -218,7 +226,7 @@ export default function useTetrisGame() {
   // bestLines exposed
   return {
     board, current, next, ghost,
-    score, highScore, lines, level,
+    score, highScore, lines, level, justLeveledUp,
     gameState, resetGame, bestLines,
     moveLeft, moveRight, moveDown, rotate, hardDrop,
     BOARD_WIDTH, BOARD_HEIGHT,

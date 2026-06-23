@@ -18,7 +18,7 @@ function MiniPiece({ shape, color }) {
 export default function Tetris() {
   const {
     board, current, next, ghost,
-    score, highScore, lines, level, bestLines,
+    score, highScore, lines, level, bestLines, justLeveledUp,
     gameState, resetGame,
     moveLeft, moveRight, moveDown, rotate, hardDrop,
     BOARD_WIDTH, BOARD_HEIGHT,
@@ -80,7 +80,7 @@ export default function Tetris() {
 
       {/* Board */}
       <div className="tetris-board-container">
-        <div className={`tetris-board ${gameState === 'over' ? 'game-over' : ''}`} style={{ gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)` }}>
+        <div className={`tetris-board ${gameState === 'over' ? 'game-over' : ''} ${justLeveledUp ? 'level-up' : ''}`} style={{ gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)` }}>
           {displayBoard.map((row, y) =>
             row.map((cell, x) => (
               <div

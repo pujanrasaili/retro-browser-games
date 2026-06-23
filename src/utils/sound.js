@@ -56,6 +56,7 @@ export const sounds = {
   rotate:    () => playTone({ freq: 330, duration: 0.05, type: 'triangle', volume: 0.08 }),
   drop:      () => playTone({ freq: 150, duration: 0.07, type: 'square', volume: 0.12, sweepTo: 60 }),
   lineClear: () => playTone({ freq: 600, duration: 0.18, type: 'sawtooth', volume: 0.12, sweepTo: 1200 }),
+  levelUp:   () => playTone({ freq: 400, duration: 0.25, type: 'triangle', volume: 0.13, sweepTo: 900 }),
   flag:      () => playTone({ freq: 500, duration: 0.05, type: 'triangle', volume: 0.08 }),
   reveal:    () => playTone({ freq: 350, duration: 0.04, type: 'sine', volume: 0.06 }),
   win:       () => playTone({ freq: 523, duration: 0.3, type: 'triangle', volume: 0.14, sweepTo: 1046 }),
