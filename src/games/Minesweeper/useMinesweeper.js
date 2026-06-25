@@ -68,7 +68,11 @@ export default function useMinesweeper() {
     const newBoard = floodReveal(currentBoard, r, c, rows, cols);
     setBoard(newBoard);
     if (checkWin(newBoard)) {
-      sounds.win();
+      if (difficulty === 'hard') {
+        sounds.legendaryWin();
+      } else {
+        sounds.win();
+      }
       setGameState('won');
       // Save best time
       setBestTimes(prev => {

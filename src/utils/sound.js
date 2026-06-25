@@ -66,6 +66,13 @@ export const sounds = {
   flag:      () => playTone({ freq: 500, duration: 0.05, type: 'triangle', volume: 0.08 }),
   reveal:    () => playTone({ freq: 350, duration: 0.04, type: 'sine', volume: 0.06 }),
   win:       () => playTone({ freq: 523, duration: 0.3, type: 'triangle', volume: 0.14, sweepTo: 1046 }),
+  legendaryWin: () => {
+    // Bigger fanfare for the rare Hard-difficulty win — four ascending notes
+    playTone({ freq: 523, duration: 0.12, type: 'triangle', volume: 0.15 });
+    setTimeout(() => playTone({ freq: 659, duration: 0.12, type: 'triangle', volume: 0.15 }), 100);
+    setTimeout(() => playTone({ freq: 784, duration: 0.12, type: 'triangle', volume: 0.16 }), 200);
+    setTimeout(() => playTone({ freq: 1046, duration: 0.35, type: 'triangle', volume: 0.18 }), 300);
+  },
   explode:   () => playTone({ freq: 120, duration: 0.3, type: 'sawtooth', volume: 0.18, sweepTo: 40 }),
   gameOver:  () => playTone({ freq: 300, duration: 0.4, type: 'sawtooth', volume: 0.14, sweepTo: 80 }),
 };

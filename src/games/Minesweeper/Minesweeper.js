@@ -88,8 +88,13 @@ export default function Minesweeper() {
         {gameState === 'won' && (
           <div className="mine-overlay">
             <div className="mine-overlay-content">
-              <div className="mine-overlay-icon">😎</div>
-              <h2 className="pixel-font mine-overlay-title green">YOU WIN!</h2>
+              <div className="mine-overlay-icon">{difficulty === 'hard' ? '🏆' : '😎'}</div>
+              <h2 className="pixel-font mine-overlay-title green">
+                {difficulty === 'hard' ? 'LEGENDARY WIN!' : 'YOU WIN!'}
+              </h2>
+              <p className="pixel-font mine-diff-badge">
+                {difficulty === 'easy' ? '🟢' : difficulty === 'medium' ? '🟡' : '🔴'} {difficulty.toUpperCase()}
+              </p>
               <p className="mine-overlay-stat pixel-font">TIME: {time}s</p>
               {isNewBest && <p className="mine-overlay-best pixel-font">🏆 NEW BEST!</p>}
               <button className="mine-btn pixel-font" onClick={() => resetGame(difficulty)}>▶ PLAY AGAIN</button>

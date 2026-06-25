@@ -224,6 +224,12 @@
   letter-spacing: 3px;
 }
 
+.mine-diff-badge {
+  font-size: 0.45rem;
+  color: #8a8a9a;
+  letter-spacing: 2px;
+}
+
 .mine-overlay-sub {
   font-size: 0.65rem;
   color: #3a4a5a;
