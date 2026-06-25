@@ -18,7 +18,7 @@ function MiniPiece({ shape, color }) {
 export default function Tetris() {
   const {
     board, current, next, ghost,
-    score, highScore, lines, level, bestLines, justLeveledUp,
+    score, highScore, lines, level, bestLines, justLeveledUp, tetrisCallout,
     gameState, resetGame,
     moveLeft, moveRight, moveDown, rotate, hardDrop,
     BOARD_WIDTH, BOARD_HEIGHT,
@@ -97,6 +97,10 @@ export default function Tetris() {
             ))
           )}
         </div>
+
+        {tetrisCallout && (
+          <div className="tetris-callout pixel-font">TETRIS!</div>
+        )}
 
         {/* Overlays */}
         {gameState === 'idle' && (

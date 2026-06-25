@@ -82,6 +82,28 @@
   animation: tBoardShake 0.4s ease-out;
 }
 
+.tetris-callout {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.1rem;
+  color: #ffd700;
+  text-shadow: 0 0 16px #ffd700, 0 0 32px rgba(255,215,0,0.6);
+  letter-spacing: 4px;
+  pointer-events: none;
+  z-index: 8;
+  animation: tetrisCalloutPop 0.9s ease-out forwards;
+}
+
+@keyframes tetrisCalloutPop {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  15%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  30%  { transform: translate(-50%, -50%) scale(1); }
+  75%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+}
+
 @keyframes tBoardShake {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-6px) rotate(-0.5deg); }

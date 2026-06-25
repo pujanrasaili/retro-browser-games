@@ -56,6 +56,12 @@ export const sounds = {
   rotate:    () => playTone({ freq: 330, duration: 0.05, type: 'triangle', volume: 0.08 }),
   drop:      () => playTone({ freq: 150, duration: 0.07, type: 'square', volume: 0.12, sweepTo: 60 }),
   lineClear: () => playTone({ freq: 600, duration: 0.18, type: 'sawtooth', volume: 0.12, sweepTo: 1200 }),
+  tetrisClear: () => {
+    // Distinct fanfare for a 4-line clear — quick ascending triple beep
+    playTone({ freq: 660, duration: 0.1, type: 'square', volume: 0.14 });
+    setTimeout(() => playTone({ freq: 880, duration: 0.1, type: 'square', volume: 0.14 }), 90);
+    setTimeout(() => playTone({ freq: 1320, duration: 0.2, type: 'square', volume: 0.16 }), 180);
+  },
   levelUp:   () => playTone({ freq: 400, duration: 0.25, type: 'triangle', volume: 0.13, sweepTo: 900 }),
   flag:      () => playTone({ freq: 500, duration: 0.05, type: 'triangle', volume: 0.08 }),
   reveal:    () => playTone({ freq: 350, duration: 0.04, type: 'sine', volume: 0.06 }),
