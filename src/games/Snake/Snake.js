@@ -16,7 +16,7 @@ function getSpeedLevel(speed, diff) {
 
 export default function Snake() {
   const {
-    snake, food, score, highScore, gameState, speed, eatBurst,
+    snake, food, score, highScore, gameState, speed, eatBurst, milestone,
     difficulty, setDifficulty, walls, setWalls,
     resetGame, setDirection, BOARD_SIZE,
   } = useSnakeGame();
@@ -119,6 +119,10 @@ export default function Snake() {
               <span key={i} className="burst-particle" style={{ '--angle': `${i * 60}deg` }} />
             ))}
           </div>
+        )}
+
+        {milestone && (
+          <div className="milestone-callout pixel-font">🐍 {milestone} LONG!</div>
         )}
 
         {gameState === 'idle' && (

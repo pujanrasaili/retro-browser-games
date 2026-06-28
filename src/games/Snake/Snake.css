@@ -112,6 +112,29 @@
   }
 }
 
+.milestone-callout {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7rem;
+  color: var(--green-bright);
+  text-shadow: 0 0 14px var(--green-bright), 0 0 28px rgba(57,255,20,0.5);
+  letter-spacing: 3px;
+  pointer-events: none;
+  z-index: 6;
+  white-space: nowrap;
+  animation: milestonePop 1.2s ease-out forwards;
+}
+
+@keyframes milestonePop {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  12%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  25%  { transform: translate(-50%, -50%) scale(1); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -60%) scale(1); }
+}
+
 .board {
   display: grid;
   width: 100%;

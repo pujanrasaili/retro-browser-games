@@ -52,6 +52,11 @@ function playTone({ freq = 440, duration = 0.1, type = 'square', volume = 0.15, 
 
 export const sounds = {
   eat:       () => playTone({ freq: 440, duration: 0.08, type: 'square', volume: 0.12 }),
+  milestone: () => {
+    // Quick double chime for every 10-segment milestone
+    playTone({ freq: 700, duration: 0.1, type: 'triangle', volume: 0.13 });
+    setTimeout(() => playTone({ freq: 1000, duration: 0.15, type: 'triangle', volume: 0.14 }), 90);
+  },
   move:      () => playTone({ freq: 220, duration: 0.04, type: 'square', volume: 0.05 }),
   rotate:    () => playTone({ freq: 330, duration: 0.05, type: 'triangle', volume: 0.08 }),
   drop:      () => playTone({ freq: 150, duration: 0.07, type: 'square', volume: 0.12, sweepTo: 60 }),
