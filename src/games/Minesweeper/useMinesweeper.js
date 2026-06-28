@@ -9,6 +9,8 @@ export default function useMinesweeper() {
   const [minesLeft, setMinesLeft] = useState(DIFFICULTIES.easy.mines);
   const [time, setTime] = useState(0);
   const [firstClick, setFirstClick] = useState(true);
+  const [halfwayCelebrated, setHalfwayCelebrated] = useState(false);
+  const halfwayShownRef = useRef(false);
   const [bestTimes, setBestTimes] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('mine_best') || '{}');
@@ -34,15 +36,20 @@ export default function useMinesweeper() {
     setMinesLeft(DIFFICULTIES[diff].mines);
     setTime(0);
     setFirstClick(true);
+    halfwayShownRef.current = false;
   }, [difficulty]);
 
-  const checkWin = useCallback((b) => {
+  const checkProgress = useCallback((b) => {
     const { rows, cols, mines } = DIFFICULTIES[difficulty];
+    const totalCells = rows * cols;
+    const totalSafeCells = totalCells - mines;
     let unrevealed = 0;
     for (let r = 0; r < rows; r++)
       for (let c = 0; c < cols; c++)
         if (!b[r][c].revealed) unrevealed++;
-    return unrevealed === mines;
+    const revealedSafeCells = totalSafeCells - (unrevealed - mines);
+    const percent = totalSafeCells > 0 ? revealedSafeCells / totalSafeCells : 0;
+    return { won: unrevealed === mines, percent };
   }, [difficulty]);
 
   const handleReveal = useCallback((r, c) => {
@@ -67,7 +74,16 @@ export default function useMinesweeper() {
     }
     const newBoard = floodReveal(currentBoard, r, c, rows, cols);
     setBoard(newBoard);
-    if (checkWin(newBoard)) {
+    const { won, percent } = checkProgress(newBoard);
+
+    if (!halfwayShownRef.current && percent >= 0.5 && !won) {
+      halfwayShownRef.current = true;
+      sounds.milestone();
+      setHalfwayCelebrated(true);
+      setTimeout(() => setHalfwayCelebrated(false), 1200);
+    }
+
+    if (won) {
       if (difficulty === 'hard') {
         sounds.legendaryWin();
       } else {
@@ -87,7 +103,7 @@ export default function useMinesweeper() {
     } else {
       sounds.reveal();
     }
-  }, [board, gameState, firstClick, rows, cols, mines, checkWin, difficulty, time]);
+  }, [board, gameState, firstClick, rows, cols, mines, checkProgress, difficulty, time]);
 
   const handleFlag = useCallback((e, r, c) => {
     e.preventDefault();
@@ -103,7 +119,7 @@ export default function useMinesweeper() {
   }, [board, gameState]);
 
   return {
-    board, difficulty, gameState, minesLeft, time, bestTimes,
+    board, difficulty, gameState, minesLeft, time, bestTimes, halfwayCelebrated,
     rows, cols, mines,
     resetGame, handleReveal, handleFlag,
   };

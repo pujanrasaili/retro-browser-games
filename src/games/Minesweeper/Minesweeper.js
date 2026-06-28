@@ -10,7 +10,7 @@ function SevenSeg({ value, digits = 3 }) {
 
 export default function Minesweeper() {
   const {
-    board, difficulty, gameState, minesLeft, time, bestTimes,
+    board, difficulty, gameState, minesLeft, time, bestTimes, halfwayCelebrated,
     rows, cols,
     resetGame, handleReveal, handleFlag,
   } = useMinesweeper();
@@ -84,6 +84,10 @@ export default function Minesweeper() {
                 )))
           )}
         </div>
+
+        {halfwayCelebrated && (
+          <div className="halfway-callout pixel-font">⚡ HALFWAY THERE!</div>
+        )}
 
         {gameState === 'won' && (
           <div className="mine-overlay">
