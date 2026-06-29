@@ -102,7 +102,7 @@ export default function Snake() {
 
       {/* Game Board */}
       <div className="board-container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-        <div className="board" style={{ gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)` }}>
+        <div className={`board ${walls ? 'walls-active' : ''}`} style={{ gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)` }}>
           {cells}
         </div>
 
