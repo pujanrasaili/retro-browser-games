@@ -4,7 +4,11 @@ import { NUM_COLORS, DIFFICULTIES } from './mineUtils';
 import './Minesweeper.css';
 
 function SevenSeg({ value, digits = 3 }) {
-  const display = String(Math.max(0, Math.min(999, value))).padStart(digits, '0');
+  const isNegative = value < 0;
+  const clamped = Math.max(-99, Math.min(999, value));
+  const display = isNegative
+    ? '-' + String(Math.abs(clamped)).padStart(digits - 1, '0')
+    : String(clamped).padStart(digits, '0');
   return <div className="seven-seg pixel-font">{display}</div>;
 }
 
