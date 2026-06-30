@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatScore } from '../utils/formatScore';
 import './StatsBar.css';
 
 function readStats() {
@@ -57,7 +58,7 @@ export default function StatsBar() {
       <div className="stat-item">
         <span className="stat-icon">🧱</span>
         <span className="stat-label pixel-font">BEST</span>
-        <span className="stat-value pixel-font" style={{ color: '#bf5fff' }}>{String(tetrisBest).padStart(6,'0')}</span>
+        <span className="stat-value pixel-font" style={{ color: '#bf5fff' }}>{formatScore(tetrisBest)}</span>
       </div>
       <div className="stat-divider" />
       <div className="stat-item">

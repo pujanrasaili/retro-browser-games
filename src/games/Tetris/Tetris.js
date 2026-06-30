@@ -1,5 +1,6 @@
 import React from 'react';
 import useTetrisGame from './useTetrisGame';
+import { formatScore } from '../../utils/formatScore';
 import './Tetris.css';
 
 function MiniPiece({ shape, color }) {
@@ -61,11 +62,11 @@ export default function Tetris() {
       <div className="tetris-side left-panel">
         <div className="panel-box">
           <div className="panel-label pixel-font">SCORE</div>
-          <div className="panel-value pixel-font" style={{ color: '#39ff14' }}>{String(score).padStart(6, '0')}</div>
+          <div className="panel-value pixel-font" style={{ color: '#39ff14' }}>{formatScore(score)}</div>
         </div>
         <div className="panel-box">
           <div className="panel-label pixel-font">BEST</div>
-          <div className="panel-value pixel-font" style={{ color: '#ffd700' }}>{String(highScore).padStart(6, '0')}</div>
+          <div className="panel-value pixel-font" style={{ color: '#ffd700' }}>{formatScore(highScore)}</div>
         </div>
         <div className="panel-box">
           <div className="panel-label pixel-font">LINES</div>
@@ -126,7 +127,7 @@ export default function Tetris() {
             <div className="t-overlay-content">
               <h2 className="pixel-font t-title red">GAME OVER</h2>
               <div className="t-divider" />
-              <p className="pixel-font t-stat">SCORE: {String(score).padStart(6,'0')}</p>
+              <p className="pixel-font t-stat">SCORE: {formatScore(score)}</p>
               <p className="pixel-font t-stat">LINES: {lines}</p>
               <p className="pixel-font t-stat">LEVEL: {level}</p>
               {score > 0 && score === highScore && <p className="pixel-font t-best">🏆 NEW SCORE RECORD!</p>}
