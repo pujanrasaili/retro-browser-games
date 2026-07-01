@@ -16,13 +16,13 @@ export default function Minesweeper() {
   const {
     board, difficulty, gameState, minesLeft, time, bestTimes, halfwayCelebrated,
     rows, cols,
-    resetGame, handleReveal, handleFlag,
+    resetGame, handleReveal, handleChordReveal, handleFlag,
   } = useMinesweeper();
 
   const faceMap = { idle: '🙂', playing: '🙂', won: '😎', lost: '😵' };
   const bestTime = bestTimes[difficulty];
   const isNewBest = gameState === 'won' && (!bestTime || time <= bestTime);
-  const handleChord = useChord(board, gameState, rows, cols, handleReveal);
+  const handleChord = useChord(board, gameState, rows, cols, handleChordReveal);
 
   return (
     <div className="mine-wrapper">

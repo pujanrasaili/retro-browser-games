@@ -105,6 +105,64 @@ export default function useMinesweeper() {
     }
   }, [board, gameState, firstClick, rows, cols, mines, checkProgress, difficulty, time]);
 
+  // Processes all chord neighbors in ONE board update pass, avoiding the stale-
+  // closure bug where multiple sequential handleReveal calls each read the same
+  // captured board snapshot instead of the progressively updated board.
+  const handleChordReveal = useCallback((neighbors) => {
+    if (!board || gameState !== 'playing') return;
+    let currentBoard = board;
+    let hitMine = false;
+    let mineR, mineC;
+
+    for (const [nr, nc] of neighbors) {
+      const cell = currentBoard[nr][nc];
+      if (cell.revealed || cell.flagged) continue;
+      if (cell.mine) {
+        hitMine = true;
+        mineR = nr;
+        mineC = nc;
+        break;
+      }
+      currentBoard = floodReveal(currentBoard, nr, nc, rows, cols);
+    }
+
+    if (hitMine) {
+      sounds.explode();
+      const newBoard = currentBoard.map(row =>
+        row.map(cell => cell.mine ? { ...cell, revealed: true } : cell)
+      );
+      newBoard[mineR][mineC] = { ...newBoard[mineR][mineC], exploded: true };
+      setBoard(newBoard);
+      setGameState('lost');
+      return;
+    }
+
+    setBoard(currentBoard);
+    const { won, percent } = checkProgress(currentBoard);
+    if (!halfwayShownRef.current && percent >= 0.5 && !won) {
+      halfwayShownRef.current = true;
+      sounds.milestone();
+      setHalfwayCelebrated(true);
+      setTimeout(() => setHalfwayCelebrated(false), 1200);
+    }
+    if (won) {
+      if (difficulty === 'hard') sounds.legendaryWin();
+      else sounds.win();
+      setGameState('won');
+      setBestTimes(prev => {
+        const current = prev[difficulty];
+        if (!current || time < current) {
+          const updated = { ...prev, [difficulty]: time };
+          localStorage.setItem('mine_best', JSON.stringify(updated));
+          return updated;
+        }
+        return prev;
+      });
+    } else {
+      sounds.reveal();
+    }
+  }, [board, gameState, rows, cols, checkProgress, difficulty, time]);
+
   const handleFlag = useCallback((e, r, c) => {
     e.preventDefault();
     if (gameState !== 'playing' && gameState !== 'idle') return;
@@ -121,7 +179,7 @@ export default function useMinesweeper() {
   return {
     board, difficulty, gameState, minesLeft, time, bestTimes, halfwayCelebrated,
     rows, cols, mines,
-    resetGame, handleReveal, handleFlag,
+    resetGame, handleReveal, handleChordReveal, handleFlag,
   };
 }
 
@@ -142,14 +200,14 @@ export function chordReveal(board, r, c, rows, cols) {
   return { flagCount, neighbors };
 }
 
-export function useChord(board, gameState, rows, cols, handleReveal) {
+export function useChord(board, gameState, rows, cols, handleChordReveal) {
   const handleChord = (r, c) => {
     if (!board || gameState !== 'playing') return;
     const cell = board[r][c];
     if (!cell.revealed || cell.adjacent === 0) return;
     const { flagCount, neighbors } = chordReveal(board, r, c, rows, cols);
     if (flagCount === cell.adjacent) {
-      neighbors.forEach(([nr, nc]) => handleReveal(nr, nc));
+      handleChordReveal(neighbors);
     }
   };
   return handleChord;
