@@ -317,6 +317,19 @@
   100% { transform: scale(1); }
 }
 
+/* Auto-flagged mines on win — golden glow, slightly slower pop */
+.mcell.win-flag {
+  animation: winFlagPlace 0.4s ease-out;
+  background: #0d1a0d !important;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+@keyframes winFlagPlace {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
 /* Win cell reveal */
 .mine-board.won .mcell.hidden {
   background: #0d1a0d;

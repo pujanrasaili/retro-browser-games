@@ -64,12 +64,16 @@ export default function Minesweeper() {
             ? board.map((row, r) => row.map((cell, c) => {
                 let content = '';
                 let cellClass = 'mcell';
+                // On win: auto-flag all unrevealed mines for the satisfying reveal
+                const autoFlagged = gameState === 'won' && cell.mine && !cell.revealed;
                 if (cell.revealed) {
                   cellClass += ' revealed';
                   if (cell.mine) { content = cell.exploded ? '💥' : '💣'; if (cell.exploded) cellClass += ' exploded'; }
                   else if (cell.adjacent > 0) content = cell.adjacent;
-                } else if (cell.flagged) { content = '🚩'; cellClass += ' flagged'; }
-                else cellClass += ' hidden';
+                } else if (cell.flagged || autoFlagged) {
+                  content = '🚩';
+                  cellClass += autoFlagged ? ' flagged win-flag' : ' flagged';
+                } else cellClass += ' hidden';
                 return (
                   <div key={`${r}-${c}`} className={cellClass}
                     style={cell.revealed && !cell.mine && cell.adjacent > 0 ? { color: NUM_COLORS[cell.adjacent] } : {}}
