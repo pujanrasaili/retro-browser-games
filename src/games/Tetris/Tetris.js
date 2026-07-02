@@ -81,7 +81,13 @@ export default function Tetris() {
 
       {/* Board */}
       <div className="tetris-board-container">
-        <div className={`tetris-board ${gameState === 'over' ? 'game-over' : ''} ${justLeveledUp ? 'level-up' : ''}`} style={{ gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)` }}>
+        <div
+          className={`tetris-board ${gameState === 'over' ? 'game-over' : ''} ${justLeveledUp ? 'level-up' : ''}`}
+          style={{
+            gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
+            '--level-accent': ['#00f5ff','#ffd700','#bf5fff','#39ff14','#ff4757','#ff8c00','#00bfff'][(level - 1) % 7],
+          }}
+        >
           {displayBoard.map((row, y) =>
             row.map((cell, x) => (
               <div
