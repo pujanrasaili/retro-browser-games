@@ -16,7 +16,7 @@ function getSpeedLevel(speed, diff) {
 
 export default function Snake() {
   const {
-    snake, food, score, highScore, gameState, speed, eatBurst, milestone,
+    snake, food, score, highScore, gameState, speed, eatBurst, milestone, scoreBump,
     difficulty, setDifficulty, walls, setWalls,
     resetGame, setDirection, BOARD_SIZE,
   } = useSnakeGame();
@@ -87,7 +87,7 @@ export default function Snake() {
       <div className="score-bar">
         <div className="score-item">
           <span className="score-label pixel-font">SCORE</span>
-          <span className="score-value pixel-font">{String(score).padStart(5, '0')}</span>
+          <span className={`score-value pixel-font${scoreBump ? ' bump' : ''}`}>{String(score).padStart(5, '0')}</span>
         </div>
         <div className="speed-indicator">
           {Array.from({ length: SPEED_LEVELS }, (_, i) => (

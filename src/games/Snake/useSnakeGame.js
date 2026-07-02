@@ -37,6 +37,7 @@ export default function useSnakeGame() {
   const [gameState, setGameState] = useState('idle');
   const [eatBurst, setEatBurst] = useState(null);
   const [milestone, setMilestone] = useState(null);
+  const [scoreBump, setScoreBump] = useState(false);
   const [speed, setSpeed] = useState(DIFFICULTIES.medium.speed);
 
   const directionRef = useRef(direction);
@@ -104,6 +105,8 @@ export default function useSnakeGame() {
           setTimeout(() => {
             setEatBurst(curr => (curr && curr.id === burstId ? null : curr));
           }, 400);
+          setScoreBump(true);
+          setTimeout(() => setScoreBump(false), 200);
           if (newSnake.length > 0 && newSnake.length % 10 === 0) {
             sounds.milestone();
             setMilestone(newSnake.length);
@@ -158,7 +161,7 @@ export default function useSnakeGame() {
   }, [gameState, setDirection]);
 
   return {
-    snake, food, score, highScore, gameState, speed, eatBurst, milestone,
+    snake, food, score, highScore, gameState, speed, eatBurst, milestone, scoreBump,
     difficulty, setDifficulty, walls, setWalls,
     resetGame, setDirection, BOARD_SIZE,
   };
