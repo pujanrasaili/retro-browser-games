@@ -237,8 +237,8 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 │                             │
 │   Difficulties:             │
 │   🟢 Easy   9×9,  10 mines  │
-│   🟡 Medium 16×16, 40 mines │
-│   🔴 Hard   16×30, 99 mines │
+│   🟡 Medium 16×16, 30 mines │
+│   🔴 Hard   16×30, 100 mines │
 │                             │
 └─────────────────────────────┘
 ```
