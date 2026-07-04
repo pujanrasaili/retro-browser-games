@@ -18,10 +18,10 @@ function MiniPiece({ shape, color }) {
 
 export default function Tetris() {
   const {
-    board, current, next, ghost,
+    board, current, next, ghost, hold, canHold,
     score, highScore, lines, level, bestLines, justLeveledUp, tetrisCallout,
     gameState, resetGame,
-    moveLeft, moveRight, moveDown, rotate, hardDrop,
+    moveLeft, moveRight, moveDown, rotate, hardDrop, holdPiece,
     BOARD_WIDTH, BOARD_HEIGHT,
   } = useTetrisGame();
 
@@ -77,6 +77,13 @@ export default function Tetris() {
           <div className="panel-label pixel-font">LEVEL</div>
           <div className="panel-value pixel-font" style={{ color: '#bf5fff' }}>{String(level).padStart(2, '0')}</div>
         </div>
+        <div className={`panel-box ${!canHold ? 'panel-box-dim' : ''}`}>
+          <div className="panel-label pixel-font">HOLD</div>
+          {hold
+            ? <MiniPiece shape={hold.shape} color={canHold ? hold.color : '#2a2a3a'} />
+            : <div className="panel-sublabel pixel-font">C / SHIFT</div>
+          }
+        </div>
       </div>
 
       {/* Board */}
@@ -120,6 +127,7 @@ export default function Tetris() {
                 <div className="t-key-row"><span className="t-key pixel-font">↑</span><span className="t-desc">Rotate</span></div>
                 <div className="t-key-row"><span className="t-key pixel-font">↓</span><span className="t-desc">Soft Drop</span></div>
                 <div className="t-key-row"><span className="t-key pixel-font">SPC</span><span className="t-desc">Hard Drop</span></div>
+                <div className="t-key-row"><span className="t-key pixel-font">C</span><span className="t-desc">Hold</span></div>
                 <div className="t-key-row"><span className="t-key pixel-font">P</span><span className="t-desc">Pause</span></div>
               </div>
               <div className="t-divider" />
@@ -165,6 +173,7 @@ export default function Tetris() {
         <div className="t-mobile">
           <div className="t-ctrl-row">
             <button className="t-ctrl-btn pixel-font" onClick={rotate}>↻</button>
+            <button className={`t-ctrl-btn pixel-font${!canHold ? ' t-ctrl-dim' : ''}`} onClick={holdPiece}>📦</button>
           </div>
           <div className="t-ctrl-row">
             <button className="t-ctrl-btn pixel-font" onClick={moveLeft}>◄</button>

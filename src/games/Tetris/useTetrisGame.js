@@ -53,6 +53,8 @@ export default function useTetrisGame() {
   const [board, setBoard] = useState(emptyBoard());
   const [current, setCurrent] = useState(null);
   const [next, setNext] = useState(null);
+  const [hold, setHold] = useState(null);
+  const [canHold, setCanHold] = useState(true);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem('tetris_best') || '0', 10));
   const [lines, setLines] = useState(0);
@@ -66,9 +68,11 @@ export default function useTetrisGame() {
   const boardRef = useRef(board);
   const currentRef = useRef(current);
   const levelRef = useRef(level);
+  const nextRef = useRef(next);
   boardRef.current = board;
   currentRef.current = current;
   levelRef.current = level;
+  nextRef.current = next;
 
   const spawnPiece = useCallback((boardState) => {
     const piece = randomPiece();
@@ -89,6 +93,8 @@ export default function useTetrisGame() {
     setLevel(1);
     setSpeed(INITIAL_SPEED);
     setGameState('playing');
+    setHold(null);
+    setCanHold(true);
     setCurrent(randomPiece());
     setNext(randomPiece());
   }, []);
@@ -131,6 +137,7 @@ export default function useTetrisGame() {
     } else {
       sounds.drop();
     }
+    setCanHold(true);
     spawnPiece(clearedBoard);
   }, [spawnPiece]);
 
@@ -182,6 +189,8 @@ export default function useTetrisGame() {
           setCurrent(p => ({ ...p, y: p.y + 1 }));
           setScore(s => s + 1);
         }
+      } else if (e.key === 'c' || e.key === 'C' || e.key === 'Shift') {
+        holdPiece();
       } else if (e.key === 'ArrowUp' || e.key === 'x' || e.key === 'X') {
         const rotated = rotatePiece(piece.shape);
         if (isValid(rotated, piece.x, piece.y, b)) {
@@ -206,11 +215,32 @@ export default function useTetrisGame() {
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [gameState, resetGame, lockPiece]);
+  }, [gameState, resetGame, lockPiece, holdPiece]);
 
   const moveLeft  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) { sounds.move(); setCurrent(prev => ({...prev, x: prev.x-1})); } }, []);
   const moveRight = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) { sounds.move(); setCurrent(prev => ({...prev, x: prev.x+1})); } }, []);
   const moveDown  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x, p.y+1, b)) { sounds.move(); setCurrent(prev => ({...prev, y: prev.y+1})); setScore(s => s+1); } }, []);
+
+  const holdPiece = useCallback(() => {
+    if (!canHold) return;
+    const piece = currentRef.current;
+    const nextPiece = nextRef.current;
+    if (!piece) return;
+    const pocketed = { ...piece, x: 3, y: 0 };
+    setHold(prev => {
+      if (prev) {
+        // Swap: bring held piece back into play, pocket current
+        setCurrent({ ...prev, x: 3, y: 0 });
+      } else {
+        // First hold: promote next → current, generate new next
+        setCurrent({ ...nextPiece, x: 3, y: 0 });
+        setNext(randomPiece());
+      }
+      return pocketed;
+    });
+    setCanHold(false);
+  }, [canHold]);
+
   const rotate    = useCallback(() => {
     const p = currentRef.current; const b = boardRef.current; if (!p) return;
     const rotated = rotatePiece(p.shape);
@@ -232,10 +262,10 @@ export default function useTetrisGame() {
 
   // bestLines exposed
   return {
-    board, current, next, ghost,
+    board, current, next, ghost, hold, canHold,
     score, highScore, lines, level, justLeveledUp, tetrisCallout,
     gameState, resetGame, bestLines,
-    moveLeft, moveRight, moveDown, rotate, hardDrop,
+    moveLeft, moveRight, moveDown, rotate, hardDrop, holdPiece,
     BOARD_WIDTH, BOARD_HEIGHT,
   };
 }

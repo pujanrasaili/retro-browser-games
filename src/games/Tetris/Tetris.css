@@ -354,3 +354,13 @@
   .t-ctrl-btn.drop { width: 78px; }
   .mini-cell { width: 11px; height: 11px; }
 }
+
+/* Hold panel and button dimmed when canHold is false */
+.panel-box-dim {
+  opacity: 0.4;
+}
+
+.t-ctrl-btn.t-ctrl-dim {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
