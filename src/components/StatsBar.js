@@ -41,6 +41,7 @@ export default function StatsBar() {
   const handleReset = () => {
     if (!window.confirm('Reset all best scores for Snake, Tetris, and Minesweeper? This cannot be undone.')) return;
     localStorage.removeItem('snake_best');
+    localStorage.removeItem('snake_best_length');
     localStorage.removeItem('tetris_best');
     localStorage.removeItem('tetris_best_lines');
     localStorage.removeItem('mine_best');

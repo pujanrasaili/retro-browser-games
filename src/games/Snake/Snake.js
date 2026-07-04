@@ -16,7 +16,7 @@ function getSpeedLevel(speed, diff) {
 
 export default function Snake() {
   const {
-    snake, food, score, highScore, gameState, speed, eatBurst, milestone, scoreBump,
+    snake, food, score, highScore, bestLength, gameState, speed, eatBurst, milestone, scoreBump,
     difficulty, setDifficulty, walls, setWalls,
     resetGame, setDirection, BOARD_SIZE,
   } = useSnakeGame();
@@ -147,8 +147,10 @@ export default function Snake() {
               <h2 className="pixel-font overlay-title red">GAME OVER</h2>
               <div className="overlay-divider" />
               <p className="overlay-score pixel-font">SCORE: {String(score).padStart(5, '0')}</p>
+              <p className="overlay-score pixel-font">LENGTH: {snake.length} · BEST: {bestLength}</p>
               <p className="overlay-sub">{DIFFICULTIES[difficulty].label} · {walls ? '🧱 WALLS' : '🌀 WRAP'}</p>
               {score > 0 && score === highScore && <p className="overlay-best pixel-font">🏆 NEW RECORD!</p>}
+              {snake.length > 0 && snake.length === bestLength && score !== highScore && <p className="overlay-best pixel-font">🐍 LONGEST SNAKE!</p>}
               <div className="overlay-divider" />
               <button className="start-btn pixel-font" onClick={() => resetGame(difficulty, walls)}>↺ RETRY</button>
             </div>
