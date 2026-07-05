@@ -34,8 +34,12 @@
 - 🌈 **Neon retro aesthetic** — glowing greens, deep blacks, pixel fonts
 - 📱 **Mobile friendly** — on-screen D-pad + swipe gesture support
 - 🏆 **Persistent high scores** — saved to localStorage, survives refresh
-- 🚀 **Increasing difficulty** — Snake speeds up as your score grows
-- ⏸️ **Pause / resume** — hit `Space` anytime
+- 🚀 **Increasing difficulty** — Snake speeds up, Tetris gets faster each level
+- ⏸️ **Pause / resume** — hit `Space` or `P` anytime
+- 🔊 **Sound effects** — synthesized via Web Audio API, global mute button
+- 📦 **Tetris hold piece** — save a piece for later with `C` or `Shift`
+- 🧱 **Snake walls mode** — toggle between wrap-around and lethal borders
+- 🎯 **Milestone celebrations** — mid-game callouts for length/progress achievements
 
 ---
 
@@ -273,6 +277,6 @@ Want to start fresh? Click the **↺** button at the end of the stats bar to res
 ## 📊 Project Stats
 
 ![Games](https://img.shields.io/badge/Games-3%20Live-39ff14?style=flat-square)
-![Commits](https://img.shields.io/badge/Commits-30%2B-bf5fff?style=flat-square)
-![Lines](https://img.shields.io/badge/Code-1500%2B%20lines-00f5ff?style=flat-square)
+![Commits](https://img.shields.io/badge/Commits-100%2B-bf5fff?style=flat-square)
+![Lines](https://img.shields.io/badge/Code-3000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
