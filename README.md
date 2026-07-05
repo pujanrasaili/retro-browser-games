@@ -95,6 +95,10 @@ npm run build
 - 🐍 Snake gets longer with every food eaten
 - ⚡ Speed increases every 5 foods
 - 💥 Hit yourself → Game Over
+- 🎯 **Difficulty selector**: Easy / Medium / Hard — affects starting speed and speed growth
+- 🧱 **Walls mode**: hitting the border kills you; **Wrap mode**: you pass through walls
+- 🎉 Hit **10, 20, 30...** length milestones for a special callout during play
+- 📊 Game over shows your **score + length + personal bests** for both
 
 **Speed indicator** (5 dots in the score bar):
 - `● ○ ○ ○ ○` = Slow
@@ -202,12 +206,18 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 │   ↑        Rotate Piece     │
 │   ↓        Soft Drop        │
 │   SPACE    Hard Drop        │
+│   C/SHIFT  Hold Piece       │
 │   P        Pause / Resume   │
 │                             │
 │   Mobile: Buttons on screen │
 │                             │
 └─────────────────────────────┘
 ```
+
+**Hold Piece:**
+- Press **C** or **Shift** to pocket the current piece for later
+- Swap your held piece back by pressing hold again
+- You can only hold once per piece placement — the HOLD panel dims when unavailable
 
 **Scoring:**
 | Lines Cleared | Points        |
