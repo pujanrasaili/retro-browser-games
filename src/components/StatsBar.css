@@ -57,3 +57,9 @@
   color: #ff4757;
   box-shadow: 0 0 8px rgba(255,71,87,0.2);
 }
+
+.stat-sublabel {
+  font-size: 0.3rem;
+  color: #2a4a2a;
+  letter-spacing: 1px;
+}

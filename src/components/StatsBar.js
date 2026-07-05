@@ -4,6 +4,7 @@ import './StatsBar.css';
 
 function readStats() {
   const snakeBest = parseInt(localStorage.getItem('snake_best') || '0', 10);
+  const snakeBestLength = parseInt(localStorage.getItem('snake_best_length') || '0', 10);
   const tetrisBest = parseInt(localStorage.getItem('tetris_best') || '0', 10);
 
   let mineBest = '—';
@@ -16,7 +17,7 @@ function readStats() {
     }
   } catch {}
 
-  return { snakeBest, tetrisBest, mineBest };
+  return { snakeBest, snakeBestLength, tetrisBest, mineBest };
 }
 
 export default function StatsBar() {
@@ -36,7 +37,7 @@ export default function StatsBar() {
     };
   }, []);
 
-  const { snakeBest, tetrisBest, mineBest } = stats;
+  const { snakeBest, snakeBestLength, tetrisBest, mineBest } = stats;
 
   const handleReset = () => {
     if (!window.confirm('Reset all best scores for Snake, Tetris, and Minesweeper? This cannot be undone.')) return;
@@ -52,8 +53,9 @@ export default function StatsBar() {
     <div className="stats-bar">
       <div className="stat-item">
         <span className="stat-icon">🐍</span>
-        <span className="stat-label pixel-font">BEST</span>
+        <span className="stat-label pixel-font">SCORE</span>
         <span className="stat-value pixel-font" style={{ color: '#39ff14' }}>{String(snakeBest).padStart(5,'0')}</span>
+        {snakeBestLength > 0 && <span className="stat-sublabel pixel-font">LEN {snakeBestLength}</span>}
       </div>
       <div className="stat-divider" />
       <div className="stat-item">

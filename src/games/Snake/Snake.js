@@ -136,6 +136,7 @@ export default function Snake() {
                 <div className="key-hint"><span className="key-box pixel-font">SPC</span><span className="key-desc">PAUSE</span></div>
               </div>
               <div className="overlay-divider" />
+              <p className="overlay-sub">{DIFFICULTIES[difficulty].label} · {walls ? '🧱 WALLS' : '🌀 WRAP'}</p>
               <button className="start-btn pixel-font" onClick={() => resetGame(difficulty, walls)}>▶ START</button>
             </div>
           </div>
