@@ -34,6 +34,13 @@ function placePiece(piece, board) {
   return newBoard;
 }
 
+function getFullRows(board) {
+  return board.reduce((acc, row, i) => {
+    if (row.every(cell => cell)) acc.push(i);
+    return acc;
+  }, []);
+}
+
 function clearLines(board) {
   const cleared = board.filter(row => row.some(cell => !cell));
   const linesCleared = BOARD_HEIGHT - cleared.length;
@@ -55,6 +62,7 @@ export default function useTetrisGame() {
   const [next, setNext] = useState(null);
   const [hold, setHold] = useState(null);
   const [canHold, setCanHold] = useState(true);
+  const [clearingRows, setClearingRows] = useState([]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem('tetris_best') || '0', 10));
   const [lines, setLines] = useState(0);
@@ -104,41 +112,51 @@ export default function useTetrisGame() {
     const b = boardRef.current;
     if (!piece) return;
     const newBoard = placePiece(piece, b);
+    const fullRows = getFullRows(newBoard);
     const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
-    setBoard(clearedBoard);
     if (linesCleared > 0) {
-      if (linesCleared === 4) {
-        sounds.tetrisClear();
-        setTetrisCallout(true);
-        setTimeout(() => setTetrisCallout(false), 900);
-      } else {
-        sounds.lineClear();
-      }
-      setLines(prev => {
-        const total = prev + linesCleared;
-        const newLevel = Math.floor(total / 10) + 1;
-        setLevel(currentLevel => {
-          if (newLevel > currentLevel) {
-            sounds.levelUp();
-            setJustLeveledUp(true);
-            setTimeout(() => setJustLeveledUp(false), 500);
-          }
-          return newLevel;
+      // Flash the rows before clearing
+      setClearingRows(fullRows);
+      setBoard(newBoard); // show placed piece first
+      setTimeout(() => {
+        setClearingRows([]);
+        setBoard(clearedBoard);
+        if (linesCleared === 4) {
+          sounds.tetrisClear();
+          setTetrisCallout(true);
+          setTimeout(() => setTetrisCallout(false), 900);
+        } else {
+          sounds.lineClear();
+        }
+        setLines(prev => {
+          const total = prev + linesCleared;
+          const newLevel = Math.floor(total / 10) + 1;
+          setLevel(currentLevel => {
+            if (newLevel > currentLevel) {
+              sounds.levelUp();
+              setJustLeveledUp(true);
+              setTimeout(() => setJustLeveledUp(false), 500);
+            }
+            return newLevel;
+          });
+          setSpeed(Math.max(100, INITIAL_SPEED - (newLevel - 1) * 70));
+          setBestLines(b => { const nb = Math.max(b, total); localStorage.setItem('tetris_best_lines', nb); return nb; });
+          return total;
         });
-        setSpeed(Math.max(100, INITIAL_SPEED - (newLevel - 1) * 70));
-        setBestLines(b => { const nb = Math.max(b, total); localStorage.setItem('tetris_best_lines', nb); return nb; });
-        return total;
-      });
-      setScore(prev => {
-        const ns = prev + SCORE_TABLE[linesCleared] * levelRef.current;
-        setHighScore(h => { const nh = Math.max(h, ns); localStorage.setItem('tetris_best', nh); return nh; });
-        return ns;
-      });
+        setScore(prev => {
+          const ns = prev + SCORE_TABLE[linesCleared] * levelRef.current;
+          setHighScore(h => { const nh = Math.max(h, ns); localStorage.setItem('tetris_best', nh); return nh; });
+          return ns;
+        });
+        setCanHold(true);
+        spawnPiece(clearedBoard);
+      }, 300);
     } else {
+      setBoard(clearedBoard);
       sounds.drop();
+      setCanHold(true);
+      spawnPiece(clearedBoard);
     }
-    setCanHold(true);
-    spawnPiece(clearedBoard);
   }, [spawnPiece]);
 
   // Game loop
@@ -262,7 +280,7 @@ export default function useTetrisGame() {
 
   // bestLines exposed
   return {
-    board, current, next, ghost, hold, canHold,
+    board, current, next, ghost, hold, canHold, clearingRows,
     score, highScore, lines, level, justLeveledUp, tetrisCallout,
     gameState, resetGame, bestLines,
     moveLeft, moveRight, moveDown, rotate, hardDrop, holdPiece,

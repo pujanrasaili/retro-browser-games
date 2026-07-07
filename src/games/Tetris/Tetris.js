@@ -18,7 +18,7 @@ function MiniPiece({ shape, color }) {
 
 export default function Tetris() {
   const {
-    board, current, next, ghost, hold, canHold,
+    board, current, next, ghost, hold, canHold, clearingRows,
     score, highScore, lines, level, bestLines, justLeveledUp, tetrisCallout,
     gameState, resetGame,
     moveLeft, moveRight, moveDown, rotate, hardDrop, holdPiece,
@@ -99,7 +99,7 @@ export default function Tetris() {
             row.map((cell, x) => (
               <div
                 key={`${y}-${x}`}
-                className={`tcell ${cell ? (cell.ghost ? 'ghost' : 'filled') : ''}`}
+                className={`tcell ${cell ? (cell.ghost ? 'ghost' : 'filled') : ''} ${clearingRows.includes(y) ? 'clearing' : ''}`}
                 style={cell && !cell.ghost ? {
                   background: cell.color,
                   boxShadow: `0 0 6px ${cell.shadow || cell.color}, inset 0 0 4px rgba(255,255,255,0.15)`,
