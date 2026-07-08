@@ -12,6 +12,27 @@ function SevenSeg({ value, digits = 3 }) {
   return <div className="seven-seg pixel-font">{display}</div>;
 }
 
+function TimeDisplay({ value }) {
+  const clamped = Math.min(5999, value); // cap at 99:59
+  if (clamped < 60) {
+    return <div className="seven-seg pixel-font">{String(clamped).padStart(3, '0')}</div>;
+  }
+  const mins = Math.floor(clamped / 60);
+  const secs = clamped % 60;
+  return (
+    <div className="seven-seg pixel-font">
+      {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
+    </div>
+  );
+}
+
+function formatTime(seconds) {
+  if (seconds < 60) return `${seconds}s`;
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+
 export default function Minesweeper() {
   const {
     board, difficulty, gameState, minesLeft, time, bestTimes, halfwayCelebrated,
@@ -47,10 +68,10 @@ export default function Minesweeper() {
             {faceMap[gameState]}
           </button>
           {bestTime !== undefined && (
-            <div className="best-time pixel-font">BEST: {bestTime}s</div>
+            <div className="best-time pixel-font">BEST: {formatTime(bestTime)}</div>
           )}
         </div>
-        <SevenSeg value={time} />
+        <TimeDisplay value={time} />
       </div>
 
       {/* Board */}
@@ -107,7 +128,7 @@ export default function Minesweeper() {
               <p className="pixel-font mine-diff-badge">
                 {difficulty === 'easy' ? '🟢' : difficulty === 'medium' ? '🟡' : '🔴'} {difficulty.toUpperCase()}
               </p>
-              <p className="mine-overlay-stat pixel-font">TIME: {time}s</p>
+              <p className="mine-overlay-stat pixel-font">TIME: {formatTime(time)}</p>
               {isNewBest && <p className="mine-overlay-best pixel-font">🏆 NEW BEST!</p>}
               <button className="mine-btn pixel-font" onClick={() => resetGame(difficulty)}>▶ PLAY AGAIN</button>
             </div>
