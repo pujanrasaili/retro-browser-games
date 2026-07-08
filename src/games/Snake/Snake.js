@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import useSnakeGame, { DIFFICULTIES } from './useSnakeGame';
 import { sounds } from '../../utils/sound';
+import { formatScore } from '../../utils/formatScore';
 import './Snake.css';
 
 const INITIAL_SPEED = 130;
@@ -87,7 +88,7 @@ export default function Snake() {
       <div className="score-bar">
         <div className="score-item">
           <span className="score-label pixel-font">SCORE</span>
-          <span className={`score-value pixel-font${scoreBump ? ' bump' : ''}`}>{String(score).padStart(5, '0')}</span>
+          <span className={`score-value pixel-font${scoreBump ? ' bump' : ''}`}>{formatScore(score, 5)}</span>
         </div>
         <div className="speed-indicator">
           {Array.from({ length: SPEED_LEVELS }, (_, i) => (
@@ -96,7 +97,7 @@ export default function Snake() {
         </div>
         <div className="score-item">
           <span className="score-label pixel-font">BEST</span>
-          <span className="score-value hi pixel-font">{String(highScore).padStart(5, '0')}</span>
+          <span className="score-value hi pixel-font">{formatScore(highScore, 5)}</span>
         </div>
       </div>
 
@@ -147,7 +148,7 @@ export default function Snake() {
             <div className="overlay-content">
               <h2 className="pixel-font overlay-title red">GAME OVER</h2>
               <div className="overlay-divider" />
-              <p className="overlay-score pixel-font">SCORE: {String(score).padStart(5, '0')}</p>
+              <p className="overlay-score pixel-font">SCORE: {formatScore(score, 5)}</p>
               <p className="overlay-score pixel-font">LENGTH: {snake.length} · BEST: {bestLength}</p>
               <p className="overlay-sub">{DIFFICULTIES[difficulty].label} · {walls ? '🧱 WALLS' : '🌀 WRAP'}</p>
               {score > 0 && score === highScore && <p className="overlay-best pixel-font">🏆 NEW RECORD!</p>}

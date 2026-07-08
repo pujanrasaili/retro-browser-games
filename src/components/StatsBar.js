@@ -54,7 +54,7 @@ export default function StatsBar() {
       <div className="stat-item">
         <span className="stat-icon">🐍</span>
         <span className="stat-label pixel-font">SCORE</span>
-        <span className="stat-value pixel-font" style={{ color: '#39ff14' }}>{String(snakeBest).padStart(5,'0')}</span>
+        <span className="stat-value pixel-font" style={{ color: '#39ff14' }}>{formatScore(snakeBest, 5)}</span>
         {snakeBestLength > 0 && <span className="stat-sublabel pixel-font">LEN {snakeBestLength}</span>}
       </div>
       <div className="stat-divider" />
