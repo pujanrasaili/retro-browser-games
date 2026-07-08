@@ -77,6 +77,7 @@ export default function useTetrisGame() {
   const currentRef = useRef(current);
   const levelRef = useRef(level);
   const nextRef = useRef(next);
+  const clearingRef = useRef(false);
   boardRef.current = board;
   currentRef.current = current;
   levelRef.current = level;
@@ -115,10 +116,12 @@ export default function useTetrisGame() {
     const fullRows = getFullRows(newBoard);
     const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
     if (linesCleared > 0) {
-      // Flash the rows before clearing
+      // Flash the rows before clearing — pause game loop during animation
+      clearingRef.current = true;
       setClearingRows(fullRows);
       setBoard(newBoard); // show placed piece first
       setTimeout(() => {
+        clearingRef.current = false;
         setClearingRows([]);
         setBoard(clearedBoard);
         if (linesCleared === 4) {
@@ -163,6 +166,7 @@ export default function useTetrisGame() {
   useEffect(() => {
     if (gameState !== 'playing') return;
     const interval = setInterval(() => {
+      if (clearingRef.current) return; // pause during line clear flash
       const piece = currentRef.current;
       const b = boardRef.current;
       if (!piece) return;
