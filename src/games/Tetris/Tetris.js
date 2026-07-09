@@ -19,7 +19,7 @@ function MiniPiece({ shape, color }) {
 export default function Tetris() {
   const {
     board, current, next, ghost, hold, canHold, clearingRows,
-    score, highScore, lines, level, bestLines, justLeveledUp, tetrisCallout,
+    score, highScore, lines, level, bestLines, justLeveledUp, tetrisCallout, scorePop,
     gameState, resetGame,
     moveLeft, moveRight, moveDown, rotate, hardDrop, holdPiece,
     BOARD_WIDTH, BOARD_HEIGHT,
@@ -62,7 +62,7 @@ export default function Tetris() {
       <div className="tetris-side left-panel">
         <div className="panel-box">
           <div className="panel-label pixel-font">SCORE</div>
-          <div className="panel-value pixel-font" style={{ color: '#39ff14' }}>{formatScore(score)}</div>
+          <div className={`panel-value pixel-font${scorePop ? ' pop' : ''}`} style={{ color: '#39ff14' }}>{formatScore(score)}</div>
         </div>
         <div className="panel-box">
           <div className="panel-label pixel-font">BEST</div>
