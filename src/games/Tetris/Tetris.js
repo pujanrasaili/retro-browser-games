@@ -156,6 +156,10 @@ export default function Tetris() {
           <div className="t-overlay">
             <div className="t-overlay-content">
               <h2 className="pixel-font t-title">⏸ PAUSED</h2>
+              <div className="t-divider" />
+              <p className="pixel-font t-stat">SCORE: {formatScore(score)}</p>
+              <p className="pixel-font t-stat">LINES: {lines} · LV {level}</p>
+              <div className="t-divider" />
               <p className="t-desc-lg">Press P to resume</p>
             </div>
           </div>

@@ -163,6 +163,10 @@ export default function Snake() {
           <div className="overlay">
             <div className="overlay-content">
               <h2 className="pixel-font overlay-title">⏸ PAUSED</h2>
+              <div className="overlay-divider" />
+              <p className="overlay-score pixel-font">SCORE: {formatScore(score, 5)}</p>
+              <p className="overlay-sub">LENGTH: {snake.length}</p>
+              <div className="overlay-divider" />
               <p className="overlay-sub">PRESS SPACE TO RESUME</p>
             </div>
           </div>

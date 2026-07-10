@@ -45,6 +45,14 @@ export default function Minesweeper() {
   const isNewBest = gameState === 'won' && (!bestTime || time <= bestTime);
   const handleChord = useChord(board, gameState, rows, cols, handleChordReveal);
 
+  // Count correctly placed flags (on actual mines) for the lose screen
+  const correctFlags = board
+    ? board.flat().filter(c => c.flagged && c.mine).length
+    : 0;
+  const totalMines = board
+    ? board.flat().filter(c => c.mine).length
+    : 0;
+
   return (
     <div className="mine-wrapper">
       {/* Difficulty selector */}
@@ -140,7 +148,8 @@ export default function Minesweeper() {
             <div className="mine-overlay-content">
               <div className="mine-overlay-icon">💥</div>
               <h2 className="pixel-font mine-overlay-title red">BOOM!</h2>
-              <p className="mine-overlay-sub">Better luck next time</p>
+              <p className="mine-overlay-stat pixel-font">FOUND: {correctFlags}/{totalMines} 🚩</p>
+              <p className="mine-overlay-sub">TIME: {formatTime(time)}</p>
               <button className="mine-btn pixel-font" onClick={() => resetGame(difficulty)}>↺ RETRY</button>
             </div>
           </div>
