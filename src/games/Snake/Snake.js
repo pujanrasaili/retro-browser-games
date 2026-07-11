@@ -51,6 +51,8 @@ export default function Snake() {
       if (isHead) className += ' snake-head';
       else if (isBody) className += ' snake-body';
       else if (isFood) className += ' food';
+      // Flash the head cell when food is just eaten
+      if (isHead && eatBurst && eatBurst.x === x && eatBurst.y === y) className += ' flash';
       cells.push(
         <div key={`${x}-${y}`} className={className}
           style={isBody ? { background: `rgb(0,${green},0)`, opacity: Math.max(0.45, 1 - snakeIndex * 0.025) } : {}}

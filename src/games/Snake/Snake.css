@@ -238,11 +238,6 @@
   }
 }
 
-@keyframes scoreFlash {
-  0% { color: #fff; transform: scale(1.4); }
-  100% { color: var(--green-bright); transform: scale(1); }
-}
-
 /* Trail effect on eating */
 .cell.flash {
   animation: eatFlash 0.3s ease-out;
