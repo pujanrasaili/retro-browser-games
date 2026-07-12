@@ -330,11 +330,10 @@
   100% { transform: scale(1); }
 }
 
-/* Win cell reveal */
-.mine-board.won .mcell.hidden {
-  background: #0d1a0d;
-  border-color: #1a3a1a;
-  animation: winReveal 0.5s ease forwards;
+/* Win board: revealed cells get a subtle green tinge */
+.mine-board.won .mcell.revealed {
+  background: #0a0f0a;
+  transition: background 0.3s;
 }
 
 @keyframes winReveal {

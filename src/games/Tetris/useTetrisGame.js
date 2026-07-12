@@ -252,6 +252,7 @@ export default function useTetrisGame() {
     const piece = currentRef.current;
     const nextPiece = nextRef.current;
     if (!piece) return;
+    sounds.rotate(); // distinct click sound for hold action
     const pocketed = { ...piece, x: 3, y: 0 };
     setHold(prev => {
       if (prev) {
@@ -280,6 +281,7 @@ export default function useTetrisGame() {
     while (isValid(p.shape, p.x, dropY+1, b)) dropY++;
     sounds.drop();
     setScore(s => s + (dropY - p.y) * 2);
+    if (dropY - p.y > 0) { setScorePop(true); setTimeout(() => setScorePop(false), 300); }
     setCurrent(prev => ({...prev, y: dropY}));
     setTimeout(() => lockPiece(), 30);
   }, [lockPiece]);
