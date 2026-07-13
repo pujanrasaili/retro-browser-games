@@ -71,6 +71,7 @@ export default function useTetrisGame() {
   const [justLeveledUp, setJustLeveledUp] = useState(false);
   const [tetrisCallout, setTetrisCallout] = useState(false);
   const [scorePop, setScorePop] = useState(false);
+  const [highScorePop, setHighScorePop] = useState(false);
   const [gameState, setGameState] = useState('idle');
   const [speed, setSpeed] = useState(INITIAL_SPEED);
 
@@ -149,7 +150,12 @@ export default function useTetrisGame() {
         });
         setScore(prev => {
           const ns = prev + SCORE_TABLE[linesCleared] * levelRef.current;
-          setHighScore(h => { const nh = Math.max(h, ns); localStorage.setItem('tetris_best', nh); return nh; });
+          setHighScore(h => {
+            const nh = Math.max(h, ns);
+            if (nh > h) { setHighScorePop(true); setTimeout(() => setHighScorePop(false), 600); }
+            localStorage.setItem('tetris_best', nh);
+            return nh;
+          });
           setScorePop(true);
           setTimeout(() => setScorePop(false), 300);
           return ns;
@@ -291,7 +297,7 @@ export default function useTetrisGame() {
   // bestLines exposed
   return {
     board, current, next, ghost, hold, canHold, clearingRows,
-    score, highScore, lines, level, justLeveledUp, tetrisCallout, scorePop,
+    score, highScore, lines, level, justLeveledUp, tetrisCallout, scorePop, highScorePop,
     gameState, resetGame, bestLines,
     moveLeft, moveRight, moveDown, rotate, hardDrop, holdPiece,
     BOARD_WIDTH, BOARD_HEIGHT,
