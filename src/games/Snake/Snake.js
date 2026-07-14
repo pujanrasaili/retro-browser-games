@@ -72,6 +72,7 @@ export default function Snake() {
               className={`option-btn pixel-font ${difficulty === key ? 'active' : ''}`}
               onClick={() => { setDifficulty(key); }}
               disabled={gameState === 'playing'}
+              title={`${val.label} — starting speed ${val.speed}ms`}
             >
               {val.label}
             </button>
@@ -81,6 +82,7 @@ export default function Snake() {
           className={`option-btn pixel-font walls-btn ${walls ? 'walls-on' : ''}`}
           onClick={() => setWalls(w => !w)}
           disabled={gameState === 'playing'}
+          title={walls ? 'Walls ON: hitting the border kills you' : 'Wrap ON: you pass through walls'}
         >
           {walls ? '🧱 WALLS ON' : '🌀 WRAP ON'}
         </button>

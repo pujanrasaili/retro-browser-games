@@ -72,7 +72,7 @@ export default function Minesweeper() {
       <div className="mine-header">
         <SevenSeg value={minesLeft} />
         <div className="mine-header-center">
-          <button className="face-btn" onClick={() => resetGame(difficulty)}>
+          <button className="face-btn" onClick={() => resetGame(difficulty)} title="New game">
             {faceMap[gameState]}
           </button>
           {bestTime !== undefined && (
