@@ -70,12 +70,16 @@ export default function Tetris() {
         </div>
         <div className="panel-box">
           <div className="panel-label pixel-font">LINES</div>
-          <div className="panel-value pixel-font" style={{ color: '#00f5ff' }}>{String(lines).padStart(4, '0')}</div>
+          <div className="panel-value pixel-font" style={{ color: '#00f5ff' }}>
+            {lines > 9999 ? '9999+' : String(lines).padStart(4, '0')}
+          </div>
           <div className="panel-sublabel pixel-font">BEST {bestLines}</div>
         </div>
         <div className="panel-box">
           <div className="panel-label pixel-font">LEVEL</div>
-          <div className="panel-value pixel-font" style={{ color: '#bf5fff' }}>{String(level).padStart(2, '0')}</div>
+          <div className="panel-value pixel-font" style={{ color: '#bf5fff' }}>
+            {level > 99 ? '99+' : String(level).padStart(2, '0')}
+          </div>
         </div>
         <div className={`panel-box ${!canHold ? 'panel-box-dim' : ''}`}>
           <div className="panel-label pixel-font">HOLD</div>
