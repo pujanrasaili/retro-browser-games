@@ -57,15 +57,19 @@ export default function Minesweeper() {
     <div className="mine-wrapper">
       {/* Difficulty selector */}
       <div className="mine-diff-bar">
-        {Object.keys(DIFFICULTIES).map(d => (
-          <button
-            key={d}
-            className={`diff-btn pixel-font ${difficulty === d ? 'active' : ''}`}
-            onClick={() => resetGame(d)}
-          >
-            {d === 'easy' ? '🟢' : d === 'medium' ? '🟡' : '🔴'} {d.toUpperCase()}
-          </button>
-        ))}
+        {Object.keys(DIFFICULTIES).map(d => {
+          const { rows, cols, mines } = DIFFICULTIES[d];
+          return (
+            <button
+              key={d}
+              className={`diff-btn pixel-font ${difficulty === d ? 'active' : ''}`}
+              onClick={() => resetGame(d)}
+              title={`${d.charAt(0).toUpperCase() + d.slice(1)}: ${rows}×${cols} grid, ${mines} mines`}
+            >
+              {d === 'easy' ? '🟢' : d === 'medium' ? '🟡' : '🔴'} {d.toUpperCase()}
+            </button>
+          );
+        })}
       </div>
 
       {/* Header bar */}
