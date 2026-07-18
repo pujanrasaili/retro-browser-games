@@ -135,6 +135,9 @@ export default function Tetris() {
                 <div className="t-key-row"><span className="t-key pixel-font">P</span><span className="t-desc">Pause</span></div>
               </div>
               <div className="t-divider" />
+              {highScore > 0 && (
+                <p className="pixel-font t-stat">🏆 BEST: {formatScore(highScore)} · {bestLines} LINES</p>
+              )}
               <button className="t-btn pixel-font" onClick={resetGame}>▶ START</button>
             </div>
           </div>
