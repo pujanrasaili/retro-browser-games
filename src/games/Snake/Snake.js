@@ -142,6 +142,9 @@ export default function Snake() {
               </div>
               <div className="overlay-divider" />
               <p className="overlay-sub">{DIFFICULTIES[difficulty].label} · {walls ? '🧱 WALLS' : '🌀 WRAP'}</p>
+              {highScore > 0 && (
+                <p className="overlay-sub">🏆 BEST: {formatScore(highScore, 5)}{bestLength > 0 ? ` · LEN ${bestLength}` : ''}</p>
+              )}
               <button className="start-btn pixel-font" onClick={() => resetGame(difficulty, walls)}>▶ START</button>
             </div>
           </div>
