@@ -1,6 +1,7 @@
 import React from 'react';
 import useMinesweeper, { useChord } from './useMinesweeper';
 import { NUM_COLORS, DIFFICULTIES } from './mineUtils';
+import { formatTime } from '../../utils/formatTime';
 import './Minesweeper.css';
 
 function SevenSeg({ value, digits = 3 }) {
@@ -24,13 +25,6 @@ function TimeDisplay({ value }) {
       {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
     </div>
   );
-}
-
-function formatTime(seconds) {
-  if (seconds < 60) return `${seconds}s`;
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
 }
 
 export default function Minesweeper() {

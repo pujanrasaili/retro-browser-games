@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { formatScore } from '../utils/formatScore';
+import { formatTime } from '../utils/formatTime';
 import './StatsBar.css';
 
 function readStats() {
@@ -10,11 +11,10 @@ function readStats() {
   let mineBest = '—';
   try {
     const parsed = JSON.parse(localStorage.getItem('mine_best') || '{}');
-    if (parsed.easy !== undefined) mineBest = `EASY ${parsed.easy}s`;
-    else {
-      const entries = Object.entries(parsed);
-      if (entries.length) mineBest = `${entries[0][0].toUpperCase()} ${entries[0][1]}s`;
-    }
+    // Show hardest difficulty beaten (Hard > Medium > Easy)
+    if (parsed.hard !== undefined) mineBest = `HARD ${formatTime(parsed.hard)}`;
+    else if (parsed.medium !== undefined) mineBest = `MED ${formatTime(parsed.medium)}`;
+    else if (parsed.easy !== undefined) mineBest = `EASY ${formatTime(parsed.easy)}`;
   } catch {}
 
   return { snakeBest, snakeBestLength, tetrisBest, mineBest };
