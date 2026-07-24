@@ -277,8 +277,8 @@ Want to start fresh? Click the **↺** button at the end of the stats bar to res
 ## 📊 Project Stats
 
 ![Games](https://img.shields.io/badge/Games-3%20Live-39ff14?style=flat-square)
-![Commits](https://img.shields.io/badge/Commits-100%2B-bf5fff?style=flat-square)
-![Lines](https://img.shields.io/badge/Code-3000%2B%20lines-00f5ff?style=flat-square)
+![Commits](https://img.shields.io/badge/Commits-130%2B-bf5fff?style=flat-square)
+![Lines](https://img.shields.io/badge/Code-4000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
 
 ## 👨‍💻 Author
