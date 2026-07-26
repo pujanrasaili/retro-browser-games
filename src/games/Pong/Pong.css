@@ -1,0 +1,199 @@
+.pong-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.pong-score-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  background: #0a0a14;
+  border: 1px solid #1a1a2a;
+  border-radius: 12px;
+  padding: 14px 28px;
+}
+
+.pong-score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pong-score-label {
+  font-size: 0.38rem;
+  color: #2a4a2a;
+  letter-spacing: 3px;
+}
+
+.pong-score-value {
+  font-size: 1.4rem;
+  color: var(--green-bright);
+  text-shadow: 0 0 12px var(--green-bright);
+}
+
+.pong-score-value.right {
+  color: #ff4757;
+  text-shadow: 0 0 12px #ff4757;
+}
+
+.pong-vs {
+  font-size: 0.5rem;
+  color: #2a3a2a;
+  letter-spacing: 4px;
+}
+
+.pong-canvas-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 4/3;
+}
+
+.pong-canvas {
+  width: 100%;
+  height: 100%;
+  background: #07070f;
+  border: 1px solid #1a2a1a;
+  border-radius: 12px;
+  display: block;
+}
+
+.pong-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5,5,12,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+}
+
+.pong-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 32px;
+}
+
+.pong-title {
+  font-size: 1.2rem;
+  color: var(--green-bright);
+  text-shadow: 0 0 20px var(--green-bright);
+  letter-spacing: 5px;
+}
+
+.pong-title.red { color: #ff4757; text-shadow: 0 0 20px #ff4757; }
+
+.pong-sub {
+  font-size: 0.6rem;
+  color: #3a4a3a;
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 2px;
+}
+
+.pong-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #1a3a1a, transparent);
+}
+
+.pong-btn {
+  background: transparent;
+  border: 1px solid var(--green-bright);
+  color: var(--green-bright);
+  padding: 12px 28px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  border-radius: 6px;
+  letter-spacing: 4px;
+  transition: all 0.2s;
+  box-shadow: 0 0 12px rgba(57,255,20,0.15);
+}
+
+.pong-btn:hover {
+  background: rgba(57,255,20,0.08);
+  box-shadow: 0 0 24px rgba(57,255,20,0.4);
+  transform: translateY(-1px);
+}
+
+.pong-controls {
+  display: flex;
+  gap: 20px;
+}
+
+.pong-key-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pong-key-box {
+  background: #0d1a0d;
+  border: 1px solid #1a3a1a;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.5rem;
+  color: var(--green-bright);
+  font-family: 'Press Start 2P', monospace;
+  min-width: 32px;
+  text-align: center;
+}
+
+.pong-key-desc {
+  font-size: 0.45rem;
+  color: #2a4a2a;
+  font-family: 'Orbitron', monospace;
+}
+
+.pong-mobile-controls {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.pong-mobile-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pong-mobile-label {
+  font-size: 0.35rem;
+  color: #2a3a2a;
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 2px;
+}
+
+.pong-ctrl-btn {
+  width: 52px;
+  height: 52px;
+  background: #0d0d1a;
+  border: 1px solid #1a1a2a;
+  color: var(--green-bright);
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 0 #05050f;
+}
+
+.pong-ctrl-btn.right-color { color: #ff4757; }
+
+.pong-ctrl-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #05050f;
+}
