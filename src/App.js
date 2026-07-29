@@ -3,6 +3,7 @@ import './App.css';
 import Snake from './games/Snake/Snake';
 import Tetris from './games/Tetris/Tetris';
 import Minesweeper from './games/Minesweeper/Minesweeper';
+import Pong from './games/Pong/Pong';
 import StatsBar from './components/StatsBar';
 import { isMuted, toggleMuted } from './utils/sound';
 
@@ -28,6 +29,7 @@ function App() {
           <button className={`nav-btn ${activeGame === 'snake' ? 'active' : ''}`} onClick={() => setActiveGame('snake')}>🐍 SNAKE</button>
           <button className={`nav-btn ${activeGame === 'tetris' ? 'active' : ''}`} onClick={() => setActiveGame('tetris')}>🧱 TETRIS</button>
           <button className={`nav-btn ${activeGame === 'mines' ? 'active' : ''}`} onClick={() => setActiveGame('mines')}>💣 MINES</button>
+          <button className={`nav-btn ${activeGame === 'pong' ? 'active' : ''}`} onClick={() => setActiveGame('pong')}>🏓 PONG</button>
         </nav>
         <StatsBar />
       </header>
@@ -35,6 +37,7 @@ function App() {
         {activeGame === 'snake' && <Snake />}
         {activeGame === 'tetris' && <Tetris />}
         {activeGame === 'mines' && <Minesweeper />}
+        {activeGame === 'pong' && <Pong />}
       </main>
       <footer className="app-footer">
         <span className="pixel-font footer-text">MADE BY PUJANRASAILI · 2026</span>
