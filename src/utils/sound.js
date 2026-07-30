@@ -80,4 +80,13 @@ export const sounds = {
   },
   explode:   () => playTone({ freq: 120, duration: 0.3, type: 'sawtooth', volume: 0.18, sweepTo: 40 }),
   gameOver:  () => playTone({ freq: 300, duration: 0.4, type: 'sawtooth', volume: 0.14, sweepTo: 80 }),
+  paddleHit: () => playTone({ freq: 220, duration: 0.06, type: 'square', volume: 0.14, sweepTo: 440 }),
+  wallBounce: () => playTone({ freq: 180, duration: 0.05, type: 'triangle', volume: 0.1 }),
+  pongScore: () => playTone({ freq: 500, duration: 0.15, type: 'sawtooth', volume: 0.13, sweepTo: 250 }),
+  pongWin:   () => {
+    playTone({ freq: 523, duration: 0.15, type: 'triangle', volume: 0.15 });
+    setTimeout(() => playTone({ freq: 659, duration: 0.15, type: 'triangle', volume: 0.15 }), 130);
+    setTimeout(() => playTone({ freq: 784, duration: 0.3, type: 'triangle', volume: 0.16 }), 260);
+  },
+  pongLose:  () => playTone({ freq: 250, duration: 0.35, type: 'sawtooth', volume: 0.13, sweepTo: 70 }),
 };

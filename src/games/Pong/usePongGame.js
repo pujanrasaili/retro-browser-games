@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { sounds } from '../../utils/sound';
 
 export const CANVAS_WIDTH = 600;
 export const CANVAS_HEIGHT = 450;
@@ -110,6 +111,7 @@ export default function usePongGame() {
       if (s.ballY <= 0 || s.ballY >= CANVAS_HEIGHT - BALL_SIZE) {
         s.ballVY *= -1;
         s.ballY = Math.max(0, Math.min(CANVAS_HEIGHT - BALL_SIZE, s.ballY));
+        sounds.wallBounce();
       }
 
       // Left paddle collision
@@ -123,6 +125,7 @@ export default function usePongGame() {
         s.ballVX *= -1.05;
         const hitPos = (s.ballY - s.leftY) / PADDLE_HEIGHT - 0.5;
         s.ballVY += hitPos * 3;
+        sounds.paddleHit();
       }
 
       // Right paddle collision
@@ -136,6 +139,7 @@ export default function usePongGame() {
         s.ballVX *= -1.05;
         const hitPos = (s.ballY - s.rightY) / PADDLE_HEIGHT - 0.5;
         s.ballVY += hitPos * 3;
+        sounds.paddleHit();
       }
 
       // Scoring
@@ -145,6 +149,9 @@ export default function usePongGame() {
           if (ns >= WINNING_SCORE) {
             setWinner('right');
             setGameState('over');
+            sounds.pongLose();
+          } else {
+            sounds.pongScore();
           }
           return ns;
         });
@@ -155,6 +162,9 @@ export default function usePongGame() {
           if (ns >= WINNING_SCORE) {
             setWinner('left');
             setGameState('over');
+            sounds.pongWin();
+          } else {
+            sounds.pongScore();
           }
           return ns;
         });
