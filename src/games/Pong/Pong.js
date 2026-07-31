@@ -4,7 +4,7 @@ import './Pong.css';
 
 export default function Pong() {
   const {
-    leftScore, rightScore, gameState, winner, mode,
+    leftScore, rightScore, gameState, winner, mode, cpuWins,
     stateRef, resetGame, setMode,
     CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE,
   } = usePongGame();
@@ -115,6 +115,9 @@ export default function Pong() {
                 </div>
               </div>
               <div className="pong-divider" />
+              {cpuWins > 0 && (
+                <p className="pong-sub">🏆 BEAT CPU: {cpuWins}x</p>
+              )}
               <div className="pong-controls">
                 <button className="pong-btn pixel-font" onClick={() => resetGame('ai')}>▶ VS CPU</button>
                 <button className="pong-btn pixel-font" onClick={() => resetGame('2p')}>▶ 2 PLAYER</button>
