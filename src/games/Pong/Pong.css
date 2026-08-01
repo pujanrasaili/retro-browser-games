@@ -125,6 +125,35 @@
   transform: translateY(-1px);
 }
 
+.pong-diff-row {
+  display: flex;
+  gap: 6px;
+}
+
+.pong-diff-btn {
+  background: #0a0a14;
+  border: 1px solid #1a2a1a;
+  color: #2a4a2a;
+  padding: 6px 10px;
+  font-size: 0.4rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+
+.pong-diff-btn:hover {
+  border-color: var(--green-bright);
+  color: var(--green-bright);
+}
+
+.pong-diff-btn.active {
+  border-color: var(--green-bright);
+  color: var(--green-bright);
+  background: #0d1a0d;
+  box-shadow: 0 0 10px rgba(57,255,20,0.15);
+}
+
 .pong-controls {
   display: flex;
   gap: 20px;

@@ -28,6 +28,7 @@ export default function usePongGame() {
   const [winner, setWinner] = useState(null);
   const [cpuWins, setCpuWins] = useState(() => parseInt(localStorage.getItem('pong_cpu_wins') || '0', 10));
   const [mode, setMode] = useState('ai'); // 'ai' or '2p'
+  const [aiDifficulty, setAiDifficulty] = useState('medium'); // 'easy' | 'medium' | 'hard'
 
   const stateRef = useRef(initialState());
   const keysRef = useRef({});
@@ -94,10 +95,11 @@ export default function usePongGame() {
         if (keys['ArrowDown']) s.rightY += PADDLE_SPEED;
         s.rightY = Math.max(0, Math.min(CANVAS_HEIGHT - PADDLE_HEIGHT, s.rightY));
       } else {
-        // Simple AI: track ball with slight lag
+        // AI: track ball with lag that scales by difficulty
+        const AI_SPEED_MULT = { easy: 0.5, medium: 0.75, hard: 0.95 };
         const paddleCenter = s.rightY + PADDLE_HEIGHT / 2;
         const diff = s.ballY - paddleCenter;
-        const aiSpeed = PADDLE_SPEED * 0.75;
+        const aiSpeed = PADDLE_SPEED * (AI_SPEED_MULT[aiDifficulty] || 0.75);
         if (Math.abs(diff) > 4) {
           s.rightY += Math.sign(diff) * aiSpeed;
         }
@@ -180,10 +182,10 @@ export default function usePongGame() {
 
     rafRef.current = requestAnimationFrame(tick);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [gameState, mode, resetBall]);
+  }, [gameState, mode, aiDifficulty, resetBall]);
 
   return {
-    leftScore, rightScore, gameState, winner, mode, cpuWins,
+    leftScore, rightScore, gameState, winner, mode, cpuWins, aiDifficulty, setAiDifficulty,
     stateRef, resetGame, setMode,
     CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE, WINNING_SCORE,
   };
