@@ -23,13 +23,13 @@
 | 🐍 **Snake** | ✅ Live | Classic snake — eat food, grow longer, don't crash! Speed increases as you score. |
 | 🧱 **Tetris** | ✅ Live | Stack falling tetrominoes, clear lines, survive as long as possible. Speed increases every 10 lines. |
 | 💣 **Minesweeper** | ✅ Live | Uncover all safe tiles without triggering a mine. 3 difficulty levels: Easy, Medium, Hard. |
-| 🏓 **Pong** | 🔜 Soon | Two-paddle ball game — beat the AI or play with a friend. |
+| 🏓 **Pong** | ✅ Live | Two-paddle ball game — beat the AI or play 2-player locally. First to 7 wins. |
 
 ---
 
 ## 🎯 Features
 
-- 🎮 **3 fully playable games** — Snake, Tetris, Minesweeper
+- 🎮 **4 fully playable games** — Snake, Tetris, Minesweeper, Pong
 - ⚡ **No extra dependencies** — pure React + CSS, zero UI libraries
 - 🌈 **Neon retro aesthetic** — glowing greens, deep blacks, pixel fonts
 - 📱 **Mobile friendly** — on-screen D-pad + swipe gesture support
@@ -266,9 +266,37 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 
 ---
 
+## 🏓 How to Play — Pong
+
+```
+┌─────────────────────────────┐
+│                             │
+│   W          Move Up        │
+│   S          Move Down      │
+│   ↑ (2P)     P2 Move Up     │
+│   ↓ (2P)     P2 Move Down   │
+│   P          Pause / Resume │
+│                             │
+│   Mobile: Drag to move      │
+│                             │
+└─────────────────────────────┘
+```
+
+**Modes:**
+- 🤖 **VS CPU** — play against an AI opponent with realistic reaction lag
+- 👥 **2 Player** — you control the left paddle (W/S), a friend controls the right (↑/↓)
+
+**Rules:**
+- First to **7 points** wins the match
+- Ball speed increases slightly with every paddle hit
+- Where you hit the ball on your paddle affects its bounce angle — hit with the edge for sharper angles
+- Beating the CPU is tracked permanently — check your win count on the idle screen
+
+---
+
 ## 💾 Persistent Scores
 
-All best scores (Snake high score, Tetris high score + best lines, Minesweeper best time per difficulty) are saved to your browser's `localStorage` and survive page refreshes. They're visible at all times in the **stats bar** under the navigation menu.
+All best scores (Snake high score + length, Tetris high score + best lines, Minesweeper best time per difficulty, Pong CPU wins) are saved to your browser's `localStorage` and survive page refreshes. They're visible at all times in the **stats bar** under the navigation menu.
 
 Want to start fresh? Click the **↺** button at the end of the stats bar to reset everything (with a confirmation prompt first).
 
