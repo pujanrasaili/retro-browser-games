@@ -10,7 +10,6 @@ export default function Pong() {
   } = usePongGame();
 
   const canvasRef = useRef(null);
-  const touchRef = useRef({ leftY: null, rightY: null });
 
   // Canvas render loop — runs independently of React state for smooth 60fps
   useEffect(() => {
@@ -63,15 +62,29 @@ export default function Pong() {
     return () => cancelAnimationFrame(raf);
   }, [stateRef, CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE]);
 
-  // Touch controls — drag to move paddle vertically
-  const handleTouchMove = (side) => (e) => {
-    const touch = e.touches[0];
+  // Touch controls — drag to move paddle vertically.
+  // Determines which paddle each touch controls by X position (left half vs
+  // right half of the canvas), and handles multiple simultaneous touches so
+  // 2-player mode is actually playable on a single mobile device.
+  const handleTouchMove = (e) => {
+    e.preventDefault();
     const rect = canvasRef.current.getBoundingClientRect();
-    const scale = CANVAS_HEIGHT / rect.height;
-    const y = (touch.clientY - rect.top) * scale - PADDLE_HEIGHT / 2;
-    const clamped = Math.max(0, Math.min(CANVAS_HEIGHT - PADDLE_HEIGHT, y));
-    if (side === 'left') stateRef.current.leftY = clamped;
-    else stateRef.current.rightY = clamped;
+    const scaleY = CANVAS_HEIGHT / rect.height;
+    const scaleX = CANVAS_WIDTH / rect.width;
+
+    Array.from(e.touches).forEach(touch => {
+      const touchXCanvas = (touch.clientX - rect.left) * scaleX;
+      const y = (touch.clientY - rect.top) * scaleY - PADDLE_HEIGHT / 2;
+      const clamped = Math.max(0, Math.min(CANVAS_HEIGHT - PADDLE_HEIGHT, y));
+
+      if (touchXCanvas < CANVAS_WIDTH / 2) {
+        stateRef.current.leftY = clamped;
+      } else if (mode === '2p') {
+        // Only let a right-side touch move the right paddle in 2P mode —
+        // in AI mode the CPU controls the right paddle, so ignore it there.
+        stateRef.current.rightY = clamped;
+      }
+    });
   };
 
   return (
@@ -98,7 +111,7 @@ export default function Pong() {
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
           className="pong-canvas"
-          onTouchMove={handleTouchMove('left')}
+          onTouchMove={handleTouchMove}
         />
 
         {gameState === 'idle' && (
@@ -156,6 +169,9 @@ export default function Pong() {
           <div className="pong-overlay">
             <div className="pong-overlay-content">
               <h2 className="pixel-font pong-title">⏸ PAUSED</h2>
+              <div className="pong-divider" />
+              <p className="pong-sub">{leftScore} - {rightScore}</p>
+              <div className="pong-divider" />
               <p className="pong-sub">PRESS P TO RESUME</p>
             </div>
           </div>
@@ -165,7 +181,9 @@ export default function Pong() {
       {/* Mobile controls */}
       <div className="pong-mobile-controls">
         <div className="pong-mobile-col">
-          <span className="pong-mobile-label">DRAG SCREEN TO MOVE</span>
+          <span className="pong-mobile-label">
+            {mode === '2p' ? 'TOUCH LEFT/RIGHT HALF TO MOVE EACH PADDLE' : 'DRAG SCREEN TO MOVE'}
+          </span>
         </div>
       </div>
     </div>
