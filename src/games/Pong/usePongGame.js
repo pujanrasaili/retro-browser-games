@@ -8,6 +8,10 @@ const PADDLE_HEIGHT = 70;
 const PADDLE_SPEED = 6;
 const BALL_SIZE = 8;
 const INITIAL_BALL_SPEED = 4;
+// Capped below PADDLE_WIDTH so the ball can never move farther than a paddle's
+// width in one frame — otherwise a long rally could speed the ball up enough
+// to tunnel straight through a paddle without ever triggering the collision check.
+const MAX_BALL_SPEED = 9;
 const WINNING_SCORE = 7;
 
 function initialState() {
@@ -126,8 +130,10 @@ export default function usePongGame() {
         s.ballVX < 0
       ) {
         s.ballVX *= -1.05;
+        s.ballVX = Math.sign(s.ballVX) * Math.min(Math.abs(s.ballVX), MAX_BALL_SPEED);
         const hitPos = (s.ballY - s.leftY) / PADDLE_HEIGHT - 0.5;
         s.ballVY += hitPos * 3;
+        s.ballVY = Math.sign(s.ballVY) * Math.min(Math.abs(s.ballVY), MAX_BALL_SPEED);
         sounds.paddleHit();
       }
 
@@ -140,8 +146,10 @@ export default function usePongGame() {
         s.ballVX > 0
       ) {
         s.ballVX *= -1.05;
+        s.ballVX = Math.sign(s.ballVX) * Math.min(Math.abs(s.ballVX), MAX_BALL_SPEED);
         const hitPos = (s.ballY - s.rightY) / PADDLE_HEIGHT - 0.5;
         s.ballVY += hitPos * 3;
+        s.ballVY = Math.sign(s.ballVY) * Math.min(Math.abs(s.ballVY), MAX_BALL_SPEED);
         sounds.paddleHit();
       }
 
