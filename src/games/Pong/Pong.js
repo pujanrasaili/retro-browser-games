@@ -5,6 +5,7 @@ import './Pong.css';
 export default function Pong() {
   const {
     leftScore, rightScore, gameState, winner, mode, cpuWins, aiDifficulty, setAiDifficulty,
+    leftScorePop, rightScorePop,
     stateRef, resetGame, setMode,
     CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE,
   } = usePongGame();
@@ -93,14 +94,14 @@ export default function Pong() {
       <div className="pong-score-bar">
         <div className="pong-score-item">
           <span className="pong-score-label pixel-font">YOU</span>
-          <span className="pong-score-value pixel-font">{leftScore}</span>
+          <span className={`pong-score-value pixel-font${leftScorePop ? ' pop' : ''}`}>{leftScore}</span>
         </div>
         <span className="pong-vs pixel-font">VS</span>
         <div className="pong-score-item">
           <span className="pong-score-label pixel-font">
             {mode === 'ai' ? `CPU (${aiDifficulty.charAt(0).toUpperCase()})` : 'P2'}
           </span>
-          <span className="pong-score-value right pixel-font">{rightScore}</span>
+          <span className={`pong-score-value right pixel-font${rightScorePop ? ' pop' : ''}`}>{rightScore}</span>
         </div>
       </div>
 

@@ -35,6 +35,17 @@
   font-size: 1.4rem;
   color: var(--green-bright);
   text-shadow: 0 0 12px var(--green-bright);
+  transition: transform 0.1s;
+}
+
+.pong-score-value.pop {
+  animation: pongScorePop 0.3s ease-out;
+}
+
+@keyframes pongScorePop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
 }
 
 .pong-score-value.right {

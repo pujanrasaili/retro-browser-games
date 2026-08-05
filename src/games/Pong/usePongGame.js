@@ -31,6 +31,8 @@ export default function usePongGame() {
   const [gameState, setGameState] = useState('idle'); // idle | playing | paused | over
   const [winner, setWinner] = useState(null);
   const [cpuWins, setCpuWins] = useState(() => parseInt(localStorage.getItem('pong_cpu_wins') || '0', 10));
+  const [leftScorePop, setLeftScorePop] = useState(false);
+  const [rightScorePop, setRightScorePop] = useState(false);
   const [mode, setMode] = useState('ai'); // 'ai' or '2p'
   const [aiDifficulty, setAiDifficulty] = useState('medium'); // 'easy' | 'medium' | 'hard'
 
@@ -166,6 +168,8 @@ export default function usePongGame() {
           }
           return ns;
         });
+        setRightScorePop(true);
+        setTimeout(() => setRightScorePop(false), 300);
         resetBall(1);
       } else if (s.ballX > CANVAS_WIDTH) {
         setLeftScore(prev => {
@@ -182,6 +186,8 @@ export default function usePongGame() {
           }
           return ns;
         });
+        setLeftScorePop(true);
+        setTimeout(() => setLeftScorePop(false), 300);
         resetBall(-1);
       }
 
@@ -194,6 +200,7 @@ export default function usePongGame() {
 
   return {
     leftScore, rightScore, gameState, winner, mode, cpuWins, aiDifficulty, setAiDifficulty,
+    leftScorePop, rightScorePop,
     stateRef, resetGame, setMode,
     CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE, WINNING_SCORE,
   };
