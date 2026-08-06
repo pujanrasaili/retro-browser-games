@@ -158,9 +158,16 @@ export default function Pong() {
           <div className="pong-overlay">
             <div className="pong-overlay-content">
               <h2 className={`pixel-font pong-title ${winner === 'right' ? 'red' : ''}`}>
-                {winner === 'left' ? '🏆 YOU WIN!' : mode === 'ai' ? '💻 CPU WINS' : '🏆 P2 WINS!'}
+                {winner === 'left'
+                  ? (mode === 'ai' && aiDifficulty === 'hard' ? '🏆 LEGENDARY WIN!' : '🏆 YOU WIN!')
+                  : mode === 'ai' ? '💻 CPU WINS' : '🏆 P2 WINS!'}
               </h2>
               <p className="pong-sub">{leftScore} - {rightScore}</p>
+              {mode === 'ai' && (
+                <p className="pong-sub">
+                  {aiDifficulty === 'easy' ? '🟢' : aiDifficulty === 'medium' ? '🟡' : '🔴'} {aiDifficulty.toUpperCase()}
+                </p>
+              )}
               <button className="pong-btn pixel-font" onClick={() => resetGame(mode)}>↺ RETRY</button>
             </div>
           </div>
