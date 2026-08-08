@@ -277,20 +277,28 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 │   ↓ (2P)     P2 Move Down   │
 │   P          Pause / Resume │
 │                             │
-│   Mobile: Drag to move      │
+│   Mobile (VS CPU): Drag     │
+│   anywhere to move          │
+│   Mobile (2P): Touch left   │
+│   half for P1, right half   │
+│   for P2 — both work at once│
 │                             │
 └─────────────────────────────┘
 ```
 
 **Modes:**
-- 🤖 **VS CPU** — play against an AI opponent with realistic reaction lag
-- 👥 **2 Player** — you control the left paddle (W/S), a friend controls the right (↑/↓)
+- 🤖 **VS CPU** — play against an AI opponent with 3 difficulty levels:
+  - 🟢 **Easy** — slow reactions, good for learning the controls
+  - 🟡 **Medium** — the default, a fair fight
+  - 🔴 **Hard** — near-instant reactions, genuinely tough
+- 👥 **2 Player** — you control the left paddle (W/S), a friend controls the right (↑/↓ or right-half touch on mobile)
 
 **Rules:**
 - First to **7 points** wins the match
-- Ball speed increases slightly with every paddle hit
+- Ball speed increases slightly with every paddle hit, capped so it can never move fast enough to skip through a paddle
 - Where you hit the ball on your paddle affects its bounce angle — hit with the edge for sharper angles
 - Beating the CPU is tracked permanently — check your win count on the idle screen
+- Beat **Hard** difficulty for a special 🏆 LEGENDARY WIN! screen
 
 ---
 
