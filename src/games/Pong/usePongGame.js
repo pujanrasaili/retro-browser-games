@@ -34,7 +34,13 @@ export default function usePongGame() {
   const [leftScorePop, setLeftScorePop] = useState(false);
   const [rightScorePop, setRightScorePop] = useState(false);
   const [mode, setMode] = useState('ai'); // 'ai' or '2p'
-  const [aiDifficulty, setAiDifficulty] = useState('medium'); // 'easy' | 'medium' | 'hard'
+  const [aiDifficulty, setAiDifficultyState] = useState(
+    () => localStorage.getItem('pong_ai_difficulty') || 'medium'
+  ); // 'easy' | 'medium' | 'hard'
+  const setAiDifficulty = useCallback((d) => {
+    setAiDifficultyState(d);
+    localStorage.setItem('pong_ai_difficulty', d);
+  }, []);
 
   const stateRef = useRef(initialState());
   const keysRef = useRef({});
