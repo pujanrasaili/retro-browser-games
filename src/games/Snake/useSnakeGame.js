@@ -27,8 +27,23 @@ function randomFood(snake) {
 }
 
 export default function useSnakeGame() {
-  const [difficulty, setDifficulty] = useState('medium');
-  const [walls, setWalls] = useState(false);
+  const [difficulty, setDifficultyState] = useState(
+    () => localStorage.getItem('snake_difficulty') || 'medium'
+  );
+  const [walls, setWallsState] = useState(
+    () => localStorage.getItem('snake_walls') === 'true'
+  );
+  const setDifficulty = useCallback((d) => {
+    setDifficultyState(d);
+    localStorage.setItem('snake_difficulty', d);
+  }, []);
+  const setWalls = useCallback((updater) => {
+    setWallsState(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      localStorage.setItem('snake_walls', String(next));
+      return next;
+    });
+  }, []);
   const [snake, setSnake] = useState([]);
   const [direction, setDirectionState] = useState(INITIAL_DIRECTION);
   const [food, setFood] = useState({ x: 15, y: 10 });
