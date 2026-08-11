@@ -179,6 +179,11 @@ export default function Pong() {
               <h2 className="pixel-font pong-title">⏸ PAUSED</h2>
               <div className="pong-divider" />
               <p className="pong-sub">{leftScore} - {rightScore}</p>
+              {mode === 'ai' && (
+                <p className="pong-sub">
+                  {aiDifficulty === 'easy' ? '🟢' : aiDifficulty === 'medium' ? '🟡' : '🔴'} {aiDifficulty.toUpperCase()}
+                </p>
+              )}
               <div className="pong-divider" />
               <p className="pong-sub">PRESS P TO RESUME</p>
             </div>
