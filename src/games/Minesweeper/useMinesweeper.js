@@ -3,10 +3,16 @@ import { DIFFICULTIES, createBoard, floodReveal } from './mineUtils';
 import { sounds } from '../../utils/sound';
 
 export default function useMinesweeper() {
-  const [difficulty, setDifficulty] = useState('easy');
+  const [difficulty, setDifficultyState] = useState(
+    () => localStorage.getItem('mine_difficulty') || 'easy'
+  );
+  const setDifficulty = useCallback((d) => {
+    setDifficultyState(d);
+    localStorage.setItem('mine_difficulty', d);
+  }, []);
   const [board, setBoard] = useState(null);
   const [gameState, setGameState] = useState('idle');
-  const [minesLeft, setMinesLeft] = useState(DIFFICULTIES.easy.mines);
+  const [minesLeft, setMinesLeft] = useState(() => DIFFICULTIES[difficulty].mines);
   const [time, setTime] = useState(0);
   const [firstClick, setFirstClick] = useState(true);
   const [halfwayCelebrated, setHalfwayCelebrated] = useState(false);
