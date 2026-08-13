@@ -48,6 +48,19 @@
   100% { transform: scale(1); }
 }
 
+.pong-match-point {
+  font-size: 0.32rem;
+  color: #ffd700;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px #ffd700;
+  animation: pongMatchPointPulse 1s ease-in-out infinite;
+}
+
+@keyframes pongMatchPointPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
 .pong-score-value.right {
   color: #ff4757;
   text-shadow: 0 0 12px #ff4757;

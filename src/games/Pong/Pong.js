@@ -7,10 +7,12 @@ export default function Pong() {
     leftScore, rightScore, gameState, winner, mode, cpuWins, aiDifficulty, setAiDifficulty,
     leftScorePop, rightScorePop,
     stateRef, resetGame, setMode,
-    CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE,
+    CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE, WINNING_SCORE,
   } = usePongGame();
 
   const canvasRef = useRef(null);
+  const leftMatchPoint = gameState === 'playing' && leftScore === WINNING_SCORE - 1;
+  const rightMatchPoint = gameState === 'playing' && rightScore === WINNING_SCORE - 1;
 
   // Canvas render loop — runs independently of React state for smooth 60fps
   useEffect(() => {
@@ -95,6 +97,7 @@ export default function Pong() {
         <div className="pong-score-item">
           <span className="pong-score-label pixel-font">YOU</span>
           <span className={`pong-score-value pixel-font${leftScorePop ? ' pop' : ''}`}>{leftScore}</span>
+          {leftMatchPoint && <span className="pong-match-point pixel-font">MATCH POINT</span>}
         </div>
         <span className="pong-vs pixel-font">VS</span>
         <div className="pong-score-item">
@@ -102,6 +105,7 @@ export default function Pong() {
             {mode === 'ai' ? `CPU (${aiDifficulty.charAt(0).toUpperCase()})` : 'P2'}
           </span>
           <span className={`pong-score-value right pixel-font${rightScorePop ? ' pop' : ''}`}>{rightScore}</span>
+          {rightMatchPoint && <span className="pong-match-point pixel-font">MATCH POINT</span>}
         </div>
       </div>
 
