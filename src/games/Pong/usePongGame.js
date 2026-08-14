@@ -169,6 +169,8 @@ export default function usePongGame() {
             setWinner('right');
             setGameState('over');
             sounds.pongLose();
+          } else if (ns === WINNING_SCORE - 1) {
+            sounds.matchPoint();
           } else {
             sounds.pongScore();
           }
@@ -187,6 +189,8 @@ export default function usePongGame() {
             if (mode === 'ai') {
               setCpuWins(w => { const nw = w + 1; localStorage.setItem('pong_cpu_wins', nw); return nw; });
             }
+          } else if (ns === WINNING_SCORE - 1) {
+            sounds.matchPoint();
           } else {
             sounds.pongScore();
           }

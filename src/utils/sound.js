@@ -83,6 +83,11 @@ export const sounds = {
   paddleHit: () => playTone({ freq: 220, duration: 0.06, type: 'square', volume: 0.14, sweepTo: 440 }),
   wallBounce: () => playTone({ freq: 180, duration: 0.05, type: 'triangle', volume: 0.1 }),
   pongScore: () => playTone({ freq: 500, duration: 0.15, type: 'sawtooth', volume: 0.13, sweepTo: 250 }),
+  matchPoint: () => {
+    // Two-note rising ding to signal tension, distinct from the regular score sound
+    playTone({ freq: 700, duration: 0.1, type: 'sine', volume: 0.12 });
+    setTimeout(() => playTone({ freq: 900, duration: 0.15, type: 'sine', volume: 0.13 }), 90);
+  },
   pongWin:   () => {
     playTone({ freq: 523, duration: 0.15, type: 'triangle', volume: 0.15 });
     setTimeout(() => playTone({ freq: 659, duration: 0.15, type: 'triangle', volume: 0.15 }), 130);
