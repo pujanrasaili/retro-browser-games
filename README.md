@@ -297,16 +297,19 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 - First to **7 points** wins the match
 - Ball speed increases slightly with every paddle hit, capped so it can never move fast enough to skip through a paddle
 - Where you hit the ball on your paddle affects its bounce angle — hit with the edge for sharper angles
+- Reaching **6 points** triggers a pulsing MATCH POINT indicator and a distinct sound cue
 - Beating the CPU is tracked permanently — check your win count on the idle screen
 - Beat **Hard** difficulty for a special 🏆 LEGENDARY WIN! screen
 
 ---
 
-## 💾 Persistent Scores
+## 💾 Persistent Scores & Preferences
 
 All best scores (Snake high score + length, Tetris high score + best lines, Minesweeper best time per difficulty, Pong CPU wins) are saved to your browser's `localStorage` and survive page refreshes. They're visible at all times in the **stats bar** under the navigation menu.
 
-Want to start fresh? Click the **↺** button at the end of the stats bar to reset everything (with a confirmation prompt first).
+Your last-selected difficulty and mode settings also persist across sessions — Snake's difficulty/walls mode, Minesweeper's difficulty, and Pong's AI difficulty are all remembered the next time you open the app.
+
+Want to start fresh? Click the **↺** button at the end of the stats bar to reset all **best scores**. This intentionally does *not* clear your difficulty/mode preferences, since those aren't records to reset — just your last choice.
 
 ---
 
