@@ -1,0 +1,10 @@
+{
+  "short_name": "Retro Games",
+  "name": "Retro Browser Games — Snake, Tetris, Minesweeper, Pong",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0a0a0f",
+  "background_color": "#0a0a0f",
+  "description": "Classic retro browser games built with React — Snake, Tetris, Minesweeper, and Pong."
+}
