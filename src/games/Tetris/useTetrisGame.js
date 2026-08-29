@@ -188,6 +188,27 @@ export default function useTetrisGame() {
     return () => clearInterval(interval);
   }, [gameState, speed, lockPiece]);
 
+  const holdPiece = useCallback(() => {
+    if (!canHold) return;
+    const piece = currentRef.current;
+    const nextPiece = nextRef.current;
+    if (!piece) return;
+    sounds.rotate(); // distinct click sound for hold action
+    const pocketed = { ...piece, x: 3, y: 0 };
+    setHold(prev => {
+      if (prev) {
+        // Swap: bring held piece back into play, pocket current
+        setCurrent({ ...prev, x: 3, y: 0 });
+      } else {
+        // First hold: promote next → current, generate new next
+        setCurrent({ ...nextPiece, x: 3, y: 0 });
+        setNext(randomPiece());
+      }
+      return pocketed;
+    });
+    setCanHold(false);
+  }, [canHold]);
+
   // Keyboard controls
   useEffect(() => {
     const handleKey = (e) => {
@@ -252,27 +273,6 @@ export default function useTetrisGame() {
   const moveLeft  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x-1, p.y, b)) { sounds.move(); setCurrent(prev => ({...prev, x: prev.x-1})); } }, []);
   const moveRight = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x+1, p.y, b)) { sounds.move(); setCurrent(prev => ({...prev, x: prev.x+1})); } }, []);
   const moveDown  = useCallback(() => { const p = currentRef.current; const b = boardRef.current; if (p && isValid(p.shape, p.x, p.y+1, b)) { sounds.move(); setCurrent(prev => ({...prev, y: prev.y+1})); setScore(s => s+1); } }, []);
-
-  const holdPiece = useCallback(() => {
-    if (!canHold) return;
-    const piece = currentRef.current;
-    const nextPiece = nextRef.current;
-    if (!piece) return;
-    sounds.rotate(); // distinct click sound for hold action
-    const pocketed = { ...piece, x: 3, y: 0 };
-    setHold(prev => {
-      if (prev) {
-        // Swap: bring held piece back into play, pocket current
-        setCurrent({ ...prev, x: 3, y: 0 });
-      } else {
-        // First hold: promote next → current, generate new next
-        setCurrent({ ...nextPiece, x: 3, y: 0 });
-        setNext(randomPiece());
-      }
-      return pocketed;
-    });
-    setCanHold(false);
-  }, [canHold]);
 
   const rotate    = useCallback(() => {
     const p = currentRef.current; const b = boardRef.current; if (!p) return;
