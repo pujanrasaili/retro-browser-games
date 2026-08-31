@@ -29,12 +29,20 @@ test('Snake is the active game by default', () => {
   expect(within(nav).getByText('🧱 TETRIS')).not.toHaveClass('active');
 });
 
-test('clicking the Tetris tab switches the active game', () => {
+test('clicking the Tetris tab switches the active game and mounts it correctly', () => {
   render(<App />);
   const nav = screen.getByRole('navigation');
   fireEvent.click(within(nav).getByText('🧱 TETRIS'));
   expect(within(nav).getByText('🧱 TETRIS')).toHaveClass('active');
   expect(within(nav).getByText('🐍 SNAKE')).not.toHaveClass('active');
+  // Regression guard: Tetris previously threw a ReferenceError on mount due to
+  // a temporal-dead-zone bug (holdPiece referenced before its declaration in
+  // useTetrisGame.js). Asserting on the idle screen's hold-key hint confirms
+  // the component actually rendered its content, not just that the nav class
+  // toggled — a silent mount failure wouldn't necessarily fail the class check
+  // above if React's error boundary swallowed it differently in some setup.
+  expect(screen.getByText('🧱 TETRIS', { selector: 'h2' })).toBeInTheDocument();
+  expect(screen.getByText('Hold')).toBeInTheDocument();
 });
 
 test('clicking the Minesweeper tab switches the active game', () => {
