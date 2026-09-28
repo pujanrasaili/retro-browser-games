@@ -348,8 +348,8 @@ fixes in the Minesweeper suite.
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
 ![Tests](https://img.shields.io/badge/Tests-115%20passing-39ff14?style=flat-square)
-![Commits](https://img.shields.io/badge/Commits-140%2B-bf5fff?style=flat-square)
-![Lines](https://img.shields.io/badge/Code-4500%2B%20lines-00f5ff?style=flat-square)
+![Commits](https://img.shields.io/badge/Commits-130%2B-bf5fff?style=flat-square)
+![Lines](https://img.shields.io/badge/Code-5000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
 
 ## 👨‍💻 Author
