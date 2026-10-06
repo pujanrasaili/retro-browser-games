@@ -17,6 +17,7 @@ jest.mock('./pieces', () => ({
 
 const T_PIECE = { key: 'T', shape: [[0, 1, 0], [1, 1, 1]], color: '#bf5fff', shadow: 'rgba(191, 95, 255, 0.4)' };
 const I_PIECE = { key: 'I', shape: [[1, 1, 1, 1]], color: '#00f5ff', shadow: 'rgba(0, 245, 255, 0.4)' };
+const O_PIECE = { key: 'O', shape: [[1, 1], [1, 1]], color: '#ffd700', shadow: 'rgba(255, 215, 0, 0.4)' };
 
 function queuePieces(...pieces) {
   pieces.forEach(p => randomPiece.mockReturnValueOnce({ ...p, x: 3, y: 0 }));
@@ -104,6 +105,38 @@ describe('useTetrisGame', () => {
     expect(result.current.current.key).toBe('I'); // promoted from next
     expect(result.current.next.key).toBe('T'); // freshly generated
     expect(result.current.canHold).toBe(false);
+  });
+
+  test('filling the bottom rows with O-pieces triggers the line-clear sequence', () => {
+    jest.useFakeTimers();
+    // 2 pieces for resetGame (current, next), then 2 more per spawnPiece call
+    // after each of the 5 O-piece locks = 2 + 5*2 = 12 total randomPiece() calls
+    queuePieces(...Array(12).fill(O_PIECE));
+    const { result } = renderHook(() => useTetrisGame());
+    act(() => result.current.resetGame());
+
+    // O-piece spawns at x=3 (columns 3-4). Move each of 5 pieces into its own
+    // 2-wide column pair spanning the full 10-wide board, then hard drop.
+    const moves = [-3, -1, 1, 3, 5]; // relative moveLeft(-)/moveRight(+) counts from spawn x=3
+    moves.forEach((count) => {
+      const dir = count < 0 ? result.current.moveLeft : result.current.moveRight;
+      for (let i = 0; i < Math.abs(count); i++) {
+        act(() => dir());
+      }
+      act(() => result.current.hardDrop());
+      act(() => { jest.advanceTimersByTime(30); }); // triggers the lockPiece setTimeout
+    });
+
+    // The O-piece is 2 rows tall, so completing the bottom row across all 5
+    // columns completes 2 full rows at once (both rows the piece occupies),
+    // not 1 — verified by a manual run before locking in this assertion.
+    expect(result.current.clearingRows.length).toBeGreaterThan(0);
+
+    act(() => { jest.advanceTimersByTime(300); }); // triggers the clear-animation setTimeout
+    expect(result.current.clearingRows).toEqual([]);
+    // Confirmed via a manual run that this exact placement clears 2 lines at
+    // once, not 1 — asserting the precise value rather than a loose ">0" check.
+    expect(result.current.lines).toBe(2);
   });
 
   test('holdPiece does nothing if called again before the piece locks', () => {
