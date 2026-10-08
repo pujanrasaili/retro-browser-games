@@ -323,7 +323,7 @@ npm test              # watch mode
 npm run test:coverage # one-off run with a coverage report
 ```
 
-**115 tests, ~53% statement coverage** as of the last measurement. Coverage is
+**116 tests, ~61% statement coverage** as of the last measurement. Coverage is
 uneven by design, not oversight:
 
 - **Fully covered**: pure logic utilities (formatScore, formatTime, Tetris
@@ -331,13 +331,13 @@ uneven by design, not oversight:
   chord-click logic), all 4 game hooks' core behavior, and all 4 game
   components' presentational rendering (button clicks, overlay text, correct
   hook calls).
+- **Also covered**: Tetris's line-clearing sequence end to end (stacked
+  pieces fill rows, the 300ms flash runs, the cleared-line count updates), tested
+  with fake timers. Score and level changes during a clear are not asserted.
 - **Not covered**: Pong's real-time physics loop (ball movement, collision,
   the tunneling-prevention speed cap) — it runs inside `requestAnimationFrame`
   and mutates a ref directly rather than React state, which needs a more
-  involved animation-frame mock than this suite currently sets up. Tetris's
-  line-clearing sequence (the 300ms flash-then-clear timing) is similarly
-  untested end-to-end, though the underlying `clearLines` logic is covered
-  indirectly through other tests.
+  involved animation-frame mock than this suite currently sets up.
 
 See the commit history for the reasoning behind specific testing decisions —
 several commits document real bugs the tests caught before they shipped,
@@ -347,7 +347,7 @@ fixes in the Minesweeper suite.
 ## 📊 Project Stats
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-115%20passing-39ff14?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-116%20passing-39ff14?style=flat-square)
 ![Commits](https://img.shields.io/badge/Commits-130%2B-bf5fff?style=flat-square)
 ![Lines](https://img.shields.io/badge/Code-5000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
