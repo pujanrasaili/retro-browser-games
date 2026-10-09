@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎮 Retro Browser Games
+# Retro Browser Games
 
 **A collection of classic arcade games built with React — pure neon nostalgia in your browser.**
 
@@ -10,40 +10,40 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
 
-[▶ Play Now](#getting-started) · [🐛 Report Bug](https://github.com/pujanrasaili/retro-browser-games/issues) · [✨ Request Feature](https://github.com/pujanrasaili/retro-browser-games/issues)
+[ Play Now](#getting-started) · [ Report Bug](https://github.com/pujanrasaili/retro-browser-games/issues) · [ Request Feature](https://github.com/pujanrasaili/retro-browser-games/issues)
 
 </div>
 
 ---
 
-## 🕹️ Games
+## Games
 
 | Game | Status | Description |
 |------|--------|-------------|
-| 🐍 **Snake** | ✅ Live | Classic snake — eat food, grow longer, don't crash! Speed increases as you score. |
-| 🧱 **Tetris** | ✅ Live | Stack falling tetrominoes, clear lines, survive as long as possible. Speed increases every 10 lines. |
-| 💣 **Minesweeper** | ✅ Live | Uncover all safe tiles without triggering a mine. 3 difficulty levels: Easy, Medium, Hard. |
-| 🏓 **Pong** | ✅ Live | Two-paddle ball game — beat the AI or play 2-player locally. First to 7 wins. |
+| 🐍 **Snake** | Live | Classic snake — eat food, grow longer, don't crash! Speed increases as you score. |
+| 🧱 **Tetris** | Live | Stack falling tetrominoes, clear lines, survive as long as possible. Speed increases every 10 lines. |
+| 💣 **Minesweeper** | Live | Uncover all safe tiles without triggering a mine. 3 difficulty levels: Easy, Medium, Hard. |
+| 🏓 **Pong** | Live | Two-paddle ball game — beat the AI or play 2-player locally. First to 7 wins. |
 
 ---
 
-## 🎯 Features
+## Features
 
-- 🎮 **4 fully playable games** — Snake, Tetris, Minesweeper, Pong
-- ⚡ **No extra dependencies** — pure React + CSS, zero UI libraries
-- 🌈 **Neon retro aesthetic** — glowing greens, deep blacks, pixel fonts
-- 📱 **Mobile friendly** — on-screen D-pad + swipe gesture support
-- 🏆 **Persistent high scores** — saved to localStorage, survives refresh
-- 🚀 **Increasing difficulty** — Snake speeds up, Tetris gets faster each level
-- ⏸️ **Pause / resume** — hit `Space` or `P` anytime
-- 🔊 **Sound effects** — synthesized via Web Audio API, global mute button
-- 📦 **Tetris hold piece** — save a piece for later with `C` or `Shift`
-- 🧱 **Snake walls mode** — toggle between wrap-around and lethal borders
-- 🎯 **Milestone celebrations** — mid-game callouts for length/progress achievements
+-  **4 fully playable games** — Snake, Tetris, Minesweeper, Pong
+-  **No extra dependencies** — pure React + CSS, zero UI libraries
+-  **Neon retro aesthetic** — glowing greens, deep blacks, pixel fonts
+-  **Mobile friendly** — on-screen D-pad + swipe gesture support
+-  **Persistent high scores** — saved to localStorage, survives refresh
+-  **Increasing difficulty** — Snake speeds up, Tetris gets faster each level
+-  **Pause / resume** — hit `Space` or `P` anytime
+-  **Sound effects** — synthesized via Web Audio API, global mute button
+-  **Tetris hold piece** — save a piece for later with `C` or `Shift`
+-  **Snake walls mode** — toggle between wrap-around and lethal borders
+-  **Milestone celebrations** — mid-game callouts for length/progress achievements
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) v16 or higher
@@ -68,7 +68,7 @@ npm install ajv@^8 --legacy-peer-deps
 npm start
 ```
 
-The app will open at **http://localhost:3000** 🎉
+The app will open at **http://localhost:3000** 
 
 ### Build for Production
 
@@ -78,7 +78,7 @@ npm run build
 
 ---
 
-## 🎮 How to Play — Snake
+## How to Play — Snake
 
 ```
 ┌─────────────────────────────┐
@@ -95,14 +95,14 @@ npm run build
 ```
 
 **Scoring:**
-- 🔴 Eat food → **+10 points**
-- 🐍 Snake gets longer with every food eaten
-- ⚡ Speed increases every 5 foods
-- 💥 Hit yourself → Game Over
-- 🎯 **Difficulty selector**: Easy / Medium / Hard — affects starting speed and speed growth
-- 🧱 **Walls mode**: hitting the border kills you; **Wrap mode**: you pass through walls
-- 🎉 Hit **10, 20, 30...** length milestones for a special callout during play
-- 📊 Game over shows your **score + length + personal bests** for both
+-  Eat food → **+10 points**
+-  Snake gets longer with every food eaten
+-  Speed increases every 5 foods
+-  Hit yourself → Game Over
+-  **Difficulty selector**: Easy / Medium / Hard — affects starting speed and speed growth
+-  **Walls mode**: hitting the border kills you; **Wrap mode**: you pass through walls
+-  Hit **10, 20, 30...** length milestones for a special callout during play
+-  Game over shows your **score + length + personal bests** for both
 
 **Speed indicator** (5 dots in the score bar):
 - `● ○ ○ ○ ○` = Slow
@@ -110,7 +110,7 @@ npm run build
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Technology | Purpose |
 |------------|---------|
@@ -124,7 +124,7 @@ npm run build
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 retro-browser-games/
@@ -148,7 +148,7 @@ retro-browser-games/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions make this project better! Here's how:
 
@@ -171,8 +171,8 @@ Contributions make this project better! Here's how:
 
 4. **Commit with clear messages:**
    ```bash
-   git commit -m "🧱 Tetris: Add piece rotation logic"
-   git commit -m "🧱 Tetris: Add line clearing and scoring"
+   git commit -m " Tetris: Add piece rotation logic"
+   git commit -m " Tetris: Add line clearing and scoring"
    ```
 
 5. **Open a Pull Request** with a short description
@@ -185,7 +185,7 @@ Open an [issue](https://github.com/pujanrasaili/retro-browser-games/issues) with
 
 ---
 
-## 📜 License
+## License
 
 MIT © [pujanrasaili](https://github.com/pujanrasaili)
 
@@ -195,13 +195,13 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 
 **Made with 💚 and way too much `box-shadow`**
 
-⭐ Star this repo if you had fun playing!
+Star this repo if you had fun playing!
 
 </div>
 
 ---
 
-## 🧱 How to Play — Tetris
+## How to Play — Tetris
 
 ```
 ┌─────────────────────────────┐
@@ -232,14 +232,14 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 | 4 lines (Tetris!) | 800 × level |
 
 **Tips:**
-- 👻 The **ghost piece** shows where your piece will land
-- ⚡ Speed increases every 10 lines
-- 🎯 Clear 4 lines at once (Tetris!) for maximum points
-- 📦 Watch the **NEXT** preview to plan ahead
+-  The **ghost piece** shows where your piece will land
+-  Speed increases every 10 lines
+-  Clear 4 lines at once (Tetris!) for maximum points
+-  Watch the **NEXT** preview to plan ahead
 
 ---
 
-## 💣 How to Play — Minesweeper
+## How to Play — Minesweeper
 
 ```
 ┌─────────────────────────────┐
@@ -247,26 +247,26 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 │   LEFT CLICK   Reveal cell  │
 │   RIGHT CLICK  Place flag   │
 │   DOUBLE CLICK Auto-clear   │
-│   😊 Button    New game     │
+│    Button    New game     │
 │                             │
 │   Difficulties:             │
-│   🟢 Easy   9×9,  10 mines  │
-│   🟡 Medium 16×16, 40 mines │
-│   🔴 Hard   16×30, 99 mines │
+│    Easy   9×9,  10 mines  │
+│    Medium 16×16, 40 mines │
+│    Hard   16×30, 99 mines │
 │                             │
 └─────────────────────────────┘
 ```
 
 **Tips:**
-- 🛡️ First click is always **safe** — no mine on first click
-- 🔢 Numbers show how many mines are in adjacent cells
-- 🚩 Flag suspected mines with right click
-- 💡 Empty cells auto-reveal connected safe areas
-- ⚡ Double-click a revealed number to instantly reveal all its neighbors, once you've flagged the correct number of mines around it
+-  First click is always **safe** — no mine on first click
+-  Numbers show how many mines are in adjacent cells
+-  Flag suspected mines with right click
+-  Empty cells auto-reveal connected safe areas
+-  Double-click a revealed number to instantly reveal all its neighbors, once you've flagged the correct number of mines around it
 
 ---
 
-## 🏓 How to Play — Pong
+## How to Play — Pong
 
 ```
 ┌─────────────────────────────┐
@@ -287,11 +287,11 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 ```
 
 **Modes:**
-- 🤖 **VS CPU** — play against an AI opponent with 3 difficulty levels:
-  - 🟢 **Easy** — slow reactions, good for learning the controls
-  - 🟡 **Medium** — the default, a fair fight
-  - 🔴 **Hard** — near-instant reactions, genuinely tough
-- 👥 **2 Player** — you control the left paddle (W/S), a friend controls the right (↑/↓ or right-half touch on mobile)
+-  **VS CPU** — play against an AI opponent with 3 difficulty levels:
+  -  **Easy** — slow reactions, good for learning the controls
+  -  **Medium** — the default, a fair fight
+  -  **Hard** — near-instant reactions, genuinely tough
+-  **2 Player** — you control the left paddle (W/S), a friend controls the right (↑/↓ or right-half touch on mobile)
 
 **Rules:**
 - First to **7 points** wins the match
@@ -299,11 +299,11 @@ MIT © [pujanrasaili](https://github.com/pujanrasaili)
 - Where you hit the ball on your paddle affects its bounce angle — hit with the edge for sharper angles
 - Reaching **6 points** triggers a pulsing MATCH POINT indicator and a distinct sound cue
 - Beating the CPU is tracked permanently — check your win count on the idle screen
-- Beat **Hard** difficulty for a special 🏆 LEGENDARY WIN! screen
+- Beat **Hard** difficulty for a special LEGENDARY WIN! screen
 
 ---
 
-## 💾 Persistent Scores & Preferences
+## Persistent Scores & Preferences
 
 All best scores (Snake high score + length, Tetris high score + best lines, Minesweeper best time per difficulty, Pong CPU wins) are saved to your browser's `localStorage` and survive page refreshes. They're visible at all times in the **stats bar** under the navigation menu.
 
@@ -313,7 +313,7 @@ Want to start fresh? Click the **↺** button at the end of the stats bar to res
 
 ---
 
-## 🧪 Testing
+## Testing
 
 This project has an automated test suite covering game logic, React hooks, and
 component rendering — run it yourself with:
@@ -344,7 +344,7 @@ several commits document real bugs the tests caught before they shipped,
 including a temporal-dead-zone crash in Tetris and a couple of flaky-test
 fixes in the Minesweeper suite.
 
-## 📊 Project Stats
+## Project Stats
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
 ![Tests](https://img.shields.io/badge/Tests-116%20passing-39ff14?style=flat-square)
@@ -352,5 +352,5 @@ fixes in the Minesweeper suite.
 ![Lines](https://img.shields.io/badge/Code-5000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
 
-## 👨‍💻 Author
+## Author
 **Pujan Rasaili**
