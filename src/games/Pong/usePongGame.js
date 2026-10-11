@@ -31,6 +31,13 @@ export default function usePongGame() {
   const [gameState, setGameState] = useState('idle'); // idle | playing | paused | over
   const [winner, setWinner] = useState(null);
   const [cpuWins, setCpuWins] = useState(() => parseInt(localStorage.getItem('pong_cpu_wins') || '0', 10));
+  // Scores and the CPU win count are mirrored in refs so the game loop computes the
+  // next value and runs side effects (sounds, win detection, localStorage) exactly
+  // once per point, outside any state-updater function. Updaters are double-invoked
+  // by React.StrictMode in development, which used to count one CPU win twice.
+  const leftScoreRef = useRef(0);
+  const rightScoreRef = useRef(0);
+  const cpuWinsRef = useRef(parseInt(localStorage.getItem('pong_cpu_wins') || '0', 10));
   const [leftScorePop, setLeftScorePop] = useState(false);
   const [rightScorePop, setRightScorePop] = useState(false);
   const [mode, setMode] = useState('ai'); // 'ai' or '2p'
@@ -50,6 +57,8 @@ export default function usePongGame() {
     setMode(selectedMode);
     setLeftScore(0);
     setRightScore(0);
+    leftScoreRef.current = 0;
+    rightScoreRef.current = 0;
     setWinner(null);
     stateRef.current = initialState();
     setGameState('playing');
@@ -163,39 +172,37 @@ export default function usePongGame() {
 
       // Scoring
       if (s.ballX < 0) {
-        setRightScore(prev => {
-          const ns = prev + 1;
-          if (ns >= WINNING_SCORE) {
-            setWinner('right');
-            setGameState('over');
-            sounds.pongLose();
-          } else if (ns === WINNING_SCORE - 1) {
-            sounds.matchPoint();
-          } else {
-            sounds.pongScore();
-          }
-          return ns;
-        });
+        const ns = ++rightScoreRef.current;
+        setRightScore(ns);
+        if (ns >= WINNING_SCORE) {
+          setWinner('right');
+          setGameState('over');
+          sounds.pongLose();
+        } else if (ns === WINNING_SCORE - 1) {
+          sounds.matchPoint();
+        } else {
+          sounds.pongScore();
+        }
         setRightScorePop(true);
         setTimeout(() => setRightScorePop(false), 300);
         resetBall(1);
       } else if (s.ballX > CANVAS_WIDTH) {
-        setLeftScore(prev => {
-          const ns = prev + 1;
-          if (ns >= WINNING_SCORE) {
-            setWinner('left');
-            setGameState('over');
-            sounds.pongWin();
-            if (mode === 'ai') {
-              setCpuWins(w => { const nw = w + 1; localStorage.setItem('pong_cpu_wins', nw); return nw; });
-            }
-          } else if (ns === WINNING_SCORE - 1) {
-            sounds.matchPoint();
-          } else {
-            sounds.pongScore();
+        const ns = ++leftScoreRef.current;
+        setLeftScore(ns);
+        if (ns >= WINNING_SCORE) {
+          setWinner('left');
+          setGameState('over');
+          sounds.pongWin();
+          if (mode === 'ai') {
+            cpuWinsRef.current += 1;
+            setCpuWins(cpuWinsRef.current);
+            localStorage.setItem('pong_cpu_wins', cpuWinsRef.current);
           }
-          return ns;
-        });
+        } else if (ns === WINNING_SCORE - 1) {
+          sounds.matchPoint();
+        } else {
+          sounds.pongScore();
+        }
         setLeftScorePop(true);
         setTimeout(() => setLeftScorePop(false), 300);
         resetBall(-1);
