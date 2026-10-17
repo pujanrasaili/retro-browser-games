@@ -59,3 +59,15 @@ test('the mute button toggles its icon when clicked', () => {
   fireEvent.click(muteBtn);
   expect(muteBtn.textContent).not.toBe(initialText);
 });
+
+test('the app still loads when a corrupted snake_difficulty is saved in localStorage', () => {
+  // A previous build saved a function's source text here; the app must recover
+  // (fall back to medium) rather than crash on the default Snake tab.
+  localStorage.setItem('snake_difficulty', 'diff => {\n  return diff;\n}');
+  try {
+    render(<App />);
+    expect(screen.getByText('▶ START')).toBeInTheDocument();
+  } finally {
+    localStorage.removeItem('snake_difficulty');
+  }
+});

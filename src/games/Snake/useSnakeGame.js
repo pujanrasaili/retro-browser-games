@@ -27,13 +27,18 @@ function randomFood(snake) {
 }
 
 export default function useSnakeGame() {
-  const [difficulty, setDifficultyState] = useState(
-    () => localStorage.getItem('snake_difficulty') || 'medium'
-  );
+  const [difficulty, setDifficultyState] = useState(() => {
+    // Validate rather than trust localStorage: an unrecognised value (including one
+    // saved by an older buggy build) falls back to medium instead of crashing the
+    // component on DIFFICULTIES[difficulty].label.
+    const saved = localStorage.getItem('snake_difficulty');
+    return DIFFICULTIES[saved] ? saved : 'medium';
+  });
   const [walls, setWallsState] = useState(
     () => localStorage.getItem('snake_walls') === 'true'
   );
   const setDifficulty = useCallback((d) => {
+    if (!DIFFICULTIES[d]) return; // only real difficulty names are ever stored
     setDifficultyState(d);
     localStorage.setItem('snake_difficulty', d);
   }, []);
@@ -59,9 +64,19 @@ export default function useSnakeGame() {
   const directionRef = useRef(direction);
   const snakeRef = useRef(snake);
   const wallsRef = useRef(walls);
+  const foodRef = useRef(food);
+  const scoreRef = useRef(score);
+  const highScoreRef = useRef(highScore);
+  const bestLengthRef = useRef(bestLength);
+  const difficultyRef = useRef(difficulty);
   directionRef.current = direction;
   snakeRef.current = snake;
   wallsRef.current = walls;
+  foodRef.current = food;
+  scoreRef.current = score;
+  highScoreRef.current = highScore;
+  bestLengthRef.current = bestLength;
+  difficultyRef.current = difficulty;
 
   const setDirection = useCallback((newDir) => {
     const dir = directionRef.current;
@@ -72,11 +87,15 @@ export default function useSnakeGame() {
 
   const resetGame = useCallback((diff = difficulty, w = walls) => {
     const initSnake = INITIAL_SNAKE;
+    const initFood = randomFood(initSnake);
     setSnake(initSnake);
+    snakeRef.current = initSnake;
     setDirectionState(INITIAL_DIRECTION);
     directionRef.current = INITIAL_DIRECTION;
-    setFood(randomFood(initSnake));
+    setFood(initFood);
+    foodRef.current = initFood;
     setScore(0);
+    scoreRef.current = 0;
     setSpeed(DIFFICULTIES[diff].speed);
     setGameState('playing');
   }, [difficulty, walls]);
@@ -111,41 +130,51 @@ export default function useSnakeGame() {
       return;
     }
 
-    setSnake(prev => {
-      const newSnake = [newHead, ...prev];
-      setFood(prevFood => {
-        if (newHead.x === prevFood.x && newHead.y === prevFood.y) {
-          sounds.eat();
-          const burstId = Date.now();
-          setEatBurst({ x: prevFood.x, y: prevFood.y, id: burstId });
-          setTimeout(() => {
-            setEatBurst(curr => (curr && curr.id === burstId ? null : curr));
-          }, 400);
-          setScoreBump(true);
-          setTimeout(() => setScoreBump(false), 200);
-          if (newSnake.length > 0 && newSnake.length % 10 === 0) {
-            sounds.milestone();
-            setMilestone(newSnake.length);
-            setTimeout(() => setMilestone(null), 1200);
-          }
-          setScore(s => {
-            const ns = s + 10;
-            setHighScore(h => { const newH = Math.max(h, ns); localStorage.setItem('snake_best', newH); return newH; });
-            setBestLength(b => { const newB = Math.max(b, newSnake.length); localStorage.setItem('snake_best_length', newB); return newB; });
-            setDifficulty(diff => {
-              setSpeed(sp => Math.max(40, sp - DIFFICULTIES[diff].speedDec));
-              return diff;
-            });
-            return ns;
-          });
-          return randomFood(newSnake);
-        } else {
-          newSnake.pop();
-          return prevFood;
-        }
-      });
-      return newSnake;
-    });
+    // Everything below is computed from refs and applied with plain values, so each
+    // side effect (sounds, localStorage, scoring) runs exactly once per tick. Side
+    // effects inside state-updater functions run twice under React.StrictMode in
+    // development, which used to double the score, skip growth and over-speed the snake.
+    const food = foodRef.current;
+    const ate = newHead.x === food.x && newHead.y === food.y;
+    const newSnake = ate ? [newHead, ...current] : [newHead, ...current.slice(0, -1)];
+    snakeRef.current = newSnake;
+    setSnake(newSnake);
+
+    if (!ate) return;
+
+    sounds.eat();
+    const burstId = Date.now();
+    setEatBurst({ x: food.x, y: food.y, id: burstId });
+    setTimeout(() => {
+      setEatBurst(curr => (curr && curr.id === burstId ? null : curr));
+    }, 400);
+    setScoreBump(true);
+    setTimeout(() => setScoreBump(false), 200);
+    if (newSnake.length % 10 === 0) {
+      sounds.milestone();
+      setMilestone(newSnake.length);
+      setTimeout(() => setMilestone(null), 1200);
+    }
+
+    const newScore = scoreRef.current + 10;
+    scoreRef.current = newScore;
+    setScore(newScore);
+    if (newScore > highScoreRef.current) {
+      highScoreRef.current = newScore;
+      setHighScore(newScore);
+      localStorage.setItem('snake_best', newScore);
+    }
+    if (newSnake.length > bestLengthRef.current) {
+      bestLengthRef.current = newSnake.length;
+      setBestLength(newSnake.length);
+      localStorage.setItem('snake_best_length', newSnake.length);
+    }
+    const speedStep = DIFFICULTIES[difficultyRef.current].speedDec;
+    setSpeed(sp => Math.max(40, sp - speedStep));
+
+    const nextFood = randomFood(newSnake);
+    foodRef.current = nextFood;
+    setFood(nextFood);
   }, []);
 
   useEffect(() => {
