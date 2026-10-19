@@ -323,7 +323,7 @@ npm test              # watch mode
 npm run test:coverage # one-off run with a coverage report
 ```
 
-**116 tests, ~61% statement coverage** as of the last measurement. Coverage is
+**137 tests, ~70% statement coverage** as of the last measurement. Coverage is
 uneven by design, not oversight:
 
 - **Fully covered**: pure logic utilities (formatScore, formatTime, Tetris
@@ -334,20 +334,27 @@ uneven by design, not oversight:
 - **Also covered**: Tetris's line-clearing sequence end to end (stacked
   pieces fill rows, the 300ms flash runs, the cleared-line count updates), tested
   with fake timers. Score and level changes during a clear are not asserted.
-- **Not covered**: Pong's real-time physics loop (ball movement, collision,
-  the tunneling-prevention speed cap) — it runs inside `requestAnimationFrame`
-  and mutates a ref directly rather than React state, which needs a more
-  involved animation-frame mock than this suite currently sets up.
+- **Also covered**: Pong's real-time physics loop (ball movement, wall and paddle
+  bounces, the speed cap that prevents tunneling through a paddle, paddle and AI
+  control, scoring, game over), driven frame by frame through a manually stepped
+  `requestAnimationFrame` mock. The speed cap was mutation-checked: breaking it
+  makes exactly its test fail.
+- **Not covered**: the keyboard handlers in Tetris and Snake (the hooks' public
+  functions are tested, but not the `keydown` listeners that call them) and
+  Minesweeper's chord-reveal handler (the underlying `chordReveal` helper is
+  tested). The whole suite also runs without a real browser or audio device, so
+  sound output is never actually heard.
 
 See the commit history for the reasoning behind specific testing decisions —
-several commits document real bugs the tests caught before they shipped,
-including a temporal-dead-zone crash in Tetris and a couple of flaky-test
-fixes in the Minesweeper suite.
+several commits document real bugs the tests caught, including a
+temporal-dead-zone crash in Tetris, a crash-on-reload in Snake (a corrupted
+saved difficulty), and dev-mode double counting in Snake and Pong (React
+StrictMode runs state updaters twice, so side effects inside them ran twice).
 
 ## Project Stats
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-116%20passing-39ff14?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-137%20passing-39ff14?style=flat-square)
 ![Commits](https://img.shields.io/badge/Commits-130%2B-bf5fff?style=flat-square)
 ![Lines](https://img.shields.io/badge/Code-5000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
