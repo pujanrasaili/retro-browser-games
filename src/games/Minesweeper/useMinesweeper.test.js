@@ -1,3 +1,4 @@
+import React from 'react';
 import { renderHook, act } from '@testing-library/react';
 import useMinesweeper from './useMinesweeper';
 
@@ -12,6 +13,7 @@ import useMinesweeper from './useMinesweeper';
 
 afterEach(() => {
   localStorage.clear();
+  jest.useRealTimers();
 });
 
 describe('useMinesweeper', () => {
@@ -94,5 +96,37 @@ describe('useMinesweeper', () => {
     act(() => result.current.handleFlag({ preventDefault }, targetR, targetC));
     act(() => result.current.handleFlag({ preventDefault }, targetR, targetC));
     expect(result.current.minesLeft).toBe(before);
+  });
+});
+
+// React.StrictMode (used by src/index.js) runs state updater functions twice in
+// development. Snake and Pong each had side effects inside updaters that doubled
+// their results under `npm start`. Minesweeper's flag counter and timer should
+// behave identically with and without StrictMode; this guards against a change
+// ever introducing the same problem here.
+describe.each([
+  ['plain', undefined],
+  ['StrictMode', React.StrictMode],
+])('flags and timer (%s)', (_name, wrapper) => {
+  test('a net of one flag lowers the mine counter by exactly 1, and 3 seconds is 3', () => {
+    jest.useFakeTimers();
+    const { result } = renderHook(() => useMinesweeper(), wrapper ? { wrapper } : undefined);
+    const preventDefault = () => {};
+    act(() => result.current.handleReveal(4, 4));
+    // Pick genuinely unrevealed cells from the real board rather than assuming
+    // fixed positions are safe from the first click's flood fill.
+    const unrevealed = [];
+    result.current.board.forEach((row, r) => row.forEach((cell, c) => {
+      if (!cell.revealed) unrevealed.push([r, c]);
+    }));
+    const startMines = result.current.minesLeft;
+
+    act(() => result.current.handleFlag({ preventDefault }, ...unrevealed[0]));
+    act(() => result.current.handleFlag({ preventDefault }, ...unrevealed[1]));
+    act(() => result.current.handleFlag({ preventDefault }, ...unrevealed[1])); // unflag
+    act(() => { jest.advanceTimersByTime(3000); });
+
+    expect(result.current.minesLeft).toBe(startMines - 1);
+    expect(result.current.time).toBe(3);
   });
 });

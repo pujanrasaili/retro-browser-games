@@ -323,7 +323,7 @@ npm test              # watch mode
 npm run test:coverage # one-off run with a coverage report
 ```
 
-**137 tests, ~70% statement coverage** as of the last measurement. Coverage is
+**139 tests, ~70% statement coverage** as of the last measurement. Coverage is
 uneven by design, not oversight:
 
 - **Fully covered**: pure logic utilities (formatScore, formatTime, Tetris
@@ -354,7 +354,7 @@ StrictMode runs state updaters twice, so side effects inside them ran twice).
 ## Project Stats
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-137%20passing-39ff14?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-139%20passing-39ff14?style=flat-square)
 ![Commits](https://img.shields.io/badge/Commits-130%2B-bf5fff?style=flat-square)
 ![Lines](https://img.shields.io/badge/Code-5000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
