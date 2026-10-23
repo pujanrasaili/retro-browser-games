@@ -135,3 +135,76 @@ describe('persisted difficulty safety', () => {
     expect(localStorage.getItem('snake_difficulty')).toBeNull();
   });
 });
+
+// The keydown listener is the real way players steer and pause. The hook's other
+// tests call setDirection directly, which never exercises this listener.
+describe('keyboard controls', () => {
+  function press(key) {
+    const event = new KeyboardEvent('keydown', { key, cancelable: true });
+    act(() => { window.dispatchEvent(event); });
+    return event;
+  }
+
+  function startPlaying() {
+    jest.useFakeTimers();
+    const hook = renderHook(() => useSnakeGame());
+    act(() => hook.result.current.resetGame()); // head (10,10), moving right
+    return hook;
+  }
+
+  test.each([
+    ['ArrowUp', { x: 10, y: 9 }],
+    ['w', { x: 10, y: 9 }],
+    ['ArrowDown', { x: 10, y: 11 }],
+    ['s', { x: 10, y: 11 }],
+  ])('%s turns the snake', (key, expectedHead) => {
+    const { result } = startPlaying();
+    press(key);
+    act(() => { jest.advanceTimersByTime(result.current.speed); });
+    expect(result.current.snake[0]).toEqual(expectedHead);
+  });
+
+  test.each(['ArrowLeft', 'a'])('%s (a reversal) is ignored while moving right', (key) => {
+    const { result } = startPlaying();
+    press(key);
+    act(() => { jest.advanceTimersByTime(result.current.speed); });
+    expect(result.current.snake[0]).toEqual({ x: 11, y: 10 });
+  });
+
+  test('keys that are not controls do nothing', () => {
+    const { result } = startPlaying();
+    press('x');
+    act(() => { jest.advanceTimersByTime(result.current.speed); });
+    expect(result.current.snake[0]).toEqual({ x: 11, y: 10 });
+    expect(result.current.gameState).toBe('playing');
+  });
+
+  test('space pauses a playing game and resumes a paused one', () => {
+    const { result } = startPlaying();
+    press(' ');
+    expect(result.current.gameState).toBe('paused');
+    press(' ');
+    expect(result.current.gameState).toBe('playing');
+  });
+
+  test('space does nothing before the game has started', () => {
+    const { result } = renderHook(() => useSnakeGame());
+    press(' ');
+    expect(result.current.gameState).toBe('idle');
+  });
+
+  test('space prevents the page from scrolling', () => {
+    startPlaying();
+    const event = press(' ');
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  test('direction keys are ignored while paused', () => {
+    const { result } = startPlaying();
+    press(' ');          // pause
+    press('ArrowUp');    // should be ignored
+    press(' ');          // resume
+    act(() => { jest.advanceTimersByTime(result.current.speed); });
+    expect(result.current.snake[0]).toEqual({ x: 11, y: 10 }); // still heading right
+  });
+});
