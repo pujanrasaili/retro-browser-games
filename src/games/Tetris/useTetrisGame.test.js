@@ -24,7 +24,9 @@ function queuePieces(...pieces) {
 }
 
 beforeEach(() => {
-  randomPiece.mockClear();
+  // mockReset (not mockClear) so queued pieces or an installed implementation from
+  // one test can never leak into the next.
+  randomPiece.mockReset();
 });
 
 afterEach(() => {
@@ -151,5 +153,122 @@ describe('useTetrisGame', () => {
 
     expect(result.current.hold.key).toBe(heldKey);
     expect(result.current.current.key).toBe(currentKey);
+  });
+});
+
+// The keydown listener is how the game is actually played. The hook's other tests
+// call moveLeft/rotate/etc. directly, which never exercises this listener.
+describe('keyboard controls', () => {
+  function press(key) {
+    const event = new KeyboardEvent('keydown', { key, cancelable: true });
+    act(() => { window.dispatchEvent(event); });
+    return event;
+  }
+
+  function startPlaying() {
+    jest.useFakeTimers();
+    queuePieces(T_PIECE, I_PIECE, T_PIECE, I_PIECE);
+    const hook = renderHook(() => useTetrisGame());
+    act(() => hook.result.current.resetGame()); // current = T at x=3, next = I
+    return hook;
+  }
+
+  test('ArrowLeft and ArrowRight move the piece one column', () => {
+    const { result } = startPlaying();
+    const startX = result.current.current.x;
+    press('ArrowLeft');
+    expect(result.current.current.x).toBe(startX - 1);
+    press('ArrowRight');
+    press('ArrowRight');
+    expect(result.current.current.x).toBe(startX + 1);
+  });
+
+  test('ArrowDown soft-drops one row and scores 1 point', () => {
+    const { result } = startPlaying();
+    const startY = result.current.current.y;
+    press('ArrowDown');
+    expect(result.current.current.y).toBe(startY + 1);
+    expect(result.current.score).toBe(1);
+  });
+
+  test.each(['ArrowUp', 'x', 'X'])('%s rotates the piece', (key) => {
+    const { result } = startPlaying();
+    const before = result.current.current.shape;
+    press(key);
+    expect(result.current.current.shape).not.toEqual(before);
+  });
+
+  test.each(['c', 'C', 'Shift'])('%s holds the current piece', (key) => {
+    const { result } = startPlaying();
+    press(key);
+    expect(result.current.hold.key).toBe('T');
+    expect(result.current.current.key).toBe('I'); // promoted from next
+    expect(result.current.canHold).toBe(false);
+  });
+
+  test('space hard-drops the piece to the floor, scores 2 per row, and locks it', () => {
+    const { result } = startPlaying();
+    press(' ');
+    // A T-piece is 2 rows tall, so from y=0 it falls 18 rows to y=18: 18 * 2 points
+    expect(result.current.score).toBe(36);
+    act(() => { jest.advanceTimersByTime(30); }); // the lockPiece timeout
+    // Its cells are now part of the board's bottom row (T's flat side is 3 wide)
+    const bottom = result.current.board[19];
+    expect([bottom[3], bottom[4], bottom[5]].every(cell => cell !== null)).toBe(true);
+    // ...and the next piece has spawned at the top
+    expect(result.current.current.y).toBe(0);
+  });
+
+  test.each(['p', 'P', 'Escape'])('%s pauses and resumes', (key) => {
+    const { result } = startPlaying();
+    press(key);
+    expect(result.current.gameState).toBe('paused');
+    press(key);
+    expect(result.current.gameState).toBe('playing');
+  });
+
+  test('movement keys are ignored while paused', () => {
+    const { result } = startPlaying();
+    const startX = result.current.current.x;
+    press('p');
+    press('ArrowLeft');
+    press('x');
+    expect(result.current.current.x).toBe(startX);
+    expect(result.current.current.shape).toEqual(T_PIECE.shape);
+  });
+
+  test('space starts a game from the idle screen', () => {
+    queuePieces(T_PIECE, I_PIECE);
+    const { result } = renderHook(() => useTetrisGame());
+    expect(result.current.gameState).toBe('idle');
+    press(' ');
+    expect(result.current.gameState).toBe('playing');
+  });
+
+  test.each([
+    ['ArrowUp', 'ArrowUp'], ['ArrowDown', 'ArrowDown'],
+    ['ArrowLeft', 'ArrowLeft'], ['ArrowRight', 'ArrowRight'],
+    ['space', ' '],
+  ])('%s prevents the page from scrolling', (_label, key) => {
+    startPlaying();
+    expect(press(key).defaultPrevented).toBe(true);
+  });
+
+  test('space restarts the game after game over', () => {
+    jest.useFakeTimers();
+    // Every piece is an O. Hard-dropping them all in the same spot stacks them 2 rows
+    // at a time until the 10th reaches the top and the next spawn has no room.
+    randomPiece.mockImplementation(() => ({ ...O_PIECE, x: 3, y: 0 }));
+    const { result } = renderHook(() => useTetrisGame());
+    act(() => result.current.resetGame());
+    for (let i = 0; i < 10; i++) {
+      press(' ');
+      act(() => { jest.advanceTimersByTime(30); });
+    }
+    expect(result.current.gameState).toBe('over');
+
+    press(' ');
+    expect(result.current.gameState).toBe('playing');
+    expect(result.current.score).toBe(0);
   });
 });
