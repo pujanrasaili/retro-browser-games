@@ -323,7 +323,7 @@ npm test              # watch mode
 npm run test:coverage # one-off run with a coverage report
 ```
 
-**194 tests, ~83% statement coverage** as of the last measurement. Coverage is
+**204 tests, ~85% statement coverage** as of the last measurement. Coverage is
 uneven by design, not oversight:
 
 - **Fully covered**: pure logic utilities (formatScore, formatTime, Tetris
@@ -338,12 +338,11 @@ uneven by design, not oversight:
   cap that prevents tunneling through a paddle, paddle and AI control, scoring, game
   over), driven frame by frame through a manually stepped `requestAnimationFrame`
   mock; the keyboard handlers in Snake and Tetris, using real `keydown` events;
-  and Minesweeper's win and lose paths, best-time saving and chord-click, using a
-  hand-built board in place of the random one. Many of these were mutation-checked:
+  and Minesweeper's win and lose paths, best-time saving, chord-click and board
+  rendering, using a hand-built board in place of the random one. Many of these were mutation-checked:
   deliberately breaking the code makes exactly the intended test fail.
-- **Not covered**: drawing the falling and ghost pieces in the Tetris component and
-  the per-cell rendering and click handlers in the Minesweeper component (the
-  component tests render empty boards); the tone-generating part of `sound.js`
+- **Not covered**: drawing the falling and ghost pieces in the Tetris component (its
+  component tests render an empty board); the tone-generating part of `sound.js`
   (the test environment has no audio device, though the mute logic is tested); and
   the `index.js` entry point.
 
@@ -356,7 +355,7 @@ StrictMode runs state updaters twice, so side effects inside them ran twice).
 ## Project Stats
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-194%20passing-39ff14?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-204%20passing-39ff14?style=flat-square)
 ![Commits](https://img.shields.io/badge/Commits-130%2B-bf5fff?style=flat-square)
 ![Lines](https://img.shields.io/badge/Code-5000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
