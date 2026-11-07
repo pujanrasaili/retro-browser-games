@@ -7,6 +7,9 @@ import './Snake.css';
 const INITIAL_SPEED = 130;
 const MIN_SPEED = 40;
 const SPEED_LEVELS = 5;
+// A touch must travel at least this many pixels to count as a swipe; anything shorter is
+// a tap or finger jitter and must not steer the snake.
+const SWIPE_MIN_DISTANCE = 20;
 
 function getSpeedLevel(speed, diff) {
   const base = DIFFICULTIES[diff]?.speed || INITIAL_SPEED;
@@ -32,6 +35,10 @@ export default function Snake() {
     if (!touchStart.current) return;
     const dx = e.changedTouches[0].clientX - touchStart.current.x;
     const dy = e.changedTouches[0].clientY - touchStart.current.y;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < SWIPE_MIN_DISTANCE) {
+      touchStart.current = null;
+      return;
+    }
     if (Math.abs(dx) > Math.abs(dy)) setDirection(dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
     else setDirection(dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
     sounds.move();
