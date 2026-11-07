@@ -72,6 +72,8 @@
 
 /* Board */
 .board-container {
+  /* Swiping on the board steers the snake and must not scroll the page. */
+  touch-action: none;
   position: relative;
   width: 100%;
   max-width: 500px;
