@@ -323,7 +323,7 @@ npm test              # watch mode
 npm run test:coverage # one-off run with a coverage report
 ```
 
-**204 tests, ~85% statement coverage** as of the last measurement. Coverage is
+**241 tests, ~88% statement coverage** as of the last measurement. Coverage is
 uneven by design, not oversight:
 
 - **Fully covered**: pure logic utilities (formatScore, formatTime, Tetris
@@ -339,25 +339,33 @@ uneven by design, not oversight:
   over), driven frame by frame through a manually stepped `requestAnimationFrame`
   mock; the keyboard handlers in Snake and Tetris, using real `keydown` events;
   and Minesweeper's win and lose paths, best-time saving, chord-click and board
-  rendering, using a hand-built board in place of the random one. Many of these were mutation-checked:
-  deliberately breaking the code makes exactly the intended test fail.
-- **Not covered**: drawing the falling and ghost pieces in the Tetris component (its
-  component tests render an empty board); the tone-generating part of `sound.js`
-  (the test environment has no audio device, though the mute logic is tested); and
-  the `index.js` entry point.
+  rendering, using a hand-built board in place of the random one; the Tetris
+  component's drawing of the falling piece, ghost piece, next and hold previews; and
+  the touch controls: Snake's swipe gestures (with a minimum distance so a tap does
+  not steer) and Pong's drag-to-move, including the 2-player left/right split,
+  multi-touch, and a canvas that is scaled or offset on screen. Many of these were
+  mutation-checked: deliberately breaking the code makes exactly the intended test
+  fail.
+- **Not covered**: the tone-generating part of `sound.js` (the test environment has
+  no audio device, though the mute logic is tested), the `index.js` entry point, and
+  a handful of individual lines in the components. Nothing is tested on a real
+  device: touch behavior is simulated with synthetic events, and the
+  `touch-action: none` CSS that stops the page scrolling during a drag or swipe
+  cannot be exercised by the test environment at all.
 
 See the commit history for the reasoning behind specific testing decisions —
 several commits document real bugs the tests caught, including a
 temporal-dead-zone crash in Tetris, a crash-on-reload in Snake (a corrupted
-saved difficulty), and dev-mode double counting in Snake and Pong (React
-StrictMode runs state updaters twice, so side effects inside them ran twice).
+saved difficulty), dev-mode double counting in Snake and Pong (React
+StrictMode runs state updaters twice, so side effects inside them ran twice),
+and a plain tap turning the Snake's direction on touch screens.
 
 ## Project Stats
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-204%20passing-39ff14?style=flat-square)
-![Commits](https://img.shields.io/badge/Commits-130%2B-bf5fff?style=flat-square)
-![Lines](https://img.shields.io/badge/Code-5000%2B%20lines-00f5ff?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-241%20passing-39ff14?style=flat-square)
+![Commits](https://img.shields.io/badge/Commits-150%2B-bf5fff?style=flat-square)
+![Lines](https://img.shields.io/badge/Code-6000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
 
 ## Author
