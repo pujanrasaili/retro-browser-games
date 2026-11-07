@@ -323,7 +323,7 @@ npm test              # watch mode
 npm run test:coverage # one-off run with a coverage report
 ```
 
-**241 tests, ~88% statement coverage** as of the last measurement. Coverage is
+**294 tests, ~90% statement coverage** as of the last measurement. Coverage is
 uneven by design, not oversight:
 
 - **Fully covered**: pure logic utilities (formatScore, formatTime, Tetris
@@ -343,15 +343,16 @@ uneven by design, not oversight:
   component's drawing of the falling piece, ghost piece, next and hold previews; and
   the touch controls: Snake's swipe gestures (with a minimum distance so a tap does
   not steer) and Pong's drag-to-move, including the 2-player left/right split,
-  multi-touch, and a canvas that is scaled or offset on screen. Many of these were
+  multi-touch, and a canvas that is scaled or offset on screen; and the sound
+  engine, using a fake audio device that records what it is asked to play. Many of
+  these were
   mutation-checked: deliberately breaking the code makes exactly the intended test
   fail.
-- **Not covered**: the tone-generating part of `sound.js` (the test environment has
-  no audio device, though the mute logic is tested), the `index.js` entry point, and
-  a handful of individual lines in the components. Nothing is tested on a real
-  device: touch behavior is simulated with synthetic events, and the
-  `touch-action: none` CSS that stops the page scrolling during a drag or swipe
-  cannot be exercised by the test environment at all.
+- **Not covered**: the `index.js` entry point and a handful of individual lines in
+  the components. Nothing is tested on a real device: touch behavior is simulated
+  with synthetic events, the `touch-action: none` CSS that stops the page scrolling
+  during a drag or swipe cannot be exercised by the test environment at all, and the
+  sound tests check what the audio API is asked to play, not what anyone hears.
 
 See the commit history for the reasoning behind specific testing decisions —
 several commits document real bugs the tests caught, including a
@@ -363,7 +364,7 @@ and a plain tap turning the Snake's direction on touch screens.
 ## Project Stats
 
 ![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-241%20passing-39ff14?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-294%20passing-39ff14?style=flat-square)
 ![Commits](https://img.shields.io/badge/Commits-150%2B-bf5fff?style=flat-square)
 ![Lines](https://img.shields.io/badge/Code-6000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
