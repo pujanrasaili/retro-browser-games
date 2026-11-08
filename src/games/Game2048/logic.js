@@ -52,3 +52,53 @@ export function move(board, direction) {
   });
   return { board: unflip(slid), score, moved };
 }
+
+// Coordinates [row, col] of every empty cell, in reading order.
+export function emptyCells(board) {
+  const cells = [];
+  board.forEach((row, r) => row.forEach((value, c) => {
+    if (value === 0) cells.push([r, c]);
+  }));
+  return cells;
+}
+
+// Returns a new board with one new tile (a 2 nine times in ten, otherwise a 4) in a
+// random empty cell. `random` is injectable so tests can script the outcome. It is
+// called twice, in this order: first to choose the cell, then to choose the value.
+// A board with no empty cell comes back unchanged.
+export function addRandomTile(board, random = Math.random) {
+  const next = board.map(row => [...row]);
+  const empties = emptyCells(next);
+  if (empties.length === 0) return next;
+  const [r, c] = empties[Math.floor(random() * empties.length)];
+  next[r][c] = random() < 0.9 ? 2 : 4;
+  return next;
+}
+
+// A fresh game: an empty board with two starting tiles.
+export function newBoard(random = Math.random) {
+  const empty = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
+  return addRandomTile(addRandomTile(empty, random), random);
+}
+
+// True once any tile has reached the target (2048 by default). Higher tiles count too,
+// because players can keep playing past 2048.
+export function hasWon(board, target = 2048) {
+  return board.some(row => row.some(value => value >= target));
+}
+
+// A move is possible if there is an empty cell or two equal tiles are side by side.
+export function canMove(board) {
+  if (emptyCells(board).length > 0) return true;
+  for (let r = 0; r < board.length; r++) {
+    for (let c = 0; c < board[r].length; c++) {
+      if (c + 1 < board[r].length && board[r][c] === board[r][c + 1]) return true;
+      if (r + 1 < board.length && board[r][c] === board[r + 1][c]) return true;
+    }
+  }
+  return false;
+}
+
+export function isGameOver(board) {
+  return !canMove(board);
+}
