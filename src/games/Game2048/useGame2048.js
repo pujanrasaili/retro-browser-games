@@ -1,8 +1,15 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { sounds } from '../../utils/sound';
 import { newBoard, move, addRandomTile, hasWon, isGameOver, SIZE } from './logic';
 
 const BEST_KEY = 'game2048_best';
+
+const KEY_DIRECTIONS = {
+  ArrowLeft: 'left', a: 'left', A: 'left',
+  ArrowRight: 'right', d: 'right', D: 'right',
+  ArrowUp: 'up', w: 'up', W: 'up',
+  ArrowDown: 'down', s: 'down', S: 'down',
+};
 
 const emptyBoard = () => Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
 
@@ -98,6 +105,31 @@ export default function useGame2048({ random = Math.random, createBoard } = {}) 
       setStatus('playing');
     }
   }, [setStatus]);
+
+  // Keyboard: arrow keys or WASD move; Space or Enter starts a game from the idle or
+  // game-over screen and dismisses the win screen.
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return; // leave browser shortcuts (Ctrl+S, ...) alone
+      if (e.key === ' ' || e.key === 'Enter') {
+        if (gameState === 'idle' || gameState === 'over') {
+          e.preventDefault();
+          startGame();
+        } else if (gameState === 'won') {
+          e.preventDefault();
+          keepPlaying();
+        }
+        return;
+      }
+      const direction = KEY_DIRECTIONS[e.key];
+      if (!direction || gameState !== 'playing') return;
+      // Only block the page from scrolling while the arrows are actually steering a game.
+      if (e.key.startsWith('Arrow')) e.preventDefault();
+      slide(direction);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [gameState, slide, startGame, keepPlaying]);
 
   return { board, score, best, gameState, startGame, slide, keepPlaying, SIZE };
 }
