@@ -4,6 +4,7 @@ import Snake from './games/Snake/Snake';
 import Tetris from './games/Tetris/Tetris';
 import Minesweeper from './games/Minesweeper/Minesweeper';
 import Pong from './games/Pong/Pong';
+import Game2048 from './games/Game2048/Game2048';
 import StatsBar from './components/StatsBar';
 import { isMuted, toggleMuted } from './utils/sound';
 
@@ -30,6 +31,7 @@ function App() {
           <button className={`nav-btn ${activeGame === 'tetris' ? 'active' : ''}`} onClick={() => setActiveGame('tetris')}>🧱 TETRIS</button>
           <button className={`nav-btn ${activeGame === 'mines' ? 'active' : ''}`} onClick={() => setActiveGame('mines')}>💣 MINES</button>
           <button className={`nav-btn ${activeGame === 'pong' ? 'active' : ''}`} onClick={() => setActiveGame('pong')}>🏓 PONG</button>
+          <button className={`nav-btn ${activeGame === '2048' ? 'active' : ''}`} onClick={() => setActiveGame('2048')}>🔢 2048</button>
         </nav>
         <StatsBar />
       </header>
@@ -38,6 +40,7 @@ function App() {
         {activeGame === 'tetris' && <Tetris />}
         {activeGame === 'mines' && <Minesweeper />}
         {activeGame === 'pong' && <Pong />}
+        {activeGame === '2048' && <Game2048 />}
       </main>
       <footer className="app-footer">
         <span className="pixel-font footer-text">MADE BY PUJANRASAILI · 2026</span>

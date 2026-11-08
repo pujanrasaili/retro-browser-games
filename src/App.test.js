@@ -13,13 +13,14 @@ test('renders the app without crashing', () => {
   expect(screen.getByText('🎮 RETRO GAMES')).toBeInTheDocument();
 });
 
-test('shows all 4 game nav buttons', () => {
+test('shows all 5 game nav buttons', () => {
   render(<App />);
   const nav = screen.getByRole('navigation');
   expect(within(nav).getByText('🐍 SNAKE')).toBeInTheDocument();
   expect(within(nav).getByText('🧱 TETRIS')).toBeInTheDocument();
   expect(within(nav).getByText('💣 MINES')).toBeInTheDocument();
   expect(within(nav).getByText('🏓 PONG')).toBeInTheDocument();
+  expect(within(nav).getByText('🔢 2048')).toBeInTheDocument();
 });
 
 test('Snake is the active game by default', () => {
@@ -70,4 +71,23 @@ test('the app still loads when a corrupted snake_difficulty is saved in localSto
   } finally {
     localStorage.removeItem('snake_difficulty');
   }
+});
+
+test('clicking the 2048 tab opens the 2048 game and closes the one before it', () => {
+  render(<App />);
+  const nav = screen.getByRole('navigation');
+  fireEvent.click(within(nav).getByText('🔢 2048'));
+  expect(within(nav).getByText('🔢 2048')).toHaveClass('active');
+  expect(within(nav).getByText('🐍 SNAKE')).not.toHaveClass('active');
+  // 2048's own idle screen is showing, and Snake's is gone
+  expect(screen.getByRole('heading', { name: '2048' })).toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: /SNAKE/ })).not.toBeInTheDocument();
+});
+
+test('the 2048 game can be started from its tab', () => {
+  render(<App />);
+  fireEvent.click(within(screen.getByRole('navigation')).getByText('🔢 2048'));
+  fireEvent.click(screen.getByText('▶ START'));
+  // two starting tiles are dealt
+  expect(document.querySelectorAll('.g2048-tile')).toHaveLength(2);
 });
