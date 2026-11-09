@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import useGame2048 from './useGame2048';
 import { formatScore } from '../../utils/formatScore';
+import { swipeDirection } from '../../utils/swipeDirection';
 import './Game2048.css';
 
 // 2048 and anything higher have their own look; every tile below that is styled by value.
 const tileClass = (value) => (value > 2048 ? 'super' : String(value));
 
 export default function Game2048() {
-  const { board, score, best, gameState, startGame, keepPlaying } = useGame2048();
+  const { board, score, best, gameState, startGame, keepPlaying, slide } = useGame2048();
+  const touchStart = useRef(null);
+
+  // Swipe to slide. The gesture is measured from where the finger went down to where it came
+  // up, and swipeDirection decides whether that was a swipe at all (taps and jitter are not).
+  // A second finger (a pinch, or a stray palm) cancels the gesture instead of steering.
+  const handleTouchStart = (e) => {
+    touchStart.current = e.touches.length === 1
+      ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      : null;
+  };
+  const handleTouchEnd = (e) => {
+    const start = touchStart.current;
+    touchStart.current = null; // each gesture is used once
+    if (!start) return;
+    const touch = e.changedTouches[0];
+    const direction = swipeDirection(touch.clientX - start.x, touch.clientY - start.y);
+    if (direction) slide(direction);
+  };
+  // A touch interrupted by the system (a call, a gesture) is not a swipe.
+  const handleTouchCancel = () => { touchStart.current = null; };
 
   return (
     <div className="g2048-wrapper">
@@ -25,7 +46,12 @@ export default function Game2048() {
         </div>
       </div>
 
-      <div className="g2048-board-container">
+      <div
+        className="g2048-board-container"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchCancel}
+      >
         <div className="g2048-board">
           {board.map((row, r) => row.map((value, c) => (
             <div
