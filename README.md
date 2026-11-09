@@ -24,12 +24,13 @@
 | 🧱 **Tetris** | Live | Stack falling tetrominoes, clear lines, survive as long as possible. Speed increases every 10 lines. |
 | 💣 **Minesweeper** | Live | Uncover all safe tiles without triggering a mine. 3 difficulty levels: Easy, Medium, Hard. |
 | 🏓 **Pong** | Live | Two-paddle ball game — beat the AI or play 2-player locally. First to 7 wins. |
+| 🔢 **2048** | Live | Slide and merge numbered tiles to make 2048, then keep going for a higher score. Arrows, WASD or swipe. |
 
 ---
 
 ## Features
 
--  **4 fully playable games** — Snake, Tetris, Minesweeper, Pong
+-  **5 fully playable games** — Snake, Tetris, Minesweeper, Pong, 2048
 -  **No extra dependencies** — pure React + CSS, zero UI libraries
 -  **Neon retro aesthetic** — glowing greens, deep blacks, pixel fonts
 -  **Mobile friendly** — on-screen D-pad + swipe gesture support
@@ -129,22 +130,35 @@ npm run build
 ```
 retro-browser-games/
 ├── public/
-│   └── index.html              # HTML shell with Google Fonts
+│   ├── index.html                # HTML shell with Google Fonts
+│   └── manifest.json             # Web app manifest
 ├── src/
-│   ├── games/
-│   │   ├── Snake/
-│   │   └── Tetris/
-│   │       ├── Snake.js        # Board renderer + overlays + controls
-│   │       ├── Snake.css       # All neon visuals & animations
-│   │       └── useSnakeGame.js # Pure game logic (hook)
-│   ├── App.js                  # Root component + nav
-│   ├── App.css                 # Global layout + header styles
-│   ├── index.js                # React entry point
-│   └── index.css               # CSS variables + reset
+│   ├── games/                    # One folder per game; tests sit beside the code
+│   │   ├── Snake/                # Snake.js, useSnakeGame.js, Snake.css
+│   │   ├── Tetris/               # Tetris.js, useTetrisGame.js, pieces.js, Tetris.css
+│   │   ├── Minesweeper/          # Minesweeper.js, useMinesweeper.js, mineUtils.js, Minesweeper.css
+│   │   ├── Pong/                 # Pong.js, usePongGame.js, Pong.css
+│   │   └── Game2048/             # Game2048.js, useGame2048.js, logic.js, Game2048.css
+│   ├── components/
+│   │   └── StatsBar.js           # Best scores for every game + reset button
+│   ├── utils/
+│   │   ├── sound.js              # Synthesized Web Audio sounds + mute switch
+│   │   ├── formatScore.js        # Zero-padded scores, "1.2M" for huge ones
+│   │   ├── formatTime.js         # Seconds to "42s" or "1:05"
+│   │   └── swipeDirection.js     # Finger movement to left / right / up / down
+│   ├── App.js                    # Root component + nav
+│   ├── App.css                   # Global layout + header styles
+│   ├── index.js                  # React entry point
+│   ├── index.css                 # CSS variables + reset
+│   └── setupTests.js             # Test setup (jest-dom matchers)
 ├── package.json
 ├── .gitignore
 └── README.md
 ```
+
+Each game is split the same way: a React component for the screen, a hook that holds the game
+state, and (where it helps) a file of pure logic. 2048 keeps its rules in `logic.js` with no React
+in it, which is what makes them easy to test exactly.
 
 ---
 
@@ -303,9 +317,35 @@ Star this repo if you had fun playing!
 
 ---
 
+## How to Play — 2048
+
+```
+┌─────────────────────────────────┐
+│   ← ↑ → ↓  or  W A S D   Slide  │
+│   Swipe (touch screens)  Slide  │
+│   Space / Enter     Start / Keep│
+└─────────────────────────────────┘
+```
+
+**Rules:**
+- Each move slides **every** tile as far as it can go. Two tiles with the same number that touch
+  **merge into one tile of double the value**, and that value is added to your score
+- A tile merges **at most once per move**, so a row of 2 2 2 2 becomes 4 4, not 8
+- After every move that changes the board, a new **2** (nine times in ten) or **4** appears in a
+  random empty cell. A move that changes nothing does not add a tile
+- Make a **2048** tile to win, then choose **KEEP GOING** to play on for a higher score
+- The game ends when the board is full and no two neighbouring tiles match
+- Your best score is saved and shown in the stats bar
+
+**Tips:**
+- Swipes need to travel a short distance (20 pixels) to count, so a plain tap on the board never moves anything
+- Pressing a modifier key (Ctrl, Cmd, Alt) with an arrow or letter is treated as a browser shortcut, not a move
+
+---
+
 ## Persistent Scores & Preferences
 
-All best scores (Snake high score + length, Tetris high score + best lines, Minesweeper best time per difficulty, Pong CPU wins) are saved to your browser's `localStorage` and survive page refreshes. They're visible at all times in the **stats bar** under the navigation menu.
+All best scores (Snake high score + length, Tetris high score + best lines, Minesweeper best time per difficulty, Pong CPU wins, 2048 best score) are saved to your browser's `localStorage` and survive page refreshes. They're visible at all times in the **stats bar** under the navigation menu.
 
 Your last-selected difficulty and mode settings also persist across sessions — Snake's difficulty/walls mode, Minesweeper's difficulty, and Pong's AI difficulty are all remembered the next time you open the app.
 
@@ -323,7 +363,7 @@ npm test              # watch mode
 npm run test:coverage # one-off run with a coverage report
 ```
 
-**294 tests, ~90% statement coverage** as of the last measurement. Coverage is
+**457 tests, ~92% statement coverage** as of the last measurement. Coverage is
 uneven by design, not oversight:
 
 - **Fully covered**: pure logic utilities (formatScore, formatTime, Tetris
@@ -344,7 +384,9 @@ uneven by design, not oversight:
   the touch controls: Snake's swipe gestures (with a minimum distance so a tap does
   not steer) and Pong's drag-to-move, including the 2-player left/right split,
   multi-touch, and a canvas that is scaled or offset on screen; and the sound
-  engine, using a fake audio device that records what it is asked to play. Many of
+  engine, using a fake audio device that records what it is asked to play; and all
+  of 2048 (move and merge rules, spawning, win and game over, the state hook,
+  keyboard and swipe controls, the screen). Many of
   these were
   mutation-checked: deliberately breaking the code makes exactly the intended test
   fail.
@@ -363,10 +405,10 @@ and a plain tap turning the Snake's direction on touch screens.
 
 ## Project Stats
 
-![Games](https://img.shields.io/badge/Games-4%20Live-39ff14?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-294%20passing-39ff14?style=flat-square)
-![Commits](https://img.shields.io/badge/Commits-150%2B-bf5fff?style=flat-square)
-![Lines](https://img.shields.io/badge/Code-6000%2B%20lines-00f5ff?style=flat-square)
+![Games](https://img.shields.io/badge/Games-5%20Live-39ff14?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-457%20passing-39ff14?style=flat-square)
+![Commits](https://img.shields.io/badge/Commits-170%2B-bf5fff?style=flat-square)
+![Lines](https://img.shields.io/badge/Code-8000%2B%20lines-00f5ff?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/Extra%20Deps-Zero-ff4757?style=flat-square)
 
 ## Author
