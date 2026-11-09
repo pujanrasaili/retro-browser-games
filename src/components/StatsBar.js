@@ -8,6 +8,9 @@ function readStats() {
   const snakeBestLength = parseInt(localStorage.getItem('snake_best_length') || '0', 10);
   const tetrisBest = parseInt(localStorage.getItem('tetris_best') || '0', 10);
   const pongCpuWins = parseInt(localStorage.getItem('pong_cpu_wins') || '0', 10);
+  // Only trust a positive whole number, so a bad saved value shows 0 instead of NaN.
+  const game2048Saved = parseInt(localStorage.getItem('game2048_best') || '0', 10);
+  const game2048Best = Number.isFinite(game2048Saved) && game2048Saved > 0 ? game2048Saved : 0;
 
   let mineBest = '—';
   try {
@@ -18,7 +21,7 @@ function readStats() {
     else if (parsed.easy !== undefined) mineBest = `EASY ${formatTime(parsed.easy)}`;
   } catch {}
 
-  return { snakeBest, snakeBestLength, tetrisBest, mineBest, pongCpuWins };
+  return { snakeBest, snakeBestLength, tetrisBest, mineBest, pongCpuWins, game2048Best };
 }
 
 export default function StatsBar() {
@@ -38,16 +41,17 @@ export default function StatsBar() {
     };
   }, []);
 
-  const { snakeBest, snakeBestLength, tetrisBest, mineBest, pongCpuWins } = stats;
+  const { snakeBest, snakeBestLength, tetrisBest, mineBest, pongCpuWins, game2048Best } = stats;
 
   const handleReset = () => {
-    if (!window.confirm('Reset all best scores for Snake, Tetris, Minesweeper, and Pong? This cannot be undone.')) return;
+    if (!window.confirm('Reset all best scores for Snake, Tetris, Minesweeper, Pong, and 2048? This cannot be undone.')) return;
     localStorage.removeItem('snake_best');
     localStorage.removeItem('snake_best_length');
     localStorage.removeItem('tetris_best');
     localStorage.removeItem('tetris_best_lines');
     localStorage.removeItem('mine_best');
     localStorage.removeItem('pong_cpu_wins');
+    localStorage.removeItem('game2048_best');
     setStats(readStats());
   };
 
@@ -76,6 +80,12 @@ export default function StatsBar() {
         <span className="stat-icon">🏓</span>
         <span className="stat-label pixel-font">WINS</span>
         <span className="stat-value pixel-font" style={{ color: '#39ff14' }}>{pongCpuWins}</span>
+      </div>
+      <div className="stat-divider" />
+      <div className="stat-item">
+        <span className="stat-icon">🔢</span>
+        <span className="stat-label pixel-font">BEST</span>
+        <span className="stat-value pixel-font" style={{ color: '#ffd700' }}>{formatScore(game2048Best)}</span>
       </div>
       <div className="stat-divider" />
       <button className="stats-reset-btn pixel-font" onClick={handleReset} title="Reset all best scores">↺</button>
