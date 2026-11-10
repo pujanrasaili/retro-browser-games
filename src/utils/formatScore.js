@@ -4,13 +4,17 @@
 // high scores (uncapped level-multiplied scoring in Tetris, for example)
 // never break the layout.
 export function formatScore(value, digits = 6) {
+  // Anything that is not a usable score (NaN from a corrupted saved value, undefined, a
+  // negative) is shown as zero. NaN used to fall through every comparison below and come
+  // out as "NaNM".
+  const score = Number.isFinite(value) && value >= 0 ? value : 0;
   const max = Math.pow(10, digits) - 1;
-  if (value <= max) {
-    return String(value).padStart(digits, '0');
+  if (score <= max) {
+    return String(score).padStart(digits, '0');
   }
-  if (value < 1_000_000) {
-    return String(value);
+  if (score < 1_000_000) {
+    return String(score);
   }
-  const millions = value / 1_000_000;
+  const millions = score / 1_000_000;
   return millions.toFixed(millions < 10 ? 1 : 0) + 'M';
 }

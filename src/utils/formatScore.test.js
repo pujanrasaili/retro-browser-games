@@ -29,4 +29,25 @@ describe('formatScore', () => {
   test('shows a whole number at or above 10 million', () => {
     expect(formatScore(25000000)).toBe('25M');
   });
+
+  // Snake shows scores at 5 digits, so 100000 to 999999 are wider than the display but
+  // still below a million: they are shown whole, not padded and not abbreviated.
+  test('a score wider than the digit width but under a million is shown as it is', () => {
+    expect(formatScore(99999, 5)).toBe('99999');       // fits exactly: padded form
+    expect(formatScore(100000, 5)).toBe('100000');     // one too wide: shown whole
+    expect(formatScore(123456, 5)).toBe('123456');
+    expect(formatScore(999999, 5)).toBe('999999');
+    expect(formatScore(1000000, 5)).toBe('1.0M');      // a million switches to millions
+  });
+
+  test.each([
+    ['NaN (a corrupted saved value)', NaN],
+    ['undefined', undefined],
+    ['null', null],
+    ['a negative number', -5],
+    ['Infinity', Infinity],
+  ])('shows %s as zero, never NaN or garbage', (_name, value) => {
+    expect(formatScore(value)).toBe('000000');
+    expect(formatScore(value, 5)).toBe('00000');
+  });
 });
