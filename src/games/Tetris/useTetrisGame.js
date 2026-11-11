@@ -86,7 +86,10 @@ export default function useTetrisGame() {
   nextRef.current = next;
 
   const spawnPiece = useCallback((boardState) => {
-    const piece = randomPiece();
+    // The piece shown in NEXT is the one that appears; only the preview gets a fresh draw.
+    // (This used to draw a brand-new random piece and discard the one on the NEXT panel.)
+    const upcoming = nextRef.current;
+    const piece = upcoming ? { ...upcoming, x: 3, y: 0 } : randomPiece();
     if (!isValid(piece.shape, piece.x, piece.y, boardState)) {
       sounds.gameOver();
       setGameState('over');

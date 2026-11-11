@@ -111,9 +111,10 @@ describe('useTetrisGame', () => {
 
   test('filling the bottom rows with O-pieces triggers the line-clear sequence', () => {
     jest.useFakeTimers();
-    // 2 pieces for resetGame (current, next), then 2 more per spawnPiece call
-    // after each of the 5 O-piece locks = 2 + 5*2 = 12 total randomPiece() calls
-    queuePieces(...Array(12).fill(O_PIECE));
+    // 2 pieces for resetGame (current, next), then 1 more per spawn (the old next becomes the
+    // current piece; only the preview is drawn fresh) after each of the 5 O-piece locks:
+    // 2 + 5 = 7 randomPiece() calls. Too few queued would crash, so this count is exact.
+    queuePieces(...Array(7).fill(O_PIECE));
     const { result } = renderHook(() => useTetrisGame());
     act(() => result.current.resetGame());
 
